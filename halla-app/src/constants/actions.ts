@@ -1,0 +1,12 @@
+
+export const CONNECT = 'CONNECT';
+export const CONNECT_SUCCESSFUL = 'CONNECT_SUCCESSFUL';
+
+export const LOGOUT = 'LOGOUT';
+
+export const SUBMIT_LOGIN = 'SUBMIT_LOGIN';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+
+export const SUBMIT_SIGNUP = 'SUBMIT_SIGNUP';
+export const SUBMIT_SUCCESS = 'SUBMIT_SUCCESS';
+
