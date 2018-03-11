@@ -27,12 +27,13 @@ class MongoServer {
         });
     }
     recieveMessageFromSocketServer() {
-        const SUB = this.rabbitMQContext.socket("SUB", { routing: "topic" });
-        SUB.setEncoding("utf8");
-        SUB.on("data", (data) => {
+        const WORKER_SOCKET = this.rabbitMQContext.socket("WORKER", { routing: "topic" });
+        WORKER_SOCKET.setEncoding("utf8");
+        WORKER_SOCKET.on("data", (data) => {
+            WORKER_SOCKET.ack();
             console.log(data);
         });
-        SUB.connect("TEST_EXCHANGE");
+        WORKER_SOCKET.connect("ttt");
     }
     listenClients() {
         this.recieveMessageFromSocketServer();

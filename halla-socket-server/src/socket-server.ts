@@ -2,7 +2,7 @@ import socketIo = require("socket.io");
 import * as rabbitJS from "rabbit.js";
 import { Client } from "./handlers/Client";
 import * as R from "ramda";
-import { PubSocket, SubSocket } from "rabbit.js";
+import { PushSocket } from "rabbit.js";
 
 export class SocketServer {
     public static readonly PORT: number = 5027;
@@ -34,11 +34,16 @@ export class SocketServer {
     }
 
     private sendMessageToTaskQueue(message: string): void {
-        const PUB: PubSocket = this.rabbitMQContext.socket("PUB", {routing: "topic"});
+        const PUSH_SOCKET: PushSocket = this.rabbitMQContext.socket("PUSH",
+        {
+            routing: "topic",
+            persistent: true
+        }
+    );
 
-        PUB.connect("TEST_EXCHANGE", () => {
-            PUB.write(message, "utf8");
-            PUB.close();
+        PUSH_SOCKET.connect("ttt", () => {
+            PUSH_SOCKET.write(message, "utf8");
+            PUSH_SOCKET.close();
         });
     }
 

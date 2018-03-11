@@ -31,10 +31,13 @@ class SocketServer {
         });
     }
     sendMessageToTaskQueue(message) {
-        const PUB = this.rabbitMQContext.socket("PUB", { routing: "topic" });
-        PUB.connect("TEST_EXCHANGE", () => {
-            PUB.write(message, "utf8");
-            PUB.close();
+        const PUSH_SOCKET = this.rabbitMQContext.socket("PUSH", {
+            routing: "topic",
+            persistent: true
+        });
+        PUSH_SOCKET.connect("ttt", () => {
+            PUSH_SOCKET.write(message, "utf8");
+            PUSH_SOCKET.close();
         });
     }
     listenClients() {

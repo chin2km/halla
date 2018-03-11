@@ -2,7 +2,8 @@
 import Mongoose =  require("mongoose");
 import * as rabbitJS from "rabbit.js";
 import * as R from "ramda";
-import { SubSocket } from "rabbit.js";
+import { WorkerSocket } from "rabbit.js";
+import { Socket } from "net";
 
 export class MongoServer {
     public static readonly rabbitMQ_SERVER: string = "amqp://localhost";
@@ -32,14 +33,15 @@ export class MongoServer {
     }
 
     private recieveMessageFromSocketServer(): void {
-        const SUB: SubSocket = this.rabbitMQContext.socket("SUB", {routing: "topic"});
-        SUB.setEncoding("utf8");
+        const WORKER_SOCKET: WorkerSocket = this.rabbitMQContext.socket("WORKER", {routing: "topic"});
+        WORKER_SOCKET.setEncoding("utf8");
 
-        SUB.on("data", (data) => {
+        WORKER_SOCKET.on("data", (data) => {
+            WORKER_SOCKET.ack();
             console.log(data);
         });
 
-        SUB.connect("TEST_EXCHANGE");
+        WORKER_SOCKET.connect("ttt");
     }
 
     private listenClients(): void {
