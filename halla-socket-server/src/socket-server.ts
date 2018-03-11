@@ -65,10 +65,6 @@ export class SocketServer {
 
             socket.emit("connected", socket.id);
 
-            setTimeout(() => {
-                socket.emit("test", socket.id);
-            }, 2000);
-
             const handlerCategories = {
                 user: new User(this, socket).handlers
             };
