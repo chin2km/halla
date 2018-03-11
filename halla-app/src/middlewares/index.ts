@@ -1,9 +1,9 @@
 import logger from './logger';
-import {sagaMiddleware} from './saga';
 import {createRouterMiddleware} from './router';
+import epicMiddleware from './epicMiddleware';
 
 export {
-  sagaMiddleware,
+  epicMiddleware,
   logger,
   createRouterMiddleware
 };

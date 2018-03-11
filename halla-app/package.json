@@ -5,7 +5,6 @@
   "description": "A frontend boilerplate with React, Redux and Typescript",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --debug --devtool cheap-module-source-map --output-pathinfo --history-api-fallback --hot --inline --progress --colors --port 3333 --open",
     "build": "webpack -p --progress --colors"
   },
@@ -57,8 +56,9 @@
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
     "redux-logger": "^3.0.6",
-    "redux-saga": "^0.16.0",
+    "redux-observable": "^0.18.0",
     "rx": "^4.1.0",
+    "rxjs": "^5.5.6",
     "socket.io-client": "^2.0.4"
   }
 }
