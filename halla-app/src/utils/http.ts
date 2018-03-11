@@ -1,6 +1,5 @@
 import R from 'ramda';
 import axios from 'axios';
-import {CANCEL} from 'redux-saga';
 
 const instance = axios.create();
 
@@ -36,6 +35,5 @@ export const cancelableHttpRequest = (method, url, config, accept = 'application
     const cancellableRequestObject = R.assoc('cancelToken', source.token)(requestObject);
 
     const request = instance.request(cancellableRequestObject);
-    request[CANCEL] = () => source.cancel();
     return request;
 };

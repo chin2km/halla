@@ -62,7 +62,12 @@ export class SocketServer {
         this.socketIO.on("connect", (socket: SocketIO.Socket) => {
             this.ALL_SOCKETS.push(socket);
             console.log(`Connected client on port ${this.port}: Total Clients: ${this.ALL_SOCKETS.length}: Client id: ${socket.id}`);
+
             socket.emit("connected", socket.id);
+
+            setTimeout(() => {
+                socket.emit("test", socket.id);
+            }, 2000);
 
             const handlerCategories = {
                 user: new User(this, socket).handlers
