@@ -1,25 +1,19 @@
 
 import Mongoose =  require("mongoose");
-import * as rabbitMQ from "amqplib";
+import * as rabbitJS from "rabbit.js";
 import * as R from "ramda";
+import { SubSocket } from "rabbit.js";
 
 export class MongoServer {
-    public static readonly PORT: number = 5027;
-    public static readonly RABBITMQ_SERVER: string = "amqp://localhost";
+    public static readonly rabbitMQ_SERVER: string = "amqp://localhost";
     public static readonly MONGODB_DB: string = "mongodb://localhost/halla_db";
-    private rabbitMQConnection: rabbitMQ.Connection;
+    private rabbitMQContext: rabbitJS.Context;
     private port: string | number;
 
     private hallaDB: Mongoose.Connection;
 
     constructor() {
-        this.config();
         this.createServer();
-        this.listenClients();
-    }
-
-    private config(): void {
-        this.port = process.env.PORT || MongoServer.PORT;
     }
 
     private createServer(): void {
@@ -30,43 +24,26 @@ export class MongoServer {
             // Connected to MongoDB
         });
 
-        // RabbitMq Connection
-        rabbitMQ.connect(MongoServer.RABBITMQ_SERVER)
-        .then((mqConnection: rabbitMQ.Connection) => {
-            process.once("SIGINT", function() { mqConnection.close(); });
-            this.rabbitMQConnection = mqConnection;
-        }).catch(console.warn);
+        // rabbitJS Connection
+        this.rabbitMQContext = rabbitJS.createContext(MongoServer.rabbitMQ_SERVER);
+        this.rabbitMQContext.on("ready", () => {
+            this.listenClients();
+        });
     }
 
-    private recieveMessageFromSocketServer = (): void => {
-        const channelPromise: any =  this.rabbitMQConnection.createChannel();
-        channelPromise.then((channel: rabbitMQ.Channel) => {
+    private recieveMessageFromSocketServer(): void {
+        const SUB: SubSocket = this.rabbitMQContext.socket("SUB", {routing: "topic"});
+        SUB.setEncoding("utf8");
 
-            const q = "LOGIN_QUEUE";
-
-            const ok = channel.assertQueue(q, {durable: true});
-            ok.then(function() { channel.prefetch(1); });
-            ok.then(function() {
-                channel.consume(q, doWork, {noAck: false});
-                console.log(" [*] Waiting for messages. To exit press CTRL+C");
-            });
-
-            function doWork(msg: any) {
-              const body = msg.content.toString();
-              const secs = body.split(".").length - 1;
-
-              setTimeout(function() {
-                console.log(" [x] Received '%s'", body);
-                channel.ack(msg);
-              }, secs * 1000);
-            }
-
+        SUB.on("data", (data) => {
+            console.log(data);
         });
-        channelPromise.catch(console.warn);
+
+        SUB.connect("TEST_EXCHANGE");
     }
 
     private listenClients(): void {
-        setTimeout(this.recieveMessageFromSocketServer, 2000);
+        this.recieveMessageFromSocketServer();
     }
 
     public getServer(): any {

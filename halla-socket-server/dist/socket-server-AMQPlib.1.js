@@ -8,7 +8,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 const socketIo = require("socket.io");
-const rabbitJS = __importStar(require("rabbit.js"));
+const rabbitMQ = __importStar(require("amqplib"));
 const Client_1 = require("./handlers/Client");
 const R = __importStar(require("ramda"));
 class SocketServer {
@@ -16,6 +16,7 @@ class SocketServer {
         this.ALL_SOCKETS = [];
         this.config();
         this.createServer();
+        this.listenClients();
     }
     config() {
         this.port = process.env.PORT || SocketServer.PORT;
@@ -24,18 +25,24 @@ class SocketServer {
         // Socket Connection
         this.socketIO = socketIo();
         this.socketIO.listen(this.port);
-        // rabbitJS Connection
-        this.rabbitMQContext = rabbitJS.createContext(SocketServer.rabbitMQ_SERVER);
-        this.rabbitMQContext.on("ready", () => {
-            this.listenClients();
-        });
+        // RabbitMq Connection
+        rabbitMQ.connect(SocketServer.RABBITMQ_SERVER)
+            .then((mqConnection) => {
+            this.rabbitMQConnection = mqConnection;
+        }).catch(console.warn);
     }
     sendMessageToTaskQueue(message) {
-        const PUB = this.rabbitMQContext.socket("PUB", { routing: "topic" });
-        PUB.connect("TEST_EXCHANGE", () => {
-            PUB.write(message, "utf8");
-            PUB.close();
+        const channelPromise = this.rabbitMQConnection.createChannel();
+        channelPromise.then((channel) => {
+            const q = "LOGIN_QUEUE";
+            const ok = channel.assertQueue(q, { durable: true });
+            ok.then(function () {
+                channel.sendToQueue(q, Buffer.from(message), { deliveryMode: true });
+                console.log("Sent to queue:  '%s'", message);
+                channel.close();
+            });
         });
+        channelPromise.catch(console.warn);
     }
     listenClients() {
         //////////////////////////////////////////////////////////////
@@ -67,6 +74,6 @@ class SocketServer {
     }
 }
 SocketServer.PORT = 5027;
-SocketServer.rabbitMQ_SERVER = "amqp://localhost";
+SocketServer.RABBITMQ_SERVER = "amqp://localhost";
 exports.SocketServer = SocketServer;
-//# sourceMappingURL=socket-server.js.map
+//# sourceMappingURL=socket-server-AMQPlib.1.js.map

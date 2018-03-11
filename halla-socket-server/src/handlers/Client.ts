@@ -1,5 +1,5 @@
 import { SocketServer } from "../socket-server";
-export class User {
+export class Client {
     private app: SocketServer;
     private socket: SocketIO.Socket;
 
@@ -10,7 +10,7 @@ export class User {
 
     handleLogin = (event: any) => {
         console.log("SUBMIT_LOGIN", event);
-        this.socket.emit("LOGIN_SUCCESS", event);
+        this.socket.emit("LOGIN_FAIL", event);
     }
 
     handleLogout = (event: any) => {

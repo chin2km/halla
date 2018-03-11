@@ -4,7 +4,7 @@ class Client {
     constructor(app, socket) {
         this.handleLogin = (event) => {
             console.log("SUBMIT_LOGIN", event);
-            this.socket.emit("LOGIN_SUCCESS", event);
+            this.socket.emit("LOGIN_FAIL", event);
         };
         this.handleLogout = (event) => {
             console.log("LOGOUT event", event);
@@ -18,4 +18,4 @@ class Client {
     }
 }
 exports.Client = Client;
-//# sourceMappingURL=User.js.map
+//# sourceMappingURL=Client.js.map

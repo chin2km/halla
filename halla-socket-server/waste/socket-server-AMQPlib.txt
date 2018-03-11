@@ -1,20 +1,20 @@
 import socketIo = require("socket.io");
-import * as rabbitJS from "rabbit.js";
+import * as rabbitMQ from "amqplib";
 import { Client } from "./handlers/Client";
 import * as R from "ramda";
-import { PubSocket, SubSocket } from "rabbit.js";
 
 export class SocketServer {
     public static readonly PORT: number = 5027;
-    public static readonly rabbitMQ_SERVER: string = "amqp://localhost";
+    public static readonly RABBITMQ_SERVER: string = "amqp://localhost";
     private socketIO: SocketIO.Server;
-    private rabbitMQContext: rabbitJS.Context;
+    private rabbitMQConnection: rabbitMQ.Connection;
     private port: string | number;
     private ALL_SOCKETS: SocketIO.Socket[] = [];
 
     constructor() {
         this.config();
         this.createServer();
+        this.listenClients();
     }
 
     private config(): void {
@@ -26,20 +26,29 @@ export class SocketServer {
         this.socketIO = socketIo();
         this.socketIO.listen(this.port);
 
-        // rabbitJS Connection
-        this.rabbitMQContext = rabbitJS.createContext(SocketServer.rabbitMQ_SERVER);
-        this.rabbitMQContext.on("ready", () => {
-            this.listenClients();
-        });
+        // RabbitMq Connection
+        rabbitMQ.connect(SocketServer.RABBITMQ_SERVER)
+        .then((mqConnection: rabbitMQ.Connection) => {
+            this.rabbitMQConnection = mqConnection;
+        }).catch(console.warn);
     }
 
-    private sendMessageToTaskQueue(message: string): void {
-        const PUB: PubSocket = this.rabbitMQContext.socket("PUB", {routing: "topic"});
 
-        PUB.connect("TEST_EXCHANGE", () => {
-            PUB.write(message, "utf8");
-            PUB.close();
+    private sendMessageToTaskQueue(message: string): void {
+        const channelPromise: any =  this.rabbitMQConnection.createChannel();
+        channelPromise.then((channel: rabbitMQ.Channel) => {
+
+            const q = "LOGIN_QUEUE";
+            const ok = channel.assertQueue(q, {durable: true});
+
+            ok.then(function() {
+              channel.sendToQueue(q, Buffer.from(message), {deliveryMode: true});
+              console.log("Sent to queue:  '%s'", message);
+              channel.close();
+            });
+
         });
+        channelPromise.catch(console.warn);
     }
 
     private listenClients(): void {

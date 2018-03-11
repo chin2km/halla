@@ -2,25 +2,15 @@
 # yarn lockfile v1
 
 
-"@types/amqplib@^0.5.6":
-  version "0.5.6"
-  resolved "https://registry.yarnpkg.com/@types/amqplib/-/amqplib-0.5.6.tgz#75ce568f8ebd71f0b0247f9fc7feaf7d337d480f"
-  dependencies:
-    "@types/bluebird" "*"
-    "@types/events" "*"
-    "@types/node" "*"
-
-"@types/bluebird@*", "@types/bluebird@^3.5.20":
-  version "3.5.20"
-  resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.20.tgz#f6363172add6f4eabb8cada53ca9af2781e8d6a1"
-
-"@types/events@*":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@types/events/-/events-1.1.0.tgz#93b1be91f63c184450385272c47b6496fd028e02"
-
 "@types/node@*":
   version "9.4.6"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.4.6.tgz#d8176d864ee48753d053783e4e463aec86b8d82e"
+
+"@types/rabbit.js@^0.4.31":
+  version "0.4.31"
+  resolved "https://registry.yarnpkg.com/@types/rabbit.js/-/rabbit.js-0.4.31.tgz#3d9c97224fa1271100030cc0dbbc78426d6b7165"
+  dependencies:
+    "@types/node" "*"
 
 "@types/ramda@^0.25.18":
   version "0.25.18"
@@ -54,15 +44,14 @@ ajv@^4.9.1:
     co "^4.6.0"
     json-stable-stringify "^1.0.1"
 
-amqplib@^0.5.2:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/amqplib/-/amqplib-0.5.2.tgz#d2d7313c7ffaa4d10bcf1e6252de4591b6cc7b63"
+amqplib@0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/amqplib/-/amqplib-0.3.2.tgz#e77d8fb3842ebcae78cf1c930c490d1e954f4297"
   dependencies:
     bitsyntax "~0.0.4"
-    bluebird "^3.4.6"
     buffer-more-ints "0.0.2"
     readable-stream "1.x >=1.1.9"
-    safe-buffer "^5.0.1"
+    when "~3.6.2"
 
 ansi-align@^2.0.0:
   version "2.0.0"
@@ -243,10 +232,6 @@ block-stream@*:
   resolved "https://registry.yarnpkg.com/block-stream/-/block-stream-0.0.9.tgz#13ebfe778a03205cfe03751481ebb4b3300c126a"
   dependencies:
     inherits "~2.0.0"
-
-bluebird@^3.4.6:
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
 
 boom@2.x.x:
   version "2.10.1"
@@ -1337,6 +1322,10 @@ node-pre-gyp@^0.6.39:
     tar "^2.2.1"
     tar-pack "^3.4.0"
 
+node-uuid@:
+  version "1.4.8"
+  resolved "https://registry.yarnpkg.com/node-uuid/-/node-uuid-1.4.8.tgz#b040eb0923968afabf8d32fb1f17f1167fdab907"
+
 nodemon@^1.13.0:
   version "1.15.1"
   resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-1.15.1.tgz#54daa72443d8d5a548f130866b92e65cded0ed58"
@@ -1541,6 +1530,14 @@ qs@~6.4.0:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.4.0.tgz#13e26d28ad6b0ffaa91312cd3bf708ed351e7233"
 
+rabbit.js@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/rabbit.js/-/rabbit.js-0.4.4.tgz#84a97b2fba35fd21af435dfd7cbd9b31895f1da4"
+  dependencies:
+    amqplib "0.3.2"
+    node-uuid ""
+    readable-stream "~1 >=1.0.2"
+
 ramda@^0.25.0:
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"
@@ -1554,7 +1551,7 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-"readable-stream@1.x >=1.1.9":
+"readable-stream@1.x >=1.1.9", "readable-stream@~1 >=1.0.2":
   version "1.1.14"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-1.1.14.tgz#7cf4c54ef648e3813084c636dd2079e166c081d9"
   dependencies:
@@ -2159,6 +2156,10 @@ verror@1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
+
+when@~3.6.2:
+  version "3.6.4"
+  resolved "https://registry.yarnpkg.com/when/-/when-3.6.4.tgz#473b517ec159e2b85005497a13983f095412e34e"
 
 which@^1.2.9:
   version "1.3.0"
