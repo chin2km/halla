@@ -33,7 +33,7 @@ class MongoServer {
             WORKER_SOCKET.ack();
             console.log(data);
         });
-        WORKER_SOCKET.connect("ttt");
+        WORKER_SOCKET.connect("TEST_EXCHANGE");
     }
     listenClients() {
         this.recieveMessageFromSocketServer();

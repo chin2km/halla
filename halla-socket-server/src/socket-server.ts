@@ -10,7 +10,7 @@ export class SocketServer {
     private socketIO: SocketIO.Server;
     private rabbitMQContext: rabbitJS.Context;
     private port: string | number;
-    private ALL_SOCKETS: SocketIO.Socket[] = [];
+    private ALL_CLIENTS: Client[] = [];
 
     constructor() {
         this.config();
@@ -34,14 +34,12 @@ export class SocketServer {
     }
 
     private sendMessageToTaskQueue(message: string): void {
-        const PUSH_SOCKET: PushSocket = this.rabbitMQContext.socket("PUSH",
-        {
+        const PUSH_SOCKET: PushSocket = this.rabbitMQContext.socket("PUSH", {
             routing: "topic",
             persistent: true
-        }
-    );
+        });
 
-        PUSH_SOCKET.connect("ttt", () => {
+        PUSH_SOCKET.connect("TEST_EXCHANGE", () => {
             PUSH_SOCKET.write(message, "utf8");
             PUSH_SOCKET.close();
         });
@@ -57,24 +55,15 @@ export class SocketServer {
         //////////////////////////////////////////////////////////////
 
         this.socketIO.on("connect", (socket: SocketIO.Socket) => {
-            this.ALL_SOCKETS.push(socket);
-            console.log(`Connected client on port ${this.port}: Total Clients: ${this.ALL_SOCKETS.length}: Client id: ${socket.id}`);
+            const CLIENT = new Client(this, socket);
 
-            socket.emit("connected", socket.id);
-
-            const handlerCategories = {
-                client: new Client(this, socket).handlers
-            };
-
-            R.forEachObjIndexed((handles) => {
-                R.forEachObjIndexed((handle, eventName) => {
-                    socket.on(eventName, handle);
-                })(handles);
-            })(handlerCategories);
+            this.ALL_CLIENTS.push(CLIENT);
+            console.log(`Client CONNECTED: Total Clients: ${this.ALL_CLIENTS.length}: Client socket id: ${socket.id}`);
 
             socket.on("disconnect", () => {
-                this.ALL_SOCKETS = R.filter(R.complement(R.equals(socket)))(this.ALL_SOCKETS);
-                console.log(`Client disconnected on port ${this.port}: Total Clients: ${this.ALL_SOCKETS.length}`);
+                const client = R.find(R.propEq("socket", socket))(this.ALL_CLIENTS);
+                this.ALL_CLIENTS = R.reject(R.equals(client))(this.ALL_CLIENTS);
+                console.log(`Client DISCONNECTED: Total Clients: ${this.ALL_CLIENTS.length}`);
             });
         });
     }

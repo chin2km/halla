@@ -41,7 +41,7 @@ export class MongoServer {
             console.log(data);
         });
 
-        WORKER_SOCKET.connect("ttt");
+        WORKER_SOCKET.connect("TEST_EXCHANGE");
     }
 
     private listenClients(): void {

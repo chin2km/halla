@@ -13,7 +13,7 @@ const Client_1 = require("./handlers/Client");
 const R = __importStar(require("ramda"));
 class SocketServer {
     constructor() {
-        this.ALL_SOCKETS = [];
+        this.ALL_CLIENTS = [];
         this.config();
         this.createServer();
     }
@@ -35,7 +35,7 @@ class SocketServer {
             routing: "topic",
             persistent: true
         });
-        PUSH_SOCKET.connect("ttt", () => {
+        PUSH_SOCKET.connect("TEST_EXCHANGE", () => {
             PUSH_SOCKET.write(message, "utf8");
             PUSH_SOCKET.close();
         });
@@ -48,20 +48,13 @@ class SocketServer {
         }, 1000);
         //////////////////////////////////////////////////////////////
         this.socketIO.on("connect", (socket) => {
-            this.ALL_SOCKETS.push(socket);
-            console.log(`Connected client on port ${this.port}: Total Clients: ${this.ALL_SOCKETS.length}: Client id: ${socket.id}`);
-            socket.emit("connected", socket.id);
-            const handlerCategories = {
-                client: new Client_1.Client(this, socket).handlers
-            };
-            R.forEachObjIndexed((handles) => {
-                R.forEachObjIndexed((handle, eventName) => {
-                    socket.on(eventName, handle);
-                })(handles);
-            })(handlerCategories);
+            const CLIENT = new Client_1.Client(this, socket);
+            this.ALL_CLIENTS.push(CLIENT);
+            console.log(`Client CONNECTED: Total Clients: ${this.ALL_CLIENTS.length}: Client socket id: ${socket.id}`);
             socket.on("disconnect", () => {
-                this.ALL_SOCKETS = R.filter(R.complement(R.equals(socket)))(this.ALL_SOCKETS);
-                console.log(`Client disconnected on port ${this.port}: Total Clients: ${this.ALL_SOCKETS.length}`);
+                const client = R.find(R.propEq("socket", socket))(this.ALL_CLIENTS);
+                this.ALL_CLIENTS = R.reject(R.equals(client))(this.ALL_CLIENTS);
+                console.log(`Client DISCONNECTED: Total Clients: ${this.ALL_CLIENTS.length}`);
             });
         });
     }

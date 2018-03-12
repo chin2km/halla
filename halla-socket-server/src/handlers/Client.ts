@@ -1,4 +1,6 @@
 import { SocketServer } from "../socket-server";
+import * as R from "ramda";
+
 export class Client {
     private app: SocketServer;
     private socket: SocketIO.Socket;
@@ -6,15 +8,27 @@ export class Client {
     constructor(app: SocketServer, socket: SocketIO.Socket) {
         this.app = app;
         this.socket = socket;
+
+        this.setupHandlers();
     }
 
-    handleLogin = (event: any) => {
-        console.log("SUBMIT_LOGIN", event);
-        this.socket.emit("LOGIN_FAIL", event);
+    setupHandlers = () => {
+        R.forEachObjIndexed((handles) => {
+            R.forEachObjIndexed((handle, eventName) => {
+                this.socket.on(eventName, handle);
+            })(handles);
+        })(this.handlers);
+
+        this.socket.emit("connected", this.socket.id);
     }
 
-    handleLogout = (event: any) => {
-        console.log("LOGOUT event", event);
+    handleLogin = (message: any) => {
+        console.log("SUBMIT_LOGIN", message);
+        this.socket.emit("LOGIN_FAIL", message);
+    }
+
+    handleLogout = (message: any) => {
+        console.log("LOGOUT event", message);
     }
 
     public handlers = {
