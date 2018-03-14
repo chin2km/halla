@@ -116,6 +116,7 @@ export class LoginForm extends React.Component<LoginForm.Props, LoginForm.State>
                                     value={signupPassword}
                                     onChange={({target:{value}}) => this.setValue(['signup', 'password'], value)}
                                     hintText="Password"
+                                    type="password"
                                     autoComplete="current-password"
                                 /><br />
                                 <RaisedButton label="Sign-up"

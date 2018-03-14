@@ -9,7 +9,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const R = __importStar(require("ramda"));
 class Client {
-    constructor(socket, rabbitConection) {
+    constructor(socket, rabbitMQContext) {
+        this.channels = {
+            SIGNUP_CHANNEL: "SIGNUP_CHANNEL",
+            LOGIN_CHANNEL: "LOGIN_CHANNEL",
+        };
         this.setupHandlers = () => {
             this.socket.emit("connected", this.socket.id);
             R.forEachObjIndexed((handle, eventName) => {
@@ -18,14 +22,27 @@ class Client {
         };
         this.handleLogin = (message) => {
             console.log("SUBMIT_LOGIN", message);
-            this.socket.emit("LOGIN_SUCCESS", message);
+            this.requestToChannel(this.channels.LOGIN_CHANNEL, message, (response) => {
+                this.socket.emit("LOGIN_SUCCESS", message);
+            });
         };
         this.handleSignUp = (message) => {
             console.log("SUBMIT_SIGNUP", message);
-            this.socket.emit("SIGNUP_SUCCESS", message);
+            this.requestToChannel(this.channels.SIGNUP_CHANNEL, message, (response) => {
+                this.socket.emit("SIGNUP_SUCCESS", response);
+            });
         };
         this.handleLogout = (message) => {
             console.log("LOGOUT", message);
+        };
+        this.requestToChannel = (CHANNEL, message, callback) => {
+            const REQ_SOCKET = this.rabbitMQContext.socket("REQUEST");
+            REQ_SOCKET.connect(CHANNEL, () => {
+                REQ_SOCKET.write(JSON.stringify(message), "utf8");
+                REQ_SOCKET.on("data", (message) => {
+                    callback(message);
+                });
+            });
         };
         this.handlers = {
             SUBMIT_LOGIN: this.handleLogin,
@@ -33,7 +50,7 @@ class Client {
             LOGOUT: this.handleLogout
         };
         this.socket = socket;
-        this.rabbitConection = rabbitConection;
+        this.rabbitMQContext = rabbitMQContext;
         this.setupHandlers();
     }
 }

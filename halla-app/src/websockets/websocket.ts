@@ -28,6 +28,7 @@ export const subscribe = (route, nextAction) => {
 };
 
 export const sendMessage = (config) => {
+    printLine('Sending message to:', config.route, ":", config.message )
     ws.socket.emit(config.route, config.message);
     return null;
 };

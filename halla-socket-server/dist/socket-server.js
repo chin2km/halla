@@ -9,7 +9,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const socketIo = require("socket.io");
 const rabbitJS = __importStar(require("rabbit.js"));
-const Client_1 = require("./handlers/Client");
+const Client_1 = require("./Models/Client");
 const R = __importStar(require("ramda"));
 class SocketServer {
     constructor() {
@@ -25,30 +25,14 @@ class SocketServer {
         this.socketIO = socketIo();
         this.socketIO.listen(this.port);
         // rabbitJS Connection
-        this.rabbitMQContext = rabbitJS.createContext(SocketServer.rabbitMQ_SERVER);
-        this.rabbitMQContext.on("ready", () => {
+        this.rabbitMQConnection = rabbitJS.createContext(SocketServer.rabbitMQ_SERVER);
+        this.rabbitMQConnection.on("ready", () => {
             this.listenClients();
         });
     }
-    sendMessageToTaskQueue(message) {
-        const PUSH_SOCKET = this.rabbitMQContext.socket("PUSH", {
-            routing: "topic",
-            persistent: true
-        });
-        PUSH_SOCKET.connect("TEST_EXCHANGE", () => {
-            PUSH_SOCKET.write(message, "utf8");
-            PUSH_SOCKET.close();
-        });
-    }
     listenClients() {
-        //////////////////////////////////////////////////////////////
-        let Number = 0;
-        setInterval(() => {
-            this.sendMessageToTaskQueue(`send# ${++Number}`);
-        }, 1000);
-        //////////////////////////////////////////////////////////////
         this.socketIO.on("connect", (socket) => {
-            const CLIENT = new Client_1.Client(this, socket);
+            const CLIENT = new Client_1.Client(socket, this.rabbitMQConnection);
             this.ALL_CLIENTS.push(CLIENT);
             console.log(`Client CONNECTED: Total Clients: ${this.ALL_CLIENTS.length}: Client socket id: ${socket.id}`);
             socket.on("disconnect", () => {

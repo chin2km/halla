@@ -27,14 +27,14 @@ class App extends React.Component<App.Props, App.State> {
   
   render() {
     const { children } = this.props;
-    const test = () => <h1>LOGIN (FAKE) SUCCESS!</h1>;
+    const homeComponent = () => <h1>LOGIN (FAKE) SUCCESS!</h1>;
     return (
         <div>
           <Header title="Halla"/>
           <Switch>
                 <Route exact path={'/'} component={Login}/>
                 <Route path={'/login'} component={Login}/>
-                <Route path={'/home'} component={test}/>
+                <Route path={'/home'} component={homeComponent}/>
             </Switch>
         </div>
     );

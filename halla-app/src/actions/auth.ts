@@ -5,4 +5,5 @@ export const logout = createAction(Actions.LOGOUT);
 export const submitLogin = createAction<LoginData>(Actions.SUBMIT_LOGIN);
 export const setLoginSuccess = createAction<LoginData>(Actions.LOGIN_SUCCESS);
 export const submitSignUp = createAction<any>(Actions.SUBMIT_SIGNUP);
+export const setSignupSuccess = createAction<any>(Actions.SIGNUP_SUCCESS);
 
