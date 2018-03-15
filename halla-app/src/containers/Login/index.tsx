@@ -4,12 +4,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { RootState } from '../../reducers';
-import {LoginForm} from '../../components';
+import {LoginFormComponent} from '../../components';
 import './style.less';
 
 export namespace Login {
   export interface Props extends RouteComponentProps<void> {
     actions: typeof AuthActions
+    loading: typeof AuthActions
   }
 
   export interface State {
@@ -27,18 +28,19 @@ class Login extends React.Component<Login.Props, Login.State> {
   }
   render() {
     const {children} = this.props;
-    return (
-          <LoginForm
-            onSubmitLogin={this.handleSubmitLogin}
-            onSubmitSignUp={this.handleSubmitSignUp}
+    return <LoginFormComponent
+              show={this.props.loading}
+              onSubmitLogin={this.handleSubmitLogin}
+              onSubmitSignUp={this.handleSubmitSignUp}
             />
-    );
   }
 }
 
 function mapStateToProps(state: RootState) {
   return {
-    user: state.user
+    user: state.auth.user,
+    error: state.auth.error,
+    loading: state.loading
   };
 }
 

@@ -8,6 +8,7 @@ export class Client {
     private rabbitMQContext: rabbitJS.Context;
 
     private channels = {
+        TEST: "TEST",
         SIGNUP_CHANNEL: "SIGNUP_CHANNEL",
         LOGIN_CHANNEL: "LOGIN_CHANNEL",
     };
@@ -17,6 +18,19 @@ export class Client {
         this.rabbitMQContext = rabbitMQContext;
 
         this.setupHandlers();
+        // this.test();
+    }
+
+    test = () => {
+
+        this.requestToChannel(this.channels.TEST, {
+            username: "chintu",
+            password: "chintu",
+            emailId: "blah"
+        }, (data: string) => {
+            console.log(JSON.stringify(data));
+        });
+
     }
 
     setupHandlers = () => {
@@ -31,7 +45,13 @@ export class Client {
         console.log("SUBMIT_LOGIN", message);
 
         this.requestToChannel(this.channels.LOGIN_CHANNEL, message, (response: string) => {
-            this.socket.emit("LOGIN_SUCCESS", message);
+            if (response === "SUCCESS") {
+                this.socket.emit("LOGIN_SUCCESS", message);
+            }
+
+            if ( response === "FAIL") {
+                this.socket.emit("LOGIN_FAIL", response);
+            }
         });
     }
 
@@ -39,22 +59,33 @@ export class Client {
         console.log("SUBMIT_SIGNUP", message);
 
         this.requestToChannel(this.channels.SIGNUP_CHANNEL, message, (response: string) => {
-            this.socket.emit("SIGNUP_SUCCESS", response);
+            if (response === "SUCCESS") {
+                this.socket.emit("SIGNUP_SUCCESS", message);
+            }
+
+            if ( response === "FAIL") {
+                this.socket.emit("SIGNUP_FAIL", response);
+            }
         });
-    }
+    };
 
     handleLogout = (message: any) => {
         console.log("LOGOUT", message);
     }
 
     requestToChannel = (CHANNEL: string, message: any, callback: Function) => {
-        const REQ_SOCKET: ReqSocket = this.rabbitMQContext.socket("REQUEST");
+        const REQ_SOCKET: ReqSocket = this.rabbitMQContext.socket("REQ", {expiration: 10000});
+        REQ_SOCKET.setEncoding("utf8");
 
         REQ_SOCKET.connect(CHANNEL, () => {
 
-            REQ_SOCKET.write(JSON.stringify(message), "utf8");
+            REQ_SOCKET.write(JSON.stringify(message));
             REQ_SOCKET.on("data", (message: string) => {
+                console.log(message);
                 callback(message);
+                setTimeout(() => {
+                    REQ_SOCKET.close();
+                }, 1000);
             });
 
         });

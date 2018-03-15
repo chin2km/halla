@@ -5,7 +5,7 @@ import {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { RootState } from '../../reducers';
-import {Header, LoginForm} from '../../components';
+import {Header} from '../../components';
 import Login from '../Login'
 import * as WebsocketActions from '../../actions/websocket';
 import './style.less';
@@ -43,7 +43,7 @@ class App extends React.Component<App.Props, App.State> {
 
 function mapStateToProps(state: RootState) {
   return {
-    user: state.user
+    user: state.auth
   };
 }
 

@@ -1,5 +1,5 @@
 import { combineEpics, ActionsObservable } from "redux-observable";
-import { SUBMIT_LOGIN, LOGIN_SUCCESS, SUBMIT_SIGNUP, SIGNUP_SUCCESS } from "../actions/constants";
+import { SUBMIT_LOGIN, LOGIN_SUCCESS, SUBMIT_SIGNUP, SIGNUP_SUCCESS, LOGIN_FAIL } from "../actions/constants";
 import { printLine } from "../utils/printline";
 import { sendMessage } from "../websockets/websocket";
 import { Observable } from "rxjs/Observable";
@@ -17,7 +17,7 @@ const submitLoginEpic = (actions$: ActionsObservable<any>, store) =>
 
 
 
-const submitSignUp = (actions$: ActionsObservable<any>, store) =>
+const submitSignUpEpic = (actions$: ActionsObservable<any>, store) =>
     actions$.ofType(SUBMIT_SIGNUP)
     .do(({payload}) => {
         sendMessage({
@@ -39,7 +39,7 @@ const signupSuccessEpic = (actions$: ActionsObservable<any>, store) =>
 
 export const authEpics = combineEpics(
     submitLoginEpic,
-    submitSignUp,
+    loginSuccessEpic,
+    submitSignUpEpic,
     signupSuccessEpic,
-    loginSuccessEpic
 )

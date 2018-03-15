@@ -1,13 +1,16 @@
 import { combineReducers, Reducer } from 'redux';
-import user from './user';
+import auth from './auth';
+import loading from './loading';
 import ws from './websockets';
 
 export interface RootState {
-  user: UserStoreState;
-  ws: any
+  auth: UserStoreState;
+  ws: any,
+  loading: boolean
 }
 
 export default combineReducers<RootState>({
-  user,
-  ws
+  auth,
+  ws,
+  loading
 });

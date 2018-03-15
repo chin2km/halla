@@ -1,3 +1,6 @@
+import withSpinner from './LoaderHOC';
 export {Header} from './Header';
-export {LoginForm} from './LoginForm';
+export {LoginFormComponent} from './LoginForm';
 export {TextBox} from './TextBox';
+
+export {withSpinner}

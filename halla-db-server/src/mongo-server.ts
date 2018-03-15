@@ -5,6 +5,8 @@ import * as R from "ramda";
 import { WorkerSocket, RepSocket } from "rabbit.js";
 import { Socket } from "net";
 
+import User from "./models/User";
+
 export class MongoServer {
     public static readonly rabbitMQ_SERVER: string = "amqp://localhost";
     public static readonly MONGODB_DB: string = "mongodb://localhost/halla_db";
@@ -29,16 +31,47 @@ export class MongoServer {
         this.rabbitMQContext.on("ready", this.listenClients);
     }
 
-    private recieveMessageFromSocketServer = (): void => {
+    private listenReplyToChannel = (CHANNEL: string, callback: Function) => {
+
         const REPLY_SOCKET: RepSocket = this.rabbitMQContext.socket("REPLY");
-        REPLY_SOCKET.on("data", (data: string) => {
-            const signUpData = JSON.parse(data);
-            console.log(signUpData);
 
+        REPLY_SOCKET.setEncoding("utf8");
 
-            REPLY_SOCKET.write("OK");
+        REPLY_SOCKET.connect(CHANNEL, () => {
+
+            REPLY_SOCKET.on("data", (data: string) => {
+                const dataReceived = JSON.parse(data);
+                console.log("DATA RECIEVED", dataReceived);
+                setTimeout(() => {
+                    callback(dataReceived, REPLY_SOCKET);
+                }, 2000);
+            });
         });
-        REPLY_SOCKET.connect("SIGNUP_CHANNEL");
+    }
+
+
+    private recieveMessageFromSocketServer = (): void => {
+        this.listenReplyToChannel("SIGNUP_CHANNEL", (dataReceived: any, socket: any) => {
+            User.create(dataReceived, (err, data) => {
+                if (err) {
+                    socket.write(`FAIL`);
+                } else {
+                    socket.write(`SUCCESS`);
+                }
+            });
+        });
+
+        this.listenReplyToChannel("LOGIN_CHANNEL", (dataReceived: any, socket: any) => {
+            User.findOne(dataReceived, (err, data) => {
+                if (data !== null) {
+                    console.log("LOGIN_SUCCESS");
+                    socket.write(`SUCCESS`);
+                } else {
+                    console.log("LOGIN_FAIL");
+                    socket.write(`FAIL`);
+                }
+            });
+        });
     }
 
     private listenClients = (): void => {

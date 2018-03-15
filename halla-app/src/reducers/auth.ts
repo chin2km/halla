@@ -3,10 +3,15 @@ import * as Actions from '../actions/constants';
 
 const initialState: UserStoreState = {};
 
-export default handleActions<UserStoreState, LoginData>({
+export default handleActions<UserStoreState, any>({
   [Actions.LOGIN_SUCCESS]: (state, action) => {
     return {
-      ...action.payload
+      user: action.payload
+    };
+  },
+  [Actions.LOGIN_FAIL]: (state, action) => {
+    return {
+      error: action.payload
     };
   }
 }, initialState);

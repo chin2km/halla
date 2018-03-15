@@ -6,9 +6,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 }
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+}
 Object.defineProperty(exports, "__esModule", { value: true });
 const Mongoose = require("mongoose");
 const rabbitJS = __importStar(require("rabbit.js"));
+const User_1 = __importDefault(require("./models/User"));
 class MongoServer {
     constructor() {
         this.createServer = () => {
@@ -21,14 +25,42 @@ class MongoServer {
             this.rabbitMQContext = rabbitJS.createContext(MongoServer.rabbitMQ_SERVER);
             this.rabbitMQContext.on("ready", this.listenClients);
         };
-        this.recieveMessageFromSocketServer = () => {
+        this.listenReplyToChannel = (CHANNEL, callback) => {
             const REPLY_SOCKET = this.rabbitMQContext.socket("REPLY");
-            REPLY_SOCKET.on("data", (data) => {
-                const signUpData = JSON.parse(data);
-                console.log(signUpData);
-                REPLY_SOCKET.write("OK");
+            REPLY_SOCKET.setEncoding("utf8");
+            REPLY_SOCKET.connect(CHANNEL, () => {
+                REPLY_SOCKET.on("data", (data) => {
+                    const dataReceived = JSON.parse(data);
+                    console.log("DATA RECIEVED", dataReceived);
+                    setTimeout(() => {
+                        callback(dataReceived, REPLY_SOCKET);
+                    }, 2000);
+                });
             });
-            REPLY_SOCKET.connect("SIGNUP_CHANNEL");
+        };
+        this.recieveMessageFromSocketServer = () => {
+            this.listenReplyToChannel("SIGNUP_CHANNEL", (dataReceived, socket) => {
+                User_1.default.create(dataReceived, (err, data) => {
+                    if (err) {
+                        socket.write(`FAIL`);
+                    }
+                    else {
+                        socket.write(`SUCCESS`);
+                    }
+                });
+            });
+            this.listenReplyToChannel("LOGIN_CHANNEL", (dataReceived, socket) => {
+                User_1.default.findOne(dataReceived, (err, data) => {
+                    if (data !== null) {
+                        console.log("LOGIN_SUCCESS");
+                        socket.write(`SUCCESS`);
+                    }
+                    else {
+                        console.log("LOGIN_FAIL");
+                        socket.write(`FAIL`);
+                    }
+                });
+            });
         };
         this.listenClients = () => {
             this.recieveMessageFromSocketServer();

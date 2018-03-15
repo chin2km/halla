@@ -6,8 +6,10 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import {TextBox} from '../TextBox';
 import FontIcon from 'material-ui/FontIcon';
 import MapsPersonPin from 'material-ui/svg-icons/maps/person-pin';
-import './style.less';
 import {deepPurple500, deepPurple600, deepPurple50} from 'material-ui/styles/colors';
+import {withSpinner} from '../../components'
+
+import './style.less';
 
 export namespace LoginForm {
   export interface Props {
@@ -20,7 +22,7 @@ export namespace LoginForm {
   }
 }
 
-export class LoginForm extends React.Component<LoginForm.Props, LoginForm.State> {
+class LoginFormClass extends React.Component<LoginForm.Props, LoginForm.State> {
     constructor(props) {
         super(props);
         this.state = {
@@ -29,7 +31,7 @@ export class LoginForm extends React.Component<LoginForm.Props, LoginForm.State>
                 password: ''
             },
             signup: {
-                emailid: '',
+                emailId: '',
                 username: '',
                 password: ''
             }
@@ -65,7 +67,7 @@ export class LoginForm extends React.Component<LoginForm.Props, LoginForm.State>
                 password: loginPassword
             },
             signup:{
-                emailid: signupEmailid,
+                emailId: signupEmailid,
                 username: signupUserName,
                 password: signupPassword
             },
@@ -103,7 +105,7 @@ export class LoginForm extends React.Component<LoginForm.Props, LoginForm.State>
                             <form className="content">
                                 <TextBox
                                     value={signupEmailid}
-                                    onChange={({target:{value}}) => this.setValue(['signup', 'emailid'], value)}
+                                    onChange={({target:{value}}) => this.setValue(['signup', 'emailId'], value)}
                                     hintText="Emailid"
                                 /><br />
                                 <TextBox
@@ -129,3 +131,5 @@ export class LoginForm extends React.Component<LoginForm.Props, LoginForm.State>
     );
   }
 }
+
+export const LoginFormComponent = withSpinner(LoginFormClass);

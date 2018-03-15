@@ -4,7 +4,10 @@ declare type TodoItemId = number;
 
 declare type TodoFilterType = 'SHOW_ALL' | 'SHOW_ACTIVE' | 'SHOW_COMPLETED';
 
-declare type UserStoreState = LoginData;
+declare type UserStoreState = {
+  error?: boolean,
+  user?: LoginData
+};
 
 declare type LoginData = {
   username?: string;
@@ -12,7 +15,7 @@ declare type LoginData = {
 }
 
 declare type SignUpData = {
-  emailid: string;
+  emailId: string;
   username: string;
   password: string;
 }
