@@ -3,8 +3,8 @@ import { RouteComponentProps } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { RootState } from '../../reducers';
-import Splitter from 'm-react-splitters';
-import './splitter.less';
+import SplitterLayout from 'react-splitter-layout';
+import './style.less';
 
 
 export namespace Home {
@@ -21,16 +21,15 @@ class Home extends React.Component<Home.Props, Home.State> {
   }
   
   render() {
-    return <Splitter
-            position="vertical"
-            primaryPaneMaxWidth="80%"
-            primaryPaneMinWidth={0}
-            primaryPaneWidth="400px"
-            postPoned={false}
-            >    
-            <div></div>
-            <div></div>
-    </Splitter>;
+    return <SplitterLayout
+            percentage={true}
+            primaryMinSize={10}
+            secondaryMinSize={10}
+            secondaryInitialSize={80}
+          >
+          <div>Pane 1</div>
+          <div>Pane 2</div>
+    </SplitterLayout>;
   }
 }
 
