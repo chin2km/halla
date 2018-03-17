@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { RootState } from '../../reducers';
 import {Header} from '../../components';
 import Login from '../Login'
+import Home from '../Home'
 import * as WebsocketActions from '../../actions/websocket';
 import './style.less';
 
@@ -34,7 +35,7 @@ class App extends React.Component<App.Props, App.State> {
           <Switch>
                 <Route exact path={'/'} component={Login}/>
                 <Route path={'/login'} component={Login}/>
-                <Route path={'/home'} component={homeComponent}/>
+                <Route path={'/home'} component={Home}/>
             </Switch>
         </div>
     );

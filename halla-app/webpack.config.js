@@ -60,6 +60,20 @@ module.exports = {
       { test: /\.html$/, use: 'html-loader' },
       { test: /\.png$/, use: 'url-loader?limit=10000' },
       { test: /\.jpg$/, use: 'file-loader' },
+      {
+        test: /\.css$/,
+        include: Path.join(__dirname, './node_modules'),
+        use: [
+          'style-loader',
+          {
+            loader: 'typings-for-css-modules-loader',
+            options: {
+              modules: true,
+              namedExport: true
+            }
+          }
+        ]
+      }
     ],
   },
   plugins: [
