@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { RootState } from '../../reducers';
 import {LoginFormComponent} from '../../components';
+
 import './style.less';
 
 export namespace Login {
@@ -28,11 +29,13 @@ class Login extends React.Component<Login.Props, Login.State> {
   }
   render() {
     const {children} = this.props;
-    return <LoginFormComponent
-              show={this.props.loading}
-              onSubmitLogin={this.handleSubmitLogin}
-              onSubmitSignUp={this.handleSubmitSignUp}
-            />
+    return <div className="login">
+      <LoginFormComponent
+        show={this.props.loading}
+        onSubmitLogin={this.handleSubmitLogin}
+        onSubmitSignUp={this.handleSubmitSignUp}
+      />
+    </div>
   }
 }
 

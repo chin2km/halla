@@ -18,7 +18,7 @@ const withSpinner = <PropsType extends WithSpinnerProps>(InputComponent: React.C
                 <div className="wrapper">
                     <InputComponent {...this.props} />
                     {this.props.show && <div className="spinner">
-                      <CircularProgress size={60} thickness={7} className="circle" color={deepPurple500}/>
+                      <CircularProgress size={60} thickness={7} color={deepPurple500}/>
                     </div>}
                 </div>
             );

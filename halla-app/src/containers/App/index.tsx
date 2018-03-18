@@ -9,6 +9,8 @@ import {Header} from '../../components';
 import Login from '../Login'
 import Home from '../Home'
 import * as WebsocketActions from '../../actions/websocket';
+import * as ReactTooltip from 'react-tooltip';
+
 import './style.less';
 
 export namespace App {
@@ -30,13 +32,14 @@ class App extends React.Component<App.Props, App.State> {
     const { children } = this.props;
     const homeComponent = () => <h1>LOGIN (FAKE) SUCCESS!</h1>;
     return (
-        <div>
+        <div className="app">
           <Header title="Halla"/>
           <Switch>
                 <Route exact path={'/'} component={Login}/>
                 <Route path={'/login'} component={Login}/>
                 <Route path={'/home'} component={Home}/>
-            </Switch>
+          </Switch>
+          <ReactTooltip  border place={"right"} effect="solid" delayShow={500}/>
         </div>
     );
   }

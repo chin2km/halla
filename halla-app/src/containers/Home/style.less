@@ -1,0 +1,75 @@
+.home {
+	border-top: solid 2px #0000003d;
+	display: flex;
+	flex-grow: 1;
+	position: relative;
+
+	.layout-splitter {
+		transition: all 0.2s ease-in;
+		background-color:  #0000003d !important;
+		&:hover {
+			background-color:  #5f5f5f3d !important;
+			width: 8px;
+		}
+	}
+
+	.pane1 {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		height: 100%;
+
+		.fixed {
+			padding: 15px;
+			height: 90px;
+			max-height: 90px;
+		}
+
+		.scrolled , > div {
+			padding: 15px;			
+			flex-grow: 1;
+			height: 100%;
+			overflow-y: auto;
+		}
+
+		.add-button {
+			right: 10px;
+			position: absolute;
+			top: 13px;
+			transform: scale(0.7);
+		}
+		h2 {
+			margin: 0;
+			line-height: 2em;
+		}
+		hr {
+			border: solid 0.5px #4d4d4d;
+		}
+		.search-box {
+			width: 100% !important;
+			div {
+				color: #4d4d4d !important;
+			}
+		}
+	}
+
+	.pane2 {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+
+		.chat-panel-icon {
+			transform: scale(7);
+			fill: #663ab759 !important;
+			animation-name: chatBubble;
+			animation-duration: 2s;
+			animation-iteration-count: infinite;
+		}
+		@keyframes chatBubble {
+			0%   {transform: scale(7);}
+			70%  {transform: scale(3);}
+			100% {transform: scale(7);}
+		}
+	}
+}

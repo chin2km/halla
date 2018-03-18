@@ -4,6 +4,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { RootState } from '../../reducers';
 import SplitterLayout from 'react-splitter-layout';
+import LeftPane from '../LeftPane';
+import RightPane from '../RightPane/';
 import './style.less';
 
 
@@ -21,15 +23,17 @@ class Home extends React.Component<Home.Props, Home.State> {
   }
   
   render() {
-    return <SplitterLayout
-            percentage={true}
-            primaryMinSize={10}
-            secondaryMinSize={10}
-            secondaryInitialSize={80}
-          >
-          <div>Pane 1</div>
-          <div>Pane 2</div>
-    </SplitterLayout>;
+    return <div className="home">
+        <SplitterLayout
+              percentage={true}
+              primaryMinSize={7}
+              secondaryMinSize={30}
+              secondaryInitialSize={80}
+            >
+            <LeftPane/>
+            <RightPane/>
+      </SplitterLayout>
+    </div>;
   }
 }
 

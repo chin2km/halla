@@ -1,0 +1,107 @@
+.pane2 {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+
+	.chat-window {
+		display: flex;
+		height: 100%;
+		flex: 1 0 100%;
+
+		.chat {
+			display: flex;
+			height: 100%;
+			flex: 1 0 100%;
+			background: transparent !important;
+
+			& > div {
+				display: flex;
+				flex-direction: column;
+				flex-grow: 1;
+			}
+
+			.messages {
+				display: flex;
+				flex-direction: column-reverse;
+				height: calc(100% - 210px);
+				overflow: scroll;
+			}
+
+			.chat-bubble {
+				flex-direction: row;
+				white-space: normal !important;
+				margin: 10px 15px 0px 15px !important;
+				padding: 10px !important;
+				flex-shrink: 0;
+
+				&.mine {
+					align-self: flex-end;
+				}
+
+				span {
+					white-space: normal !important;
+					line-height: 1.5em !important;
+					color: #dedede !important;
+				}
+			}
+
+			.footer {
+				bottom: 0;
+				position: absolute;
+				width: calc(100% - 30px);
+				margin: 15px;
+				display: flex;
+				flex-direction: row;
+				max-height: 110px;
+				border-top: solid 1px #333;
+
+				.chat-input {
+					width: 100% !important;
+				}
+				.send-button {
+					max-height: 57px;
+					align-self: center;
+				}
+
+			}
+
+		}
+
+		.close-btn {
+			position: absolute;
+			background: #353535;
+			width: 40px;
+			height: 40px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			border-radius: 4px;
+			right: 15px;
+			top: 15px;
+			transition: all 0.2s ease-in;
+			z-index: 1;
+
+			&:hover {
+				background: #494949;
+				border-radius: 8px;
+				cursor: pointer;
+			}
+		}
+	}
+
+
+
+	.chat-panel-icon {
+		transform: scale(7);
+		fill: #663ab759 !important;
+		animation-name: chatBubble;
+		animation-duration: 2s;
+		animation-iteration-count: infinite;
+	}
+	@keyframes chatBubble {
+		0%   {transform: scale(7);}
+		70%  {transform: scale(3);}
+		100% {transform: scale(7);}
+	}
+}

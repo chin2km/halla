@@ -13,7 +13,7 @@ export class Header extends React.Component<Header.Props> {
     const { title } = this.props;
     return (
       <div className="normal">
-        <Link to='/'>
+        <Link to='/home'>
           <h1>{title}</h1>
         </Link>
       </div>
