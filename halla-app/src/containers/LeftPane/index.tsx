@@ -9,14 +9,12 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import {deepPurple500} from 'material-ui/styles/colors';
 import Avatar from 'material-ui/Avatar';
-import {List, ListItem} from 'material-ui/List';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Subheader from 'material-ui/Subheader';
-import Divider from 'material-ui/Divider';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
-import { TextBox } from '../../components';
+import { TextBox, RoomsList } from '../../components';
 
 import './style.less';
 
@@ -94,22 +92,7 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 			</div>
 
 			<div className="scrolled">
-				<List>
-					{R.map(({name}) => <ListItem
-						className="list-item"
-						key={name}
-						primaryText={name}
-						leftAvatar={<Avatar>{R.pipe(R.head, R.toUpper)(name)}</Avatar>}
-						rightIcon={<CommunicationChatBubble />}
-					/>)(filteredRooms)}
-					
-					{R.isEmpty(filteredRooms) && 
-						<ListItem
-						className="list-item"
-						primaryText={"No channels found"}/>
-					}
-				</List>
-				<Divider />
+				<RoomsList rooms={filteredRooms}/>
 			</div>
 
 			<Dialog
@@ -152,4 +135,20 @@ const dummyChannels = [
 	{name: 'pqr-rooooom'},
 	{name: 'stu-rooooom'},
 	{name: 'vwx-rooooom'},
+	{name: 'abc-roooooom'},
+	{name: 'def-roooooom'},
+	{name: 'ghi-roooooom'},
+	{name: 'jkl-roooooom'},
+	{name: 'mno-roooooom'},
+	{name: 'pqr-roooooom'},
+	{name: 'stu-roooooom'},
+	{name: 'vwx-roooooom'},
+	{name: 'abc-roooioom'},
+	{name: 'def-roooioom'},
+	{name: 'ghi-roooioom'},
+	{name: 'jkl-roooioom'},
+	{name: 'mno-roooioom'},
+	{name: 'pqr-roooioom'},
+	{name: 'stu-roooioom'},
+	{name: 'vwx-roooioom'},
 ]
