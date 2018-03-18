@@ -14,6 +14,7 @@
 			height: 100%;
 			flex: 1 0 100%;
 			background: transparent !important;
+			overflow: hidden;
 
 			& > div {
 				display: flex;
@@ -25,7 +26,8 @@
 				display: flex;
 				flex-direction: column-reverse;
 				height: calc(100% - 210px);
-				overflow: scroll;
+				overflow: auto;
+				overflow-x: hidden;
 			}
 
 			.chat-bubble {

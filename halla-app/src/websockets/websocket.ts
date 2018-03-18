@@ -1,4 +1,4 @@
-import R from 'ramda';
+import * as R from 'ramda';
 import SocketIO = require('socket.io-client');
 import {store} from '../store/';
 import * as ACTIONS from '../actions/constants';

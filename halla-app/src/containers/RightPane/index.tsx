@@ -30,11 +30,7 @@ export namespace RightPane {
 class RightPane extends React.Component<RightPane.Props, RightPane.State> {
 
   componentDidMount() {
-    // setInterval(() => {
-    //   this.setState({
-    //     hasChat: !this.state.hasChat
-    //   })
-    // }, 3000)
+
   }
   state = {
     hasChat: true
@@ -51,7 +47,6 @@ class RightPane extends React.Component<RightPane.Props, RightPane.State> {
             <Card className="chat">
 				<div
 					onClick={this.leaveRoom}
-					// data-tip="Leave room"
 					className="close-btn">
 					<CloseIcon />
 				</div>

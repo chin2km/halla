@@ -106,7 +106,7 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 					{R.isEmpty(filteredRooms) && 
 						<ListItem
 						className="list-item"
-						primaryText={"No results found"}/>
+						primaryText={"No channels found"}/>
 					}
 				</List>
 				<Divider />
