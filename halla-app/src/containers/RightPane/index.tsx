@@ -35,7 +35,7 @@ class RightPane extends React.Component<RightPane.Props, RightPane.State> {
 
   }
   state = {
-    hasChat: true
+    hasChat: false
   }
 
   leaveRoom = () => {
