@@ -14,6 +14,9 @@ export const SUBMIT_SIGNUP = 'SUBMIT_SIGNUP';
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 export const SIGNUP_FAIL = 'SIGNUP_FAIL';
 
+export const FETCH_ROOMS = 'FETCH_ROOMS';
+export const SET_ROOMS = 'SET_ROOMS';
+
 export const CREATE_ROOM = 'CREATE_ROOM';
 export const CREATE_ROOM_SUCCESSFUL = 'CREATE_ROOM_SUCCESSFUL';
 export const CREATE_ROOM_FAIL = 'CREATE_ROOM_FAIL';

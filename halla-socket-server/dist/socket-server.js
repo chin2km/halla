@@ -9,8 +9,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const socketIo = require("socket.io");
 const rabbitJS = __importStar(require("rabbit.js"));
-const Client_1 = require("./Models/Client");
+const DefaultNamespace_1 = require("./NameSpaces/DefaultNamespace");
 const R = __importStar(require("ramda"));
+const RoomsNamespace_1 = require("./NameSpaces/RoomsNamespace");
 class SocketServer {
     constructor() {
         this.ALL_CLIENTS = [];
@@ -31,8 +32,9 @@ class SocketServer {
         });
     }
     listenClients() {
+        // Default namespace
         this.socketIO.of("/").on("connect", (socket) => {
-            const CLIENT = new Client_1.Client(socket, this.rabbitMQConnection);
+            const CLIENT = new DefaultNamespace_1.DefaultNamespace(socket, this.rabbitMQConnection);
             this.ALL_CLIENTS.push(CLIENT);
             console.log(`Client CONNECTED: Total Clients: ${this.ALL_CLIENTS.length}: Client socket id: ${socket.id}`);
             socket.on("disconnect", () => {
@@ -42,25 +44,8 @@ class SocketServer {
             });
         });
         // Rooms namespace
-        this.socketIO.of("/rooms").on("connect", function (socket) {
-            console.log("Socket connected to rooms nsc:", socket.id);
-            socket.on("CREATE_ROOM", function (title) {
-                console.log("create Room rquest received", title);
-                // Room.findOne({"title": new RegExp("^" + title + "$", "i")}, function(err, room) {
-                //     if (err) throw err;
-                //     if (room) {
-                //         socket.emit("updateRoomsList", { error: "Room title already exists." });
-                //     } else {
-                //         Room.create({
-                //             title: title
-                //         }, function(err, newRoom) {
-                //             if (err) throw err;
-                //             socket.emit("updateRoomsList", newRoom);
-                //             socket.broadcast.emit("updateRoomsList", newRoom);
-                //         });
-                //     }
-                // });
-            });
+        this.socketIO.of("/rooms").on("connect", (socket) => {
+            new RoomsNamespace_1.RoomsNamespace(socket, this.rabbitMQConnection);
         });
     }
     getServer() {

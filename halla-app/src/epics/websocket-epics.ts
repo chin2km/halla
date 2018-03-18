@@ -1,6 +1,6 @@
 import { ActionsObservable, combineEpics } from "redux-observable";
-import { CONNECT, CONNECT_SUCCESSFUL, LOGIN_SUCCESS, SIGNUP_SUCCESS, SIGNUP_FAIL, LOGIN_FAIL, CONNECTED_TO_ROOMS_NAMESPACE, CREATE_ROOM_SUCCESSFUL, CREATE_ROOM_FAIL } from "../actions/constants";
-import { connect, subscribe, DEFAULT_NSC, ROOMS_NSC } from "../websockets/websocket";
+import { CONNECT, CONNECT_SUCCESSFUL, LOGIN_SUCCESS, SIGNUP_SUCCESS, SIGNUP_FAIL, LOGIN_FAIL, CONNECTED_TO_ROOMS_NAMESPACE, CREATE_ROOM_SUCCESSFUL, CREATE_ROOM_FAIL, FETCH_ROOMS, SET_ROOMS } from "../actions/constants";
+import { connect, subscribe, DEFAULT_NSC, ROOMS_NSC, sendMessage } from "../websockets/websocket";
 import SocketIO = require('socket.io-client');
 import { Observable } from "rxjs/Observable";
 import { connectSuccessful, connectionClosedOrFailed } from "../actions/websocket";
@@ -8,7 +8,7 @@ import { ENDPOINT } from "../websockets/constants";
 import { printLine } from "../utils/printline";
 import { url } from "inspector";
 import { setLoginSuccess, setSignupSuccess, setSignupFail, setLoginFail } from "../actions/auth";
-import { createRoomSuccess, createRoomFail } from "../actions/RoomsList";
+import { createRoomSuccess, createRoomFail, setRooms } from "../actions/RoomsList";
 
 
 
@@ -27,8 +27,10 @@ export const connectionSuccessfulEpic = (action$: ActionsObservable<any>) =>
 
 export const connectedToRoomsNscEpic = (action$: ActionsObservable<any>) =>
     action$.ofType(CONNECTED_TO_ROOMS_NAMESPACE)
+        .do(() => subscribe(ROOMS_NSC, SET_ROOMS, setRooms))
         .do(() => subscribe(ROOMS_NSC, CREATE_ROOM_SUCCESSFUL, createRoomSuccess))
         .do(() => subscribe(ROOMS_NSC, CREATE_ROOM_FAIL, createRoomFail))
+        .do(() => sendMessage({route: FETCH_ROOMS}, ROOMS_NSC))
         .ignoreElements()
 
 export const websocketEpics = combineEpics(

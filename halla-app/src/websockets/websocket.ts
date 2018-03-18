@@ -13,7 +13,6 @@ export const ROOMS_NSC = "/rooms";
 const ws = {};
 
 export const connect = (namespace, nextAction) => {
-    debugger;
     ws[namespace] = SocketIO(ENDPOINT + namespace, { transports: ['websocket'] });
     ws[namespace].on('connect',(res)=>{
         printLine("Connection to nsc ", namespace, " successfull")
@@ -23,6 +22,7 @@ export const connect = (namespace, nextAction) => {
 
 export const subscribe = (namespace, route, nextAction) => {
     ws[namespace].on(route, (message) => {
+        printLine('Received message on:', route, ":", message )
         store.dispatch(nextAction(message));
     });
 };

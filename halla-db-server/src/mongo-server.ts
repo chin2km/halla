@@ -6,6 +6,7 @@ import { WorkerSocket, RepSocket } from "rabbit.js";
 import { Socket } from "net";
 
 import User from "./models/User";
+import Room from "./models/Room";
 
 export class MongoServer {
     public static readonly rabbitMQ_SERVER: string = "amqp://localhost";
@@ -18,6 +19,14 @@ export class MongoServer {
     constructor() {
         this.createServer();
     }
+
+    private channels = {
+        SIGNUP_CHANNEL: "SIGNUP_CHANNEL",
+        LOGIN_CHANNEL: "LOGIN_CHANNEL",
+
+        CREATE_ROOM: "CREATE_ROOM",
+        FETCH_ROOMS: "FETCH_ROOMS",
+    };
 
     private createServer = (): void  => {
         // MongoDB Connection
@@ -50,8 +59,8 @@ export class MongoServer {
     }
 
 
-    private recieveMessageFromSocketServer = (): void => {
-        this.listenReplyToChannel("SIGNUP_CHANNEL", (dataReceived: any, socket: any) => {
+    private listenClients = (): void => {
+        this.listenReplyToChannel(this.channels.SIGNUP_CHANNEL, (dataReceived: any, socket: any) => {
             User.create(dataReceived, (err, data) => {
                 if (err) {
                     socket.write(`FAIL`);
@@ -61,7 +70,7 @@ export class MongoServer {
             });
         });
 
-        this.listenReplyToChannel("LOGIN_CHANNEL", (dataReceived: any, socket: any) => {
+        this.listenReplyToChannel(this.channels.LOGIN_CHANNEL, (dataReceived: any, socket: any) => {
             User.findOne(dataReceived, (err, data) => {
                 if (data !== null) {
                     console.log("LOGIN_SUCCESS");
@@ -72,10 +81,35 @@ export class MongoServer {
                 }
             });
         });
-    }
 
-    private listenClients = (): void => {
-        this.recieveMessageFromSocketServer();
+        this.listenReplyToChannel(this.channels.CREATE_ROOM, (dataReceived: any, socket: any) => {
+            Room.create(dataReceived, (err, data) => {
+                if (err) {
+                    console.log("FAIL");
+                    socket.write(`FAIL`);
+                } else {
+                    console.log("SUCCESS");
+                    Room.find(undefined, (err, data) => {
+                        if (err) {
+                            console.log("FIND FAIL", err);
+                        }
+                        console.log("FIND SUCCESS", data);
+                        socket.write(JSON.stringify(data));
+                    });
+                }
+            });
+        });
+
+        this.listenReplyToChannel(this.channels.FETCH_ROOMS, (dataReceived: any, socket: any) => {
+            console.log("FETCH_ROOMS");
+            Room.find(undefined, (err, data) => {
+                if (err) {
+                    console.log("FIND FAIL", err);
+                }
+                console.log("FIND SUCCESS", data);
+                socket.write(JSON.stringify(data));
+            });
+        });
     }
 
     public getServer(): any {

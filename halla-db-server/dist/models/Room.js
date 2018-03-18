@@ -22,7 +22,7 @@ const findByIdAndUpdate = (id, data, callback) => {
 };
 const removeUser = function (socketid, callback) {
 };
-module.exports = {
+exports.default = {
     create,
     find,
     findOne,

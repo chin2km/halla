@@ -1,8 +1,9 @@
 import socketIo = require("socket.io");
 import * as rabbitJS from "rabbit.js";
-import { Client } from "./Models/Client";
+import { DefaultNamespace } from "./NameSpaces/DefaultNamespace";
 import * as R from "ramda";
 import { PushSocket } from "rabbit.js";
+import { RoomsNamespace } from "./NameSpaces/RoomsNamespace";
 
 export class SocketServer {
     public static readonly PORT: number = 5027;
@@ -10,7 +11,7 @@ export class SocketServer {
     private socketIO: SocketIO.Server;
     private rabbitMQConnection: rabbitJS.Context;
     private port: string | number;
-    private ALL_CLIENTS: Client[] = [];
+    private ALL_CLIENTS: DefaultNamespace[] = [];
 
     constructor() {
         this.config();
@@ -34,8 +35,9 @@ export class SocketServer {
     }
 
     private listenClients(): void {
+        // Default namespace
         this.socketIO.of("/").on("connect", (socket: SocketIO.Socket) => {
-            const CLIENT = new Client(socket, this.rabbitMQConnection);
+            const CLIENT = new DefaultNamespace(socket, this.rabbitMQConnection);
 
             this.ALL_CLIENTS.push(CLIENT);
             console.log(`Client CONNECTED: Total Clients: ${this.ALL_CLIENTS.length}: Client socket id: ${socket.id}`);
@@ -48,30 +50,9 @@ export class SocketServer {
         });
 
         // Rooms namespace
-        this.socketIO.of("/rooms").on("connect", function(socket: SocketIO.Socket) {
-
-            console.log("Socket connected to rooms nsc:", socket.id);
-
-            socket.on("CREATE_ROOM", function(title) {
-                console.log("create Room rquest received", title);
-
-                // Room.findOne({"title": new RegExp("^" + title + "$", "i")}, function(err, room) {
-                //     if (err) throw err;
-                //     if (room) {
-                //         socket.emit("updateRoomsList", { error: "Room title already exists." });
-                //     } else {
-                //         Room.create({
-                //             title: title
-                //         }, function(err, newRoom) {
-                //             if (err) throw err;
-                //             socket.emit("updateRoomsList", newRoom);
-                //             socket.broadcast.emit("updateRoomsList", newRoom);
-                //         });
-                //     }
-                // });
-            });
+        this.socketIO.of("/rooms").on("connect", (socket: SocketIO.Socket) => {
+            new RoomsNamespace(socket, this.rabbitMQConnection);
         });
-
     }
 
     public getServer(): SocketIO.Server {

@@ -26,7 +26,7 @@ const findByIdAndUpdate = (id: String, data: typeof Room, callback: CallBackType
 const removeUser = function(socketid: string, callback: CallBackType) {
 };
 
-module.exports = {
+export default {
     create,
     find,
     findOne,

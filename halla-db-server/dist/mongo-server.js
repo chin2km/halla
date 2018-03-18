@@ -13,8 +13,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Mongoose = require("mongoose");
 const rabbitJS = __importStar(require("rabbit.js"));
 const User_1 = __importDefault(require("./models/User"));
+const Room_1 = __importDefault(require("./models/Room"));
 class MongoServer {
     constructor() {
+        this.channels = {
+            SIGNUP_CHANNEL: "SIGNUP_CHANNEL",
+            LOGIN_CHANNEL: "LOGIN_CHANNEL",
+            CREATE_ROOM: "CREATE_ROOM",
+            FETCH_ROOMS: "FETCH_ROOMS",
+        };
         this.createServer = () => {
             // MongoDB Connection
             Mongoose.connect(MongoServer.MONGODB_DB);
@@ -38,8 +45,8 @@ class MongoServer {
                 });
             });
         };
-        this.recieveMessageFromSocketServer = () => {
-            this.listenReplyToChannel("SIGNUP_CHANNEL", (dataReceived, socket) => {
+        this.listenClients = () => {
+            this.listenReplyToChannel(this.channels.SIGNUP_CHANNEL, (dataReceived, socket) => {
                 User_1.default.create(dataReceived, (err, data) => {
                     if (err) {
                         socket.write(`FAIL`);
@@ -49,7 +56,7 @@ class MongoServer {
                     }
                 });
             });
-            this.listenReplyToChannel("LOGIN_CHANNEL", (dataReceived, socket) => {
+            this.listenReplyToChannel(this.channels.LOGIN_CHANNEL, (dataReceived, socket) => {
                 User_1.default.findOne(dataReceived, (err, data) => {
                     if (data !== null) {
                         console.log("LOGIN_SUCCESS");
@@ -61,9 +68,34 @@ class MongoServer {
                     }
                 });
             });
-        };
-        this.listenClients = () => {
-            this.recieveMessageFromSocketServer();
+            this.listenReplyToChannel(this.channels.CREATE_ROOM, (dataReceived, socket) => {
+                Room_1.default.create(dataReceived, (err, data) => {
+                    if (err) {
+                        console.log("FAIL");
+                        socket.write(`FAIL`);
+                    }
+                    else {
+                        console.log("SUCCESS");
+                        Room_1.default.find(undefined, (err, data) => {
+                            if (err) {
+                                console.log("FIND FAIL", err);
+                            }
+                            console.log("FIND SUCCESS", data);
+                            socket.write(JSON.stringify(data));
+                        });
+                    }
+                });
+            });
+            this.listenReplyToChannel(this.channels.FETCH_ROOMS, (dataReceived, socket) => {
+                console.log("FETCH_ROOMS");
+                Room_1.default.find(undefined, (err, data) => {
+                    if (err) {
+                        console.log("FIND FAIL", err);
+                    }
+                    console.log("FIND SUCCESS", data);
+                    socket.write(JSON.stringify(data));
+                });
+            });
         };
         this.createServer();
     }

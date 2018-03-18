@@ -81,7 +81,7 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 
 		const filteredRooms = R.filter(R.propSatisfies(
 			R.contains(this.state.searchWord),
-			'name'
+			'title'
 		), this.props.rooms)
 
 		return <div className="pane1">
@@ -127,7 +127,7 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 
 function mapStateToProps(state: RootState) {
 	return {
-		rooms: dummyChannels
+		rooms: state.rooms
 	};
 }
 
@@ -138,30 +138,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LeftPane);
-
-const dummyChannels = [
-	{name: 'abc-rooooom'},
-	{name: 'def-rooooom'},
-	{name: 'ghi-rooooom'},
-	{name: 'jkl-rooooom'},
-	{name: 'mno-rooooom'},
-	{name: 'pqr-rooooom'},
-	{name: 'stu-rooooom'},
-	{name: 'vwx-rooooom'},
-	{name: 'abc-roooooom'},
-	{name: 'def-roooooom'},
-	{name: 'ghi-roooooom'},
-	{name: 'jkl-roooooom'},
-	{name: 'mno-roooooom'},
-	{name: 'pqr-roooooom'},
-	{name: 'stu-roooooom'},
-	{name: 'vwx-roooooom'},
-	{name: 'abc-roooioom'},
-	{name: 'def-roooioom'},
-	{name: 'ghi-roooioom'},
-	{name: 'jkl-roooioom'},
-	{name: 'mno-roooioom'},
-	{name: 'pqr-roooioom'},
-	{name: 'stu-roooioom'},
-	{name: 'vwx-roooioom'},
-]

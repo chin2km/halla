@@ -1,7 +1,8 @@
 import Mongoose = require("mongoose");
 
 const RoomSchema = new Mongoose.Schema({
-    title: { type: String, required: true },
+    title: { type: String, required: true, unique: true},
+    admin: { type: String, required: true},
     connections: { type: [{ username: String, socketId: String }]}
 });
 

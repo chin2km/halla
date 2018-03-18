@@ -26,11 +26,11 @@ class RoomsListClass extends React.Component<RoomsListTypes.Props, RoomsListType
     return (
       <div>
         <List>
-					{R.map(({name}) => <ListItem
+					{R.map(({title}) => <ListItem
 						className="list-item"
-						key={name}
-						primaryText={name}
-						leftAvatar={<Avatar>{R.pipe(R.head, R.toUpper)(name)}</Avatar>}
+						key={title}
+						primaryText={title}
+						leftAvatar={<Avatar>{R.pipe(R.head, R.toUpper)(title)}</Avatar>}
 						rightIcon={<CommunicationChatBubble />}
 					/>)(rooms)}
 					
