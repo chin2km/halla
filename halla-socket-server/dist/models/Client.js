@@ -15,7 +15,7 @@ class Client {
             LOGIN_CHANNEL: "LOGIN_CHANNEL",
         };
         this.setupHandlers = () => {
-            this.socket.emit("connected", this.socket.id);
+            this.socket.emit("connect", this.socket.id);
             R.forEachObjIndexed((handle, eventName) => {
                 this.socket.on(eventName, handle);
             })(this.handlers);

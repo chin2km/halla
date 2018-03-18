@@ -20,7 +20,7 @@ export class Client {
     }
 
     setupHandlers = () => {
-        this.socket.emit("connected", this.socket.id);
+        this.socket.emit("connect", this.socket.id);
 
         R.forEachObjIndexed((handle, eventName) => {
             this.socket.on(eventName, handle);
