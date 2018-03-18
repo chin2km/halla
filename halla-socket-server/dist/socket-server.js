@@ -31,7 +31,7 @@ class SocketServer {
         });
     }
     listenClients() {
-        this.socketIO.on("connect", (socket) => {
+        this.socketIO.of("/").on("connect", (socket) => {
             const CLIENT = new Client_1.Client(socket, this.rabbitMQConnection);
             this.ALL_CLIENTS.push(CLIENT);
             console.log(`Client CONNECTED: Total Clients: ${this.ALL_CLIENTS.length}: Client socket id: ${socket.id}`);
@@ -39,6 +39,27 @@ class SocketServer {
                 const client = R.find(R.propEq("socket", socket))(this.ALL_CLIENTS);
                 this.ALL_CLIENTS = R.reject(R.equals(client))(this.ALL_CLIENTS);
                 console.log(`Client DISCONNECTED: Total Clients: ${this.ALL_CLIENTS.length}`);
+            });
+        });
+        // Rooms namespace
+        this.socketIO.of("/rooms").on("connect", function (socket) {
+            console.log("Socket connected to rooms nsc:", socket.id);
+            socket.on("CREATE_ROOM", function (title) {
+                console.log("create Room rquest received", title);
+                // Room.findOne({"title": new RegExp("^" + title + "$", "i")}, function(err, room) {
+                //     if (err) throw err;
+                //     if (room) {
+                //         socket.emit("updateRoomsList", { error: "Room title already exists." });
+                //     } else {
+                //         Room.create({
+                //             title: title
+                //         }, function(err, newRoom) {
+                //             if (err) throw err;
+                //             socket.emit("updateRoomsList", newRoom);
+                //             socket.broadcast.emit("updateRoomsList", newRoom);
+                //         });
+                //     }
+                // });
             });
         });
     }

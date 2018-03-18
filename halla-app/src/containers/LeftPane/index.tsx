@@ -15,6 +15,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Subheader from 'material-ui/Subheader';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
 import { TextBox, RoomsList } from '../../components';
+import * as RoomsListActions from '../../actions/RoomsList';
+
 
 import './style.less';
 
@@ -25,7 +27,8 @@ const customContentStyle = {
 
 export namespace LeftPane {
 	export interface Props extends RouteComponentProps<void> {
-		rooms?: any[]
+		rooms?: any[],
+		actions?: typeof RoomsListActions
 	}
 
 	export interface State {
@@ -36,7 +39,8 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 
 	state = {
 		open: false,
-		searchWord: ""
+		searchWord: "",
+		newRoomName: ""
 	};
 	
 	handleCreateClick = () => {
@@ -44,16 +48,23 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 	};
 
 	handleClose = () => {
-		this.setState({open: false});
+		this.setState({open: false, newRoomName: ""});
 	};
+
+	handleCreate = () => {
+		this.props.actions.createRoom(this.state.newRoomName);
+	};
+
+	setNewRoomName = ({target:{value}}) => {
+		this.setState({newRoomName: value});
+	}
 
 	setSearch = ({target:{value}}) => {
 		this.setState({searchWord: value})
 	}
 	
 	render() {
-
-		const actions = [
+		const modalActions = [
 			<FlatButton
 			  label="Cancel"
 			  primary={true}
@@ -64,7 +75,7 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 			  label="Create"
 			  primary={true}
 			  style={{color: deepPurple500}}
-			  onClick={this.handleClose}
+			  onClick={this.handleCreate}
 			/>,
 		];
 
@@ -97,12 +108,14 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 
 			<Dialog
 				title="Create a room"
-				actions={actions}
+				actions={modalActions}
 				modal={true}
 				contentStyle={customContentStyle}
 				open={this.state.open}
 				>
 				<TextBox
+					onChange={this.setNewRoomName}
+					value={this.state.newRoomName}
 					className={"search-box"}
 					hintText="type a name for the room"
 				/>
@@ -120,11 +133,11 @@ function mapStateToProps(state: RootState) {
 
 function mapDispatchToProps(dispatch) {
 	return {
+		actions: bindActionCreators(RoomsListActions as any, dispatch)
 	};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LeftPane);
-
 
 const dummyChannels = [
 	{name: 'abc-rooooom'},

@@ -27,8 +27,8 @@ class LoginFormClass extends React.Component<LoginForm.Props, LoginForm.State> {
         super(props);
         this.state = {
             login: {
-                username: '',
-                password: ''
+                username: 'a',
+                password: 'a'
             },
             signup: {
                 emailId: '',

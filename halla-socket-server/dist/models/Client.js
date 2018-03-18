@@ -11,18 +11,8 @@ const R = __importStar(require("ramda"));
 class Client {
     constructor(socket, rabbitMQContext) {
         this.channels = {
-            TEST: "TEST",
             SIGNUP_CHANNEL: "SIGNUP_CHANNEL",
             LOGIN_CHANNEL: "LOGIN_CHANNEL",
-        };
-        this.test = () => {
-            this.requestToChannel(this.channels.TEST, {
-                username: "chintu",
-                password: "chintu",
-                emailId: "blah"
-            }, (data) => {
-                console.log(JSON.stringify(data));
-            });
         };
         this.setupHandlers = () => {
             this.socket.emit("connected", this.socket.id);
@@ -77,7 +67,6 @@ class Client {
         this.socket = socket;
         this.rabbitMQContext = rabbitMQContext;
         this.setupHandlers();
-        // this.test();
     }
 }
 exports.Client = Client;

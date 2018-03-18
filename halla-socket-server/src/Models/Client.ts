@@ -8,7 +8,6 @@ export class Client {
     private rabbitMQContext: rabbitJS.Context;
 
     private channels = {
-        TEST: "TEST",
         SIGNUP_CHANNEL: "SIGNUP_CHANNEL",
         LOGIN_CHANNEL: "LOGIN_CHANNEL",
     };
@@ -18,19 +17,6 @@ export class Client {
         this.rabbitMQContext = rabbitMQContext;
 
         this.setupHandlers();
-        // this.test();
-    }
-
-    test = () => {
-
-        this.requestToChannel(this.channels.TEST, {
-            username: "chintu",
-            password: "chintu",
-            emailId: "blah"
-        }, (data: string) => {
-            console.log(JSON.stringify(data));
-        });
-
     }
 
     setupHandlers = () => {

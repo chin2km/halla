@@ -1,7 +1,7 @@
 import { combineEpics, ActionsObservable } from "redux-observable";
 import { SUBMIT_LOGIN, LOGIN_SUCCESS, SUBMIT_SIGNUP, SIGNUP_SUCCESS, LOGIN_FAIL } from "../actions/constants";
 import { printLine } from "../utils/printline";
-import { sendMessage } from "../websockets/websocket";
+import { sendMessage, connectRoomsNamespace } from "../websockets/websocket";
 import { Observable } from "rxjs/Observable";
 import {push} from 'react-router-redux';
 
@@ -28,9 +28,9 @@ const submitSignUpEpic = (actions$: ActionsObservable<any>, store) =>
     .ignoreElements()
 
 
-
 const loginSuccessEpic = (actions$: ActionsObservable<any>, store) =>
     actions$.ofType(LOGIN_SUCCESS)
+    .do(connectRoomsNamespace)
     .switchMap(() => Observable.of(push('/home')))
 
 const signupSuccessEpic = (actions$: ActionsObservable<any>, store) =>
