@@ -30,7 +30,6 @@ export const connectedToRoomsNscEpic = (action$: ActionsObservable<any>) =>
         .do(() => subscribe(ROOMS_NSC, SET_ROOMS, setRooms))
         .do(() => subscribe(ROOMS_NSC, CREATE_ROOM_SUCCESSFUL, createRoomSuccess))
         .do(() => subscribe(ROOMS_NSC, CREATE_ROOM_FAIL, createRoomFail))
-        .do(() => sendMessage({route: FETCH_ROOMS}, ROOMS_NSC))
         .ignoreElements()
 
 export const websocketEpics = combineEpics(

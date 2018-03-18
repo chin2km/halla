@@ -15,7 +15,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Subheader from 'material-ui/Subheader';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
 import { TextBox, RoomsList } from '../../components';
-import * as RoomsListActions from '../../actions/RoomsList';
+import * as RoomsListActions from '../../actions/RoomsList'
 
 
 import './style.less';
@@ -42,6 +42,10 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 		searchWord: "",
 		newRoomName: ""
 	};
+
+	componentDidMount() {
+		this.props.actions.fetchRooms();
+	}
 	
 	handleCreateClick = () => {
 		this.setState({open: true});
