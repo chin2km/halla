@@ -31,7 +31,7 @@ class RoomsListClass extends React.Component<RoomsListTypes.Props, RoomsListType
 						key={title}
 						primaryText={title}
 						leftAvatar={<Avatar>{R.pipe(R.head, R.toUpper)(title)}</Avatar>}
-					/>)(rooms)}
+					/>)(rooms.reverse())}
 					
 					{R.isEmpty(rooms) && 
 						<ListItem

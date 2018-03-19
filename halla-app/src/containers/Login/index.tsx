@@ -11,7 +11,7 @@ import './style.less';
 export namespace Login {
   export interface Props extends RouteComponentProps<void> {
     actions: typeof AuthActions
-    loading: typeof AuthActions
+    componentsStates: any
   }
 
   export interface State {
@@ -31,7 +31,7 @@ class Login extends React.Component<Login.Props, Login.State> {
     const {children} = this.props;
     return <div className="login">
       <LoginFormComponent
-        show={this.props.loading}
+        show={this.props.componentsStates.loading}
         onSubmitLogin={this.handleSubmitLogin}
         onSubmitSignUp={this.handleSubmitSignUp}
       />
@@ -42,8 +42,7 @@ class Login extends React.Component<Login.Props, Login.State> {
 function mapStateToProps(state: RootState) {
   return {
     user: state.auth.user,
-    error: state.auth.error,
-    loading: state.loading
+    componentsStates: state.componentsStates.login
   };
 }
 

@@ -9,26 +9,21 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import {deepPurple500} from 'material-ui/styles/colors';
 import Avatar from 'material-ui/Avatar';
-import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Subheader from 'material-ui/Subheader';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
-import { TextBox, RoomsList } from '../../components';
+import { TextBox, RoomsList, CreateRoomPop } from '../../components';
 import * as RoomsListActions from '../../actions/RoomsList'
-
 
 import './style.less';
 
-const customContentStyle = {
-	width: '400px',
-	maxWidth: '400px',
-};
 
 export namespace LeftPane {
 	export interface Props extends RouteComponentProps<void> {
 		rooms?: any[],
 		actions?: typeof RoomsListActions
+		componentsStates?: any
 	}
 
 	export interface State {
@@ -48,40 +43,18 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 	}
 	
 	handleCreateClick = () => {
-		this.setState({open: true});
+		this.props.actions.openCreateRoom();
 	};
 
 	handleClose = () => {
-		this.setState({open: false, newRoomName: ""});
+		this.props.actions.closeCreateRoom();
 	};
-
-	handleCreate = () => {
-		this.props.actions.createRoom(this.state.newRoomName);
-	};
-
-	setNewRoomName = ({target:{value}}) => {
-		this.setState({newRoomName: value});
-	}
 
 	setSearch = ({target:{value}}) => {
 		this.setState({searchWord: value})
 	}
 	
 	render() {
-		const modalActions = [
-			<FlatButton
-			  label="Cancel"
-			  primary={true}
-			  style={{color: deepPurple500}}
-			  onClick={this.handleClose}
-			/>,
-			<FlatButton
-			  label="Create"
-			  primary={true}
-			  style={{color: deepPurple500}}
-			  onClick={this.handleCreate}
-			/>,
-		];
 
 		const filteredRooms = R.filter(R.propSatisfies(
 			R.contains(this.state.searchWord),
@@ -110,28 +83,20 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 				<RoomsList rooms={filteredRooms}/>
 			</div>
 
-			<Dialog
-				title="Create a room"
-				actions={modalActions}
-				modal={true}
-				contentStyle={customContentStyle}
-				open={this.state.open}
-				>
-				<TextBox
-					onChange={this.setNewRoomName}
-					value={this.state.newRoomName}
-					className={"search-box"}
-					hintText="type a name for the room"
-				/>
-			</Dialog>
-							
+			<CreateRoomPop
+				loading={this.props.componentsStates.loading}
+				open={this.props.componentsStates.open}
+				handleClose={this.handleClose}
+				createRoom={this.props.actions.createRoom}
+			/>
 	</div>;
 	}
 }
 
 function mapStateToProps(state: RootState) {
 	return {
-		rooms: state.rooms
+		rooms: state.rooms,
+		componentsStates: state.componentsStates.createRoom
 	};
 }
 

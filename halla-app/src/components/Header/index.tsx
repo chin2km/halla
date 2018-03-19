@@ -16,9 +16,6 @@ export class Header extends React.Component<Header.Props> {
         <Link to='/'>
           <h1>{title}</h1>
         </Link>
-        <Link to='/home'>
-          <h1>home</h1>
-        </Link>
       </div>
     );
   }

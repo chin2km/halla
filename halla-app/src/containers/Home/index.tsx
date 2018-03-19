@@ -20,6 +20,7 @@ export namespace Home {
 class Home extends React.Component<Home.Props, Home.State> {
 
   componentDidMount() {
+    
   }
   
   render() {

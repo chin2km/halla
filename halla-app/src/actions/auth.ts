@@ -1,6 +1,8 @@
 import { createAction } from 'redux-actions';
 import * as Actions from './constants';
 
+export const addNotification = createAction<any>(Actions.ADD_NOTIFICATION);
+
 export const logout = createAction(Actions.LOGOUT);
 
 export const submitLogin = createAction<LoginData>(Actions.SUBMIT_LOGIN);

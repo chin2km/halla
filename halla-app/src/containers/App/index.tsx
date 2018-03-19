@@ -5,13 +5,14 @@ import {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { RootState } from '../../reducers';
-import {Header} from '../../components';
+import {Header, Toastr} from '../../components';
 import Login from '../Login'
 import Home from '../Home'
 import * as WebsocketActions from '../../actions/websocket';
 import * as ReactTooltip from 'react-tooltip';
 
 import './style.less';
+import 'react-redux-toastr/src/styles/index.scss';
 
 export namespace App {
   export interface Props extends RouteComponentProps<void> {
@@ -40,6 +41,7 @@ class App extends React.Component<App.Props, App.State> {
                 <Route path={'/home'} component={Home}/>
           </Switch>
           <ReactTooltip  border place={"right"} effect="solid" delayShow={500}/>
+          <Toastr/>
         </div>
     );
   }

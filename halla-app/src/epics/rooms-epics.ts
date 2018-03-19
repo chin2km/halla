@@ -2,7 +2,9 @@ import { combineEpics, ActionsObservable } from "redux-observable";
 import { printLine } from "../utils/printline";
 import { sendMessage, ROOMS_NSC } from "../websockets/websocket";
 import { Observable } from "rxjs/Observable";
-import { CREATE_ROOM, SET_ROOMS, FETCH_ROOMS } from "../actions/constants";
+import { CREATE_ROOM, SET_ROOMS, FETCH_ROOMS, CREATE_ROOM_SUCCESSFUL, CREATE_ROOM_FAIL } from "../actions/constants";
+import { addNotification } from "../actions/auth";
+import { fetchRooms } from "../actions/RoomsList";
 
 const createRoomEpic = (actions$: ActionsObservable<any>, store) =>
     actions$.ofType(CREATE_ROOM)
@@ -22,8 +24,24 @@ export const fetchRoomsEpic = (action$: ActionsObservable<any>) =>
         .do(() => sendMessage({route: FETCH_ROOMS}, ROOMS_NSC))
         .ignoreElements()
 
+export const createRoomSuccessEpic = (action$: ActionsObservable<any>) =>
+    action$.ofType(CREATE_ROOM_SUCCESSFUL)
+        .switchMap(({payload: {title, admin}}) => Observable.concat(
+            Observable.of(addNotification({type: 'success', title: "Room created!", message: `Room ${title} added by ${admin}!`})),
+            Observable.of(fetchRooms())
+        ))
+
+export const createRoomFailedEpic = (action$: ActionsObservable<any>) =>
+    action$.ofType(CREATE_ROOM_FAIL)
+        .switchMap(() => Observable.concat(
+            Observable.of(addNotification({type: 'error', title: "Error!", message: 'A room with the name exists!'})),
+            Observable.of(fetchRooms())
+        ))
+
 
 export const roomsEpics = combineEpics(
     createRoomEpic,
-    fetchRoomsEpic
+    fetchRoomsEpic,
+    createRoomSuccessEpic,
+    createRoomFailedEpic
 )
