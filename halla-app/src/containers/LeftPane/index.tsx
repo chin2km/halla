@@ -15,6 +15,7 @@ import Subheader from 'material-ui/Subheader';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
 import { TextBox, RoomsList, CreateRoomPop } from '../../components';
 import * as RoomsListActions from '../../actions/RoomsList'
+import * as ChatRoomActions from '../../actions/Chatroom'
 
 import './style.less';
 
@@ -22,7 +23,7 @@ import './style.less';
 export namespace LeftPane {
 	export interface Props extends RouteComponentProps<void> {
 		rooms?: any[],
-		actions?: typeof RoomsListActions
+		actions?: any
 		componentsStates?: any
 	}
 
@@ -80,7 +81,7 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 			</div>
 
 			<div className="scrolled">
-				<RoomsList rooms={filteredRooms}/>
+				<RoomsList joinRoom={this.props.actions.joinRoom} rooms={filteredRooms}/>
 			</div>
 
 			<CreateRoomPop
@@ -102,7 +103,10 @@ function mapStateToProps(state: RootState) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		actions: bindActionCreators(RoomsListActions as any, dispatch)
+		actions: {
+			...bindActionCreators(RoomsListActions as any, dispatch),
+			...bindActionCreators(ChatRoomActions as any, dispatch)
+		}
 	};
 }
 

@@ -60,6 +60,18 @@ export class MongoServer {
 
 
     private listenClients = (): void => {
+        this.listenReplyToChannel(this.channels.LOGIN_CHANNEL, (dataReceived: any, socket: any) => {
+            User.findOne(dataReceived, (err, data) => {
+                if (data !== null) {
+                    console.log("LOGIN_SUCCESS");
+                    socket.write(JSON.stringify(data));
+                } else {
+                    console.log("LOGIN_FAIL");
+                    socket.write(`FAIL`);
+                }
+            });
+        });
+
         this.listenReplyToChannel(this.channels.SIGNUP_CHANNEL, (dataReceived: any, socket: any) => {
             User.create(dataReceived, (err, data) => {
                 if (err) {
@@ -70,17 +82,6 @@ export class MongoServer {
             });
         });
 
-        this.listenReplyToChannel(this.channels.LOGIN_CHANNEL, (dataReceived: any, socket: any) => {
-            User.findOne(dataReceived, (err, data) => {
-                if (data !== null) {
-                    console.log("LOGIN_SUCCESS");
-                    socket.write(`SUCCESS`);
-                } else {
-                    console.log("LOGIN_FAIL");
-                    socket.write(`FAIL`);
-                }
-            });
-        });
 
         this.listenReplyToChannel(this.channels.CREATE_ROOM, (dataReceived: any, socket: any) => {
             Room.create(dataReceived, (err, data) => {

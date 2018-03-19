@@ -3,12 +3,13 @@ import SocketIO = require('socket.io-client');
 import {store} from '../store/';
 import * as ACTIONS from '../actions/constants';
 import {ENDPOINT} from './constants';
-import { connectSuccessful, connectedToRoomsNamespace } from '../actions/websocket';
+import { connectSuccessful, connectedToRoomsNsc } from '../actions/websocket';
 import { LOGIN_SUCCESS } from '../actions/constants';
 import { printLine } from '../utils/printline';
 
 export const DEFAULT_NSC = "/";
 export const ROOMS_NSC = "/rooms";
+export const CHATROOM_NSC = "/chatroom";
 
 const ws = {};
 

@@ -1,10 +1,10 @@
 import { combineEpics, ActionsObservable } from "redux-observable";
 import { SUBMIT_LOGIN, LOGIN_SUCCESS, SUBMIT_SIGNUP, SIGNUP_SUCCESS, LOGIN_FAIL, SIGNUP_FAIL } from "../actions/constants";
 import { printLine } from "../utils/printline";
-import { sendMessage, connect, ROOMS_NSC } from "../websockets/websocket";
+import { sendMessage, connect, ROOMS_NSC, CHATROOM_NSC } from "../websockets/websocket";
 import { Observable } from "rxjs/Observable";
 import {push} from 'react-router-redux';
-import { connectedToRoomsNamespace } from "../actions/websocket";
+import { connectedToRoomsNsc, connectedToChatroomNsc } from "../actions/websocket";
 import { addNotification } from "../actions/auth";
 
 const submitLoginEpic = (actions$: ActionsObservable<any>, store) =>
@@ -32,7 +32,8 @@ const submitSignUpEpic = (actions$: ActionsObservable<any>, store) =>
 
 const loginSuccessEpic = (actions$: ActionsObservable<any>, store) =>
     actions$.ofType(LOGIN_SUCCESS)
-    .do(() => connect(ROOMS_NSC, connectedToRoomsNamespace))
+    .do(() => connect(ROOMS_NSC, connectedToRoomsNsc))
+    .do(() => connect(CHATROOM_NSC, connectedToChatroomNsc))
     .switchMap(() => Observable.concat(
         Observable.of(push('/home')),
         Observable.of(addNotification({type: 'info', message: 'Logged in successfully'}))

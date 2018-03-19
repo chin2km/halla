@@ -4,6 +4,7 @@ import { DefaultNamespace } from "./NameSpaces/DefaultNamespace";
 import * as R from "ramda";
 import { PushSocket } from "rabbit.js";
 import { RoomsNamespace } from "./NameSpaces/RoomsNamespace";
+import { ChatroomNamespace } from "./NameSpaces/ChatroomNamespace";
 
 export class SocketServer {
     public static readonly PORT: number = 5027;
@@ -52,6 +53,11 @@ export class SocketServer {
         // Rooms namespace
         this.socketIO.of("/rooms").on("connect", (socket: SocketIO.Socket) => {
             new RoomsNamespace(socket, this.rabbitMQConnection);
+        });
+
+        // Chatroom namespace
+        this.socketIO.of("/chatroom").on("connect", (socket: SocketIO.Socket) => {
+            new ChatroomNamespace(socket, this.rabbitMQConnection);
         });
     }
 

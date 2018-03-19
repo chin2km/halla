@@ -23,11 +23,11 @@ class DefaultNamespace {
         this.handleLogin = (message) => {
             console.log("SUBMIT_LOGIN", message);
             this.requestToChannel(this.channels.LOGIN_CHANNEL, message, (response) => {
-                if (response === "SUCCESS") {
-                    this.socket.emit("LOGIN_SUCCESS", message);
-                }
                 if (response === "FAIL") {
                     this.socket.emit("LOGIN_FAIL", response);
+                }
+                else {
+                    this.socket.emit("LOGIN_SUCCESS", JSON.parse(response));
                 }
             });
         };
@@ -41,9 +41,6 @@ class DefaultNamespace {
                     this.socket.emit("SIGNUP_FAIL", response);
                 }
             });
-        };
-        this.handleLogout = (message) => {
-            console.log("LOGOUT", message);
         };
         this.requestToChannel = (CHANNEL, message, callback) => {
             const REQ_SOCKET = this.rabbitMQContext.socket("REQ", { expiration: 10000 });
@@ -62,7 +59,6 @@ class DefaultNamespace {
         this.handlers = {
             SUBMIT_LOGIN: this.handleLogin,
             SUBMIT_SIGNUP: this.handleSignUp,
-            LOGOUT: this.handleLogout
         };
         this.socket = socket;
         this.rabbitMQContext = rabbitMQContext;

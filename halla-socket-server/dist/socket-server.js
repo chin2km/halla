@@ -12,6 +12,7 @@ const rabbitJS = __importStar(require("rabbit.js"));
 const DefaultNamespace_1 = require("./NameSpaces/DefaultNamespace");
 const R = __importStar(require("ramda"));
 const RoomsNamespace_1 = require("./NameSpaces/RoomsNamespace");
+const ChatroomNamespace_1 = require("./NameSpaces/ChatroomNamespace");
 class SocketServer {
     constructor() {
         this.ALL_CLIENTS = [];
@@ -46,6 +47,10 @@ class SocketServer {
         // Rooms namespace
         this.socketIO.of("/rooms").on("connect", (socket) => {
             new RoomsNamespace_1.RoomsNamespace(socket, this.rabbitMQConnection);
+        });
+        // Chatroom namespace
+        this.socketIO.of("/chatroom").on("connect", (socket) => {
+            new ChatroomNamespace_1.ChatroomNamespace(socket, this.rabbitMQConnection);
         });
     }
     getServer() {

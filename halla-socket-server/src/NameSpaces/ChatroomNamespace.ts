@@ -3,13 +3,12 @@ import * as R from "ramda";
 import * as rabbitJS from "rabbit.js";
 import { PushSocket, ReqSocket, RepSocket } from "rabbit.js";
 
-export class RoomsNamespace {
+export class ChatroomNamespace {
     private socket: SocketIO.Socket;
     private rabbitMQContext: rabbitJS.Context;
 
     private channels = {
-        CREATE_ROOM: "CREATE_ROOM",
-        FETCH_ROOMS: "FETCH_ROOMS",
+        JOIN_ROOM: "JOIN_ROOM",
     };
 
     constructor(socket: SocketIO.Socket, rabbitMQContext: rabbitJS.Context) {
@@ -20,32 +19,26 @@ export class RoomsNamespace {
     }
 
     setupHandlers = () => {
+        this.socket.emit("connect", this.socket.id);
+
         R.forEachObjIndexed((handle, eventName) => {
             this.socket.on(eventName, handle);
         })(this.handlers);
     }
 
-    handleFetchRooms = (message: any) => {
-        console.log("FETCH_ROOMS", message);
+    handleJoinRoom = (message: any) => {
+        console.log("JOIN_ROOM", message);
 
-        this.requestToChannel(this.channels.FETCH_ROOMS, message, (response: string) => {
-            this.socket.emit("SET_ROOMS", JSON.parse(response));
-        });
-    }
-
-    handleCreateRoom = (message: any) => {
-        console.log("CREATE_ROOM", message);
-
-        this.requestToChannel(this.channels.CREATE_ROOM, message, (response: string) => {
-            if ( response === "FAIL") {
-                console.log("FAIL");
-                this.socket.emit("CREATE_ROOM_FAIL", response);
-            } else {
-                console.log("CREATE_ROOM_SUCCESSFUL");
-                this.socket.emit("CREATE_ROOM_SUCCESSFUL", message);
-                this.socket.broadcast.emit("CREATE_ROOM_SUCCESSFUL", message);
-            }
-        });
+        // this.requestToChannel(this.channels.JOIN_ROOM, message, (response: string) => {
+        //     // if ( response === "FAIL") {
+        //     //     console.log("FAIL");
+        //     //     this.socket.emit("CREATE_ROOM_FAIL", response);
+        //     // } else {
+        //     //     console.log("CREATE_ROOM_SUCCESSFUL");
+        //     //     this.socket.emit("CREATE_ROOM_SUCCESSFUL", message);
+        //     //     this.socket.broadcast.emit("CREATE_ROOM_SUCCESSFUL", message);
+        //     // }
+        // });
     }
 
     requestToChannel = (CHANNEL: string, message: any, callback: Function) => {
@@ -68,7 +61,6 @@ export class RoomsNamespace {
     }
 
     public handlers: any = {
-        FETCH_ROOMS: this.handleFetchRooms,
-        CREATE_ROOM: this.handleCreateRoom,
+        JOIN_ROOM: this.handleJoinRoom,
     };
 }

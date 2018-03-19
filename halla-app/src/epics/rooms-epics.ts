@@ -1,8 +1,8 @@
 import { combineEpics, ActionsObservable } from "redux-observable";
 import { printLine } from "../utils/printline";
-import { sendMessage, ROOMS_NSC } from "../websockets/websocket";
+import { sendMessage, ROOMS_NSC, CHATROOM_NSC } from "../websockets/websocket";
 import { Observable } from "rxjs/Observable";
-import { CREATE_ROOM, SET_ROOMS, FETCH_ROOMS, CREATE_ROOM_SUCCESSFUL, CREATE_ROOM_FAIL } from "../actions/constants";
+import { CREATE_ROOM, SET_ROOMS, FETCH_ROOMS, CREATE_ROOM_SUCCESSFUL, CREATE_ROOM_FAIL, JOIN_ROOM } from "../actions/constants";
 import { addNotification } from "../actions/auth";
 import { fetchRooms } from "../actions/RoomsList";
 
@@ -38,10 +38,24 @@ export const createRoomFailedEpic = (action$: ActionsObservable<any>) =>
             Observable.of(fetchRooms())
         ))
 
+export const joinRoomEpic = (action$: ActionsObservable<any>, store) =>
+    action$.ofType(JOIN_ROOM)
+        .do(({payload}) => {
+            sendMessage({
+                route: JOIN_ROOM,
+                message: {
+                    id: payload,
+                    userId: store.getState().auth.user._id
+                }
+            }, CHATROOM_NSC)
+        })
+        .ignoreElements()
+
 
 export const roomsEpics = combineEpics(
     createRoomEpic,
     fetchRoomsEpic,
     createRoomSuccessEpic,
-    createRoomFailedEpic
+    createRoomFailedEpic,
+    joinRoomEpic
 )

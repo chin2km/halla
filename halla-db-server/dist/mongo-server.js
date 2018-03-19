@@ -46,6 +46,18 @@ class MongoServer {
             });
         };
         this.listenClients = () => {
+            this.listenReplyToChannel(this.channels.LOGIN_CHANNEL, (dataReceived, socket) => {
+                User_1.default.findOne(dataReceived, (err, data) => {
+                    if (data !== null) {
+                        console.log("LOGIN_SUCCESS");
+                        socket.write(JSON.stringify(data));
+                    }
+                    else {
+                        console.log("LOGIN_FAIL");
+                        socket.write(`FAIL`);
+                    }
+                });
+            });
             this.listenReplyToChannel(this.channels.SIGNUP_CHANNEL, (dataReceived, socket) => {
                 User_1.default.create(dataReceived, (err, data) => {
                     if (err) {
@@ -53,18 +65,6 @@ class MongoServer {
                     }
                     else {
                         socket.write(`SUCCESS`);
-                    }
-                });
-            });
-            this.listenReplyToChannel(this.channels.LOGIN_CHANNEL, (dataReceived, socket) => {
-                User_1.default.findOne(dataReceived, (err, data) => {
-                    if (data !== null) {
-                        console.log("LOGIN_SUCCESS");
-                        socket.write(`SUCCESS`);
-                    }
-                    else {
-                        console.log("LOGIN_FAIL");
-                        socket.write(`FAIL`);
                     }
                 });
             });

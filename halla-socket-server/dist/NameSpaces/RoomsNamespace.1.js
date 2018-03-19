@@ -15,6 +15,7 @@ class RoomsNamespace {
             FETCH_ROOMS: "FETCH_ROOMS",
         };
         this.setupHandlers = () => {
+            this.socket.emit("connect", this.socket.id);
             R.forEachObjIndexed((handle, eventName) => {
                 this.socket.on(eventName, handle);
             })(this.handlers);
@@ -64,4 +65,4 @@ class RoomsNamespace {
     }
 }
 exports.RoomsNamespace = RoomsNamespace;
-//# sourceMappingURL=RoomsNamespace.js.map
+//# sourceMappingURL=RoomsNamespace.1.js.map

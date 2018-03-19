@@ -10,13 +10,14 @@ import './style.less';
 
 export namespace RoomsListTypes {
   export interface Props {
-    rooms: any[];
+		rooms: any[];
+		joinRoom: (id: any) => void;
 	}
 	export interface State {
   }
 }
 
-class RoomsListClass extends React.Component<RoomsListTypes.Props, RoomsListTypes.State> {
+export class RoomsList extends React.Component<RoomsListTypes.Props, RoomsListTypes.State> {
 	constructor(props) {
 		super(props)
 	}
@@ -26,23 +27,27 @@ class RoomsListClass extends React.Component<RoomsListTypes.Props, RoomsListType
     return (
       <div>
         <List>
-					{R.map(({title}) => <ListItem
+			{R.map(({title, _id}) => {
+				const joinRoom = () => this.props.joinRoom(_id);
+
+				return <ListItem
+						onClick={joinRoom}
 						className="list-item"
-						key={title}
+						key={_id}
 						primaryText={title}
 						leftAvatar={<Avatar>{R.pipe(R.head, R.toUpper)(title)}</Avatar>}
-					/>)(rooms.reverse())}
-					
-					{R.isEmpty(rooms) && 
-						<ListItem
-						className="list-item"
-						primaryText={"No channels found"}/>
-					}
-				</List>
-				<Divider />
+					/>
+			}
+			)(rooms.reverse())}
+			
+			{R.isEmpty(rooms) && 
+				<ListItem
+				className="list-item"
+				primaryText={"No channels found"}/>
+			}
+		</List>
+		<Divider />
       </div>
     );
   }
 }
-
-export const RoomsList = RoomsListClass;
