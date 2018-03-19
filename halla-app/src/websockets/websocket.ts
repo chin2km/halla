@@ -12,6 +12,7 @@ export const ROOMS_NSC = "/rooms";
 
 const ws = {};
 
+
 export const connect = (namespace, nextAction) => {
     ws[namespace] = SocketIO(ENDPOINT + namespace, { transports: ['websocket'] });
     ws[namespace].on('connect',(res)=>{

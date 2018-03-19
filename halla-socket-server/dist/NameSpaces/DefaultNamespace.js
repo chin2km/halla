@@ -55,7 +55,7 @@ class DefaultNamespace {
                     callback(message);
                     setTimeout(() => {
                         REQ_SOCKET.close();
-                    }, 1000);
+                    }, 10000);
                 });
             });
         };
