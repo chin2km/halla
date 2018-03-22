@@ -21,7 +21,7 @@ import './style.less';
 
 export namespace RightPane {
   export interface Props extends RouteComponentProps<void> {
-	  channel?: any;
+	  chatRoom?: any;
   }
 
   export interface State {
@@ -34,38 +34,41 @@ class RightPane extends React.Component<RightPane.Props, RightPane.State> {
   componentDidMount() {
 
   }
-  state = {
-    hasChat: false
-  }
 
   leaveRoom = () => {
 	  this.setState({hasChat: !this.state.hasChat});
   }
   
   render() {
-	  const {channel} = this.props;
-	  const {messages} = channel;
+	  const {chatRoom} = this.props;
+	  const {messages} = chatRoom;
     return <div className="pane2">
         {
-          this.state.hasChat ? <div className="chat-window">
+          !R.isEmpty(chatRoom) ? <div className="chat-window">
             <Card className="chat">
-				{/* <div
-					onClick={this.leaveRoom}
-					className="close-btn">
-					<CloseIcon />
-				</div> */}
-				
+
 				<CardHeader
-					title={channel.name}
-					subtitle={channel.created.toString()}
-					avatar={<Avatar>{R.pipe(R.head, R.toUpper)(channel.name)}</Avatar>}
+					title={chatRoom.title}
+					subtitle={`Room admin: ${chatRoom.admin}`}
+					avatar={<Avatar>{R.pipe(R.head, R.toUpper)(chatRoom.title)}</Avatar>}
 				/>
+
+				<h3 className="label"><i>Users in this room</i></h3>
+
+				<div className="room-users">
+					{chatRoom.users && R.map((user: any) =>
+						<Chip key={user.username}>
+							<Avatar color="#444" icon={<SvgIconFace />} />
+							{user.username}
+						</Chip>)(chatRoom.users)
+					}
+				</div>
 
 				<hr/>
 
 				<div className="messages">
 					{
-						R.map(message => <Chip key={message.message} style={{margin: 4}} className="chat-bubble">
+						messages && R.map(message => <Chip key={message.message} style={{margin: 4}} className="chat-bubble">
 							<Avatar color="#444" icon={<SvgIconFace />} />
 							<div>
 								<h5>{message.user}</h5>
@@ -94,15 +97,15 @@ class RightPane extends React.Component<RightPane.Props, RightPane.State> {
 
             </Card>
 		  </div> :
-		  <CommunicationChatBubble onClick={this.leaveRoom} className="chat-panel-icon" />
-        }
+		  <CommunicationChatBubble className="chat-panel-icon" />
+		}
     </div>;
   }
 }
 
 function mapStateToProps(state: RootState) {
   return {
-	  channel: currentChannel
+	  chatRoom: state.chatRoom
   };
 }
 
@@ -112,22 +115,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RightPane);
-
-const currentChannel = {
-	name: 'MyChannel',
-	created: new Date(),
-	messages: [
-		{user: "a user", message: 'A messaga sde', time: new Date()},
-		{user: "1 user", message: 'A messaa sdge', time: new Date()},
-		{user: "auser", message: 'A messagsd asde. this is a reallr really really really really really really really really really really really really message really really really really really really really really really really really really really really really really reallymesage', time: new Date()},
-		{user: "a usaser", message: 'A mes asdasd sage', time: new Date()},
-		{user: "a usfer", message: 'A message', time: new Date()},
-		{user: "a usser", message: 'A mesasd asdsage', time: new Date()},
-		{user: "a ussaer", message: 'A mess asdasd asdage', time: new Date()},
-		{user: "a asuser", message: 'A mess asdage', time: new Date()},
-		{user: "a uadser", message: 'A message AS', time: new Date()},
-		{user: "a usder", message: 'A messa asd adge', time: new Date()},
-		{user: "aasd uasser", message: 'A m asdas asessage sda', time: new Date()},
-		{user: "a asduser", message: 'A mesd asdds sage', time: new Date()},
-	]
-}

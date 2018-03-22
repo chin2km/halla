@@ -1,4 +1,5 @@
 
+import * as R from "ramda";
 import Room from "../schemas/Room";
 import User from "../models/User";
 
@@ -25,7 +26,10 @@ const findByIdAndUpdate = (id: String, data: typeof Room, callback: CallBackType
 
 const addUser = function(room: any, userId: string, socketId: string, callback: CallBackType) {
     const conn = { userId, socketId};
-    room.connections.push(conn);
+    const connection = R.find(R.propEq("socketId", socketId))(room.connections);
+    if (!connection) {
+        room.connections.push(conn);
+    }
     room.save(callback);
 };
 

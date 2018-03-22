@@ -28,4 +28,5 @@ export const CREATE_ROOM_FAIL = 'CREATE_ROOM_FAIL';
 
 export const JOIN_ROOM = 'JOIN_ROOM';
 export const JOIN_ROOM_SUCCESS = 'JOIN_ROOM_SUCCESS';
+export const SET_ROOM_USERS = 'SET_ROOM_USERS';
 

@@ -3,6 +3,7 @@ import auth from './auth';
 import componentsStates, { componentsStatesInitialState } from './components-states';
 import ws from './websockets';
 import rooms from './rooms';
+import chatRoom from './chatroom';
 import {reducer as toastrReducer} from 'react-redux-toastr'
 
 export interface RootState {
@@ -10,6 +11,7 @@ export interface RootState {
   ws: any,
   componentsStates: typeof componentsStatesInitialState,
   rooms: any[],
+  chatRoom :any,
   toastr: any
 }
 
@@ -18,5 +20,6 @@ export default combineReducers<RootState>({
   ws,
   componentsStates,
   rooms,
+  chatRoom,
   toastr: toastrReducer
 });

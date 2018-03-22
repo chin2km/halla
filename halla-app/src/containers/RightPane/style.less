@@ -22,6 +22,25 @@
 				flex-grow: 1;
 			}
 
+			h3.label {
+				font-size: 10px;
+				font-weight: normal;
+				color: #663ab7;
+				margin: 0 0 0 15px;
+			}
+
+			.room-users {
+				padding: 0 19px;
+				display: flex;
+				flex-wrap: wrap;
+				max-height: 85px;
+				overflow-y: scroll;
+
+				& > div {
+					margin: 3px !important;
+				}
+			}
+
 			.messages {
 				display: flex;
 				flex-direction: column-reverse;

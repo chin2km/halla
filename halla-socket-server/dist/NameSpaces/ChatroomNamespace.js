@@ -34,12 +34,13 @@ class ChatroomNamespace {
                     this.socket.join(room._id);
                     this.socket.emit("JOIN_ROOM_SUCCESS", room);
                     const data = {
-                        roomId: message.id,
+                        roomId: room._id,
                         userId: message.userId
                     };
                     this.requestToChannel(this.channels.FETCH_ROOM_USERS, data, (users) => {
                         console.log(users);
                         this.socket.emit("SET_ROOM_USERS", JSON.parse(users));
+                        this.socket.broadcast.to(room._id).emit("SET_ROOM_USERS", JSON.parse(users));
                     });
                 }
             });

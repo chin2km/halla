@@ -31,45 +31,49 @@ export class EntityList extends React.Component<EntityList.Props, EntityList.Sta
 
 	render() {
 		const { entities } = this.props;
-		const filteredEntities = R.filter(R.propSatisfies(
-			R.contains(this.state.searchWord),
-			'title'
-		), this.props.entities)
+		const filteredEntities = R.filter(
+			R.pipe(
+				R.prop('title'),
+				R.toLower,
+				R.contains(this.state.searchWord)
+			)
+		,entities)
+
 		return (
-		<div style={{display: 'contents'}}>
-				<div className="fixed">
-					<TextBox
-						className={"search-box"}
-						onChange={this.setSearch}
-						hintText={`Search ${this.props.label}`}
-					/>
-				</div>
+			<div style={{display: 'contents'}}>
+					<div className="fixed">
+						<TextBox
+							className={"search-box"}
+							onChange={this.setSearch}
+							hintText={`Search ${this.props.label}`}
+						/>
+					</div>
 
-				<div className="scrolled">
-					<List>
-						{R.map(({title, _id}) => {
-							const itemClick = () => this.props.onItemClick(_id);
+					<div className="scrolled">
+						<List>
+							{R.map(({title, _id}) => {
+								const itemClick = () => this.props.onItemClick(_id);
 
-							return <ListItem
-									onClick={itemClick}
-									className="list-item"
-									key={_id}
-									primaryText={title}
-									leftAvatar={<Avatar>{R.pipe(R.head, R.toUpper)(title)}</Avatar>}
-								/>
-						}
-						)(filteredEntities.reverse())}
-						
-						{R.isEmpty(entities) && 
-							<ListItem
-							className="list-item"
-							primaryText={"No channels found"}/>
-						}
-					</List>						
-				</div>
-				{this.props.children}
-			<Divider />
-		</div>
+								return <ListItem
+										onClick={itemClick}
+										className="list-item"
+										key={_id}
+										primaryText={title}
+										leftAvatar={<Avatar>{R.pipe(R.head, R.toUpper)(title)}</Avatar>}
+									/>
+							}
+							)(filteredEntities.reverse())}
+							
+							{R.isEmpty(filteredEntities) && 
+								<ListItem
+								className="list-item"
+								primaryText={`No ${this.props.label} found`}/>
+							}
+						</List>						
+					</div>
+					{this.props.children}
+				<Divider />
+			</div>
 		);
 	}
 }

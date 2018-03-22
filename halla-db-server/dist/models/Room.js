@@ -1,8 +1,16 @@
 "use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+}
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 }
 Object.defineProperty(exports, "__esModule", { value: true });
+const R = __importStar(require("ramda"));
 const Room_1 = __importDefault(require("../schemas/Room"));
 const User_1 = __importDefault(require("../models/User"));
 const create = (data, callback) => {
@@ -23,7 +31,10 @@ const findByIdAndUpdate = (id, data, callback) => {
 };
 const addUser = function (room, userId, socketId, callback) {
     const conn = { userId, socketId };
-    room.connections.push(conn);
+    const connection = R.find(R.propEq("socketId", socketId))(room.connections);
+    if (!connection) {
+        room.connections.push(conn);
+    }
     room.save(callback);
 };
 const getUsers = function (roomId, userId, callback) {
