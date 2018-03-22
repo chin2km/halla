@@ -65,17 +65,16 @@ const getUsers = function(roomId: any, userId: string, callback: Function) {
 const removeUser = function(socketId: string, userId: string, callback: CallBackType) {
     find({ "connections.socketId" : socketId}, (err, rooms: any[]) => {
         if (err) { return callback(err, undefined); }
-
-        R.forEach((room: any) => {
-            const connectionsToBeRemoved = R.filter(
-                R.pipe(R.prop("socketId"), R.equals(socketId))
-            )(room.connections);
-            R.forEach((conn: any) => {
-                room.connections.id(conn._id).remove();
-                room.save();
-            })(connectionsToBeRemoved);
-        })(rooms);
         callback(undefined, rooms);
+
+        if (userId) {
+
+            Room.update(
+                { },
+                { $pull: { connections: { socketId: socketId } } },
+                { multi: true }
+            );
+        }
     });
 };
 

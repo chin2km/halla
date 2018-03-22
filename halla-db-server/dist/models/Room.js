@@ -68,14 +68,10 @@ const removeUser = function (socketId, userId, callback) {
         if (err) {
             return callback(err, undefined);
         }
-        R.forEach((room) => {
-            const connectionsToBeRemoved = R.filter(R.pipe(R.prop("socketId"), R.equals(socketId)))(room.connections);
-            R.forEach((conn) => {
-                room.connections.id(conn._id).remove();
-                room.save();
-            })(connectionsToBeRemoved);
-        })(rooms);
         callback(undefined, rooms);
+        if (userId) {
+            Room_1.default.update({}, { $pull: { connections: { socketId: socketId } } }, { multi: true });
+        }
     });
 };
 exports.default = {
