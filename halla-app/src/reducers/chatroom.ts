@@ -12,7 +12,10 @@ export default handleActions({
     return action.payload;
   },
   [Actions.SET_ROOM_USERS]: (state, action) => {
-    return {...state, users: action.payload};
+    if(state._id === action.payload.roomId) {
+      state.users = action.payload.users
+    }
+    return {...state};
   },
   [Actions.REMOVE_USER]: (state, action) => {
     if(state._id === action.payload.roomId) {

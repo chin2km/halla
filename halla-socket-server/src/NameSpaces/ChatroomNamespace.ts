@@ -72,9 +72,12 @@ export class ChatroomNamespace {
                 };
 
                 this.requestToChannel(this.channels.FETCH_ROOM_USERS, data, (users: string) => {
-                    console.log(users);
-                    this.socket.emit("SET_ROOM_USERS", JSON.parse(users));
-                    this.socket.broadcast.to(room._id).emit("SET_ROOM_USERS", JSON.parse(users));
+                    const data = {
+                        roomId: room._id,
+                        users: JSON.parse(users)
+                    };
+                    this.socket.emit("SET_ROOM_USERS", data);
+                    this.socket.broadcast.to(room._id).emit("SET_ROOM_USERS", data);
                 });
             }
         });
