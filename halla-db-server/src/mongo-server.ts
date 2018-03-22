@@ -26,6 +26,9 @@ export class MongoServer {
 
         CREATE_ROOM: "CREATE_ROOM",
         FETCH_ROOMS: "FETCH_ROOMS",
+
+        JOIN_ROOM: "JOIN_ROOM",
+        FETCH_ROOM_USERS: "FETCH_ROOM_USERS"
     };
 
     private createServer = (): void  => {
@@ -109,6 +112,37 @@ export class MongoServer {
                 }
                 console.log("FIND SUCCESS", data);
                 socket.write(JSON.stringify(data));
+            });
+        });
+
+        this.listenReplyToChannel(this.channels.JOIN_ROOM, (dataReceived: any, socket: any) => {
+            console.log("JOIN_ROOM", dataReceived);
+
+            Room.findById(dataReceived.id, function(err, room: any) {
+                if (err) {
+                    return socket.write(`FAIL`);
+                }
+                if (room) {
+                    Room.addUser(room, dataReceived.userId, dataReceived.socketId, function(err, newRoom) {
+                        if (err) {
+                            return socket.write(`FAIL`);
+                        }
+
+                        socket.write(JSON.stringify(newRoom));
+                    });
+                }
+            });
+        });
+        this.listenReplyToChannel(this.channels.FETCH_ROOM_USERS, (dataReceived: any, socket: any) => {
+            console.log("FETCH_ROOM_USERS", dataReceived.roomId, dataReceived.userId);
+
+            Room.getUsers(dataReceived.roomId, dataReceived.userId, function(err: any, users: any) {
+                if (err) {
+                    console.log("FETCH_ROOM_USERS_FAIL", err, users);
+                    return socket.write(`FAIL`);
+                }
+                console.log("FETCH_ROOM_USERS_SUCCESS", users);
+                return socket.write(JSON.stringify(users));
             });
         });
     }

@@ -21,6 +21,8 @@ class MongoServer {
             LOGIN_CHANNEL: "LOGIN_CHANNEL",
             CREATE_ROOM: "CREATE_ROOM",
             FETCH_ROOMS: "FETCH_ROOMS",
+            JOIN_ROOM: "JOIN_ROOM",
+            FETCH_ROOM_USERS: "FETCH_ROOM_USERS"
         };
         this.createServer = () => {
             // MongoDB Connection
@@ -94,6 +96,33 @@ class MongoServer {
                     }
                     console.log("FIND SUCCESS", data);
                     socket.write(JSON.stringify(data));
+                });
+            });
+            this.listenReplyToChannel(this.channels.JOIN_ROOM, (dataReceived, socket) => {
+                console.log("JOIN_ROOM", dataReceived);
+                Room_1.default.findById(dataReceived.id, function (err, room) {
+                    if (err) {
+                        return socket.write(`FAIL`);
+                    }
+                    if (room) {
+                        Room_1.default.addUser(room, dataReceived.userId, dataReceived.socketId, function (err, newRoom) {
+                            if (err) {
+                                return socket.write(`FAIL`);
+                            }
+                            socket.write(JSON.stringify(newRoom));
+                        });
+                    }
+                });
+            });
+            this.listenReplyToChannel(this.channels.FETCH_ROOM_USERS, (dataReceived, socket) => {
+                console.log("FETCH_ROOM_USERS", dataReceived.roomId, dataReceived.userId);
+                Room_1.default.getUsers(dataReceived.roomId, dataReceived.userId, function (err, users) {
+                    if (err) {
+                        console.log("FETCH_ROOM_USERS_FAIL", err, users);
+                        return socket.write(`FAIL`);
+                    }
+                    console.log("FETCH_ROOM_USERS_SUCCESS", users);
+                    return socket.write(JSON.stringify(users));
                 });
             });
         };

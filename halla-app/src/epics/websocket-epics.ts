@@ -3,7 +3,7 @@ import { CONNECT, CONNECT_SUCCESSFUL, LOGIN_SUCCESS, SIGNUP_SUCCESS, SIGNUP_FAIL
 import { connect, subscribe, DEFAULT_NSC, ROOMS_NSC, sendMessage, CHATROOM_NSC } from "../websockets/websocket";
 import SocketIO = require('socket.io-client');
 import { Observable } from "rxjs/Observable";
-import { connectSuccessful } from "../actions/websocket";
+import { connectSuccessful, connectedToRoomsNsc, connectedToChatroomNsc } from "../actions/websocket";
 import { ENDPOINT } from "../websockets/constants";
 import { printLine } from "../utils/printline";
 import { url } from "inspector";

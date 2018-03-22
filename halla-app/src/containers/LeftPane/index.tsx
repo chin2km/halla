@@ -7,13 +7,14 @@ import { RootState } from '../../reducers';
 import SplitterLayout from 'react-splitter-layout';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import {deepPurple500} from 'material-ui/styles/colors';
+import {deepPurple500, deepPurple600, deepPurple50} from 'material-ui/styles/colors';
+import {Tabs, Tab} from 'material-ui/Tabs';
 import Avatar from 'material-ui/Avatar';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Subheader from 'material-ui/Subheader';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
-import { TextBox, RoomsList, CreateRoomPop } from '../../components';
+import { TextBox, EntityList, CreateRoomPop } from '../../components';
 import * as RoomsListActions from '../../actions/RoomsList'
 import * as ChatRoomActions from '../../actions/Chatroom'
 
@@ -35,7 +36,6 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 
 	state = {
 		open: false,
-		searchWord: "",
 		newRoomName: ""
 	};
 
@@ -51,45 +51,52 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 		this.props.actions.closeCreateRoom();
 	};
 
-	setSearch = ({target:{value}}) => {
-		this.setState({searchWord: value})
-	}
 	
 	render() {
 
-		const filteredRooms = R.filter(R.propSatisfies(
-			R.contains(this.state.searchWord),
-			'title'
-		), this.props.rooms)
-
 		return <div className="pane1">
-			<div className="fixed">
-				<h2>Rooms</h2>
-				<FloatingActionButton
-					onClick={this.handleCreateClick}
-					data-tip="Create a room"
-					backgroundColor={deepPurple500}
-					mini={true}
-					className="add-button">
-					<ContentAdd />
-				</FloatingActionButton>
-				<TextBox
-					className={"search-box"}
-					onChange={this.setSearch}
-					hintText="Search rooms"
-				/>
-			</div>
+ 				<Tabs
+					className="tab-system"
+				 	initialSelectedIndex={0}
+                    tabItemContainerStyle={{
+						color: deepPurple600,
+						backgroundColor: 'transparent',
+					}}
+                    inkBarStyle={{background: deepPurple50}}>
+                    <Tab
+                        icon={<br/>}
+                        label="Rooms">
 
-			<div className="scrolled">
-				<RoomsList joinRoom={this.props.actions.joinRoom} rooms={filteredRooms}/>
-			</div>
+						<EntityList
+							label="rooms"						
+							entities={this.props.rooms}
+							onItemClick={this.props.actions.joinRoom}>
+							<CreateRoomPop
+								loading={this.props.componentsStates.loading}
+								open={this.props.componentsStates.open}
+								handleClose={this.handleClose}
+								createRoom={this.props.actions.createRoom}
+							/>
+							<FloatingActionButton
+								onClick={this.handleCreateClick}
+								data-tip="Create a room"
+								backgroundColor={deepPurple500}
+								className="add-button">
+								<ContentAdd />
+							</FloatingActionButton>
+						</EntityList>
+                    </Tab>
+                    <Tab
+                        icon={<br />}
+                        label="People">
 
-			<CreateRoomPop
-				loading={this.props.componentsStates.loading}
-				open={this.props.componentsStates.open}
-				handleClose={this.handleClose}
-				createRoom={this.props.actions.createRoom}
-			/>
+						<EntityList
+							label="people"
+							entities={this.props.rooms}
+							onItemClick={this.props.actions.joinRoom}
+						/>
+                    </Tab>
+                </Tabs>
 	</div>;
 	}
 }

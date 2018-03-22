@@ -27,9 +27,9 @@ class Home extends React.Component<Home.Props, Home.State> {
     return <div className="home">
         <SplitterLayout
               percentage={true}
-              primaryMinSize={7}
+              primaryMinSize={15}
               secondaryMinSize={30}
-              secondaryInitialSize={80}
+              secondaryInitialSize={70}
             >
             <LeftPane/>
             <RightPane/>

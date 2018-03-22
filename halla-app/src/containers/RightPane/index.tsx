@@ -49,11 +49,11 @@ class RightPane extends React.Component<RightPane.Props, RightPane.State> {
         {
           this.state.hasChat ? <div className="chat-window">
             <Card className="chat">
-				<div
+				{/* <div
 					onClick={this.leaveRoom}
 					className="close-btn">
 					<CloseIcon />
-				</div>
+				</div> */}
 				
 				<CardHeader
 					title={channel.name}

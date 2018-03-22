@@ -9,6 +9,7 @@ export class ChatroomNamespace {
 
     private channels = {
         JOIN_ROOM: "JOIN_ROOM",
+        FETCH_ROOM_USERS: "FETCH_ROOM_USERS"
     };
 
     constructor(socket: SocketIO.Socket, rabbitMQContext: rabbitJS.Context) {
@@ -27,18 +28,30 @@ export class ChatroomNamespace {
     }
 
     handleJoinRoom = (message: any) => {
-        console.log("JOIN_ROOM", message);
 
-        // this.requestToChannel(this.channels.JOIN_ROOM, message, (response: string) => {
-        //     // if ( response === "FAIL") {
-        //     //     console.log("FAIL");
-        //     //     this.socket.emit("CREATE_ROOM_FAIL", response);
-        //     // } else {
-        //     //     console.log("CREATE_ROOM_SUCCESSFUL");
-        //     //     this.socket.emit("CREATE_ROOM_SUCCESSFUL", message);
-        //     //     this.socket.broadcast.emit("CREATE_ROOM_SUCCESSFUL", message);
-        //     // }
-        // });
+        const constructedMessage = {...message, socketId: this.socket.id};
+        console.log("JOIN_ROOM", constructedMessage);
+
+        this.requestToChannel(this.channels.JOIN_ROOM, constructedMessage, (response: string) => {
+            if ( response === "FAIL") {
+                console.log("FAIL");
+                this.socket.emit("JOIN_ROOM_FAIL");
+            } else {
+                const room = JSON.parse(response);
+                console.log("JOIN_ROOM_SUCCESS", room);
+                this.socket.join(room._id);
+                this.socket.emit("JOIN_ROOM_SUCCESS", room);
+
+                const data = {
+                    roomId: message.id,
+                    userId: message.userId
+                };
+                this.requestToChannel(this.channels.FETCH_ROOM_USERS, data, (users: string) => {
+                    console.log(users);
+                    this.socket.emit("SET_ROOM_USERS", JSON.parse(users));
+                });
+            }
+        });
     }
 
     requestToChannel = (CHANNEL: string, message: any, callback: Function) => {

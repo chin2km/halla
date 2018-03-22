@@ -1,7 +1,8 @@
 import { handleActions } from 'redux-actions';
 import * as Actions from '../actions/constants';
 
-const initialState: UserStoreState = {};
+const initialState: UserStoreState = {
+};
 
 export default handleActions<UserStoreState, any>({
   [Actions.LOGIN_SUCCESS]: (state, action) => {

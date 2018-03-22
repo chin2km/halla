@@ -12,6 +12,7 @@ declare type UserStoreState = {
 declare type LoginData = {
   username?: string;
   password?: string;
+  _id?: string;
 }
 
 declare type SignUpData = {

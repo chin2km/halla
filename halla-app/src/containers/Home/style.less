@@ -12,4 +12,40 @@
 			width: 8px;
 		}
 	}
+
+	.layout-pane {
+		overflow: hidden;
+	}
+
+	.tab-system {
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		padding: 0;
+		margin: 0 9px;
+
+		> div:nth-child(1) {
+			max-height: 70px;
+
+			button div {
+				height: 50px !important;
+			}
+		}
+		> div:nth-child(2) {
+			height: 2px;
+    		margin-top: 5px;
+		}
+		> div:nth-child(3) {
+			flex-grow: 1;
+			overflow: hidden;
+			position: relative;
+
+			> div {
+				display: flex;
+				flex-direction: column;
+				height: calc(100% - 10px);
+    			position: absolute !important;
+			}
+		}
+	}
 }

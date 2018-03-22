@@ -1,10 +1,11 @@
 import { combineEpics, ActionsObservable } from "redux-observable";
 import { printLine } from "../utils/printline";
-import { sendMessage, ROOMS_NSC, CHATROOM_NSC } from "../websockets/websocket";
+import { sendMessage, ROOMS_NSC, CHATROOM_NSC, connect } from "../websockets/websocket";
 import { Observable } from "rxjs/Observable";
 import { CREATE_ROOM, SET_ROOMS, FETCH_ROOMS, CREATE_ROOM_SUCCESSFUL, CREATE_ROOM_FAIL, JOIN_ROOM } from "../actions/constants";
 import { addNotification } from "../actions/auth";
 import { fetchRooms } from "../actions/RoomsList";
+import { connectedToRoomsNsc, connectedToChatroomNsc } from "../actions/websocket";
 
 const createRoomEpic = (actions$: ActionsObservable<any>, store) =>
     actions$.ofType(CREATE_ROOM)
@@ -21,6 +22,8 @@ const createRoomEpic = (actions$: ActionsObservable<any>, store) =>
 
 export const fetchRoomsEpic = (action$: ActionsObservable<any>) =>
     action$.ofType(FETCH_ROOMS)
+        .do(() => connect(ROOMS_NSC, connectedToRoomsNsc))
+        .do(() => connect(CHATROOM_NSC, connectedToChatroomNsc))
         .do(() => sendMessage({route: FETCH_ROOMS}, ROOMS_NSC))
         .ignoreElements()
 

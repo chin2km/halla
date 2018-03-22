@@ -32,11 +32,11 @@ const submitSignUpEpic = (actions$: ActionsObservable<any>, store) =>
 
 const loginSuccessEpic = (actions$: ActionsObservable<any>, store) =>
     actions$.ofType(LOGIN_SUCCESS)
-    .do(() => connect(ROOMS_NSC, connectedToRoomsNsc))
-    .do(() => connect(CHATROOM_NSC, connectedToChatroomNsc))
+    // .do(() => connect(ROOMS_NSC, connectedToRoomsNsc))
+    // .do(() => connect(CHATROOM_NSC, connectedToChatroomNsc))
     .switchMap(() => Observable.concat(
         Observable.of(push('/home')),
-        Observable.of(addNotification({type: 'info', message: 'Logged in successfully'}))
+        Observable.of(addNotification({type: 'success', message: 'Logged in successfully'}))
     ))
 
 const loginFailEpic = (actions$: ActionsObservable<any>, store) =>
@@ -48,7 +48,7 @@ const loginFailEpic = (actions$: ActionsObservable<any>, store) =>
 const signupSuccessEpic = (actions$: ActionsObservable<any>, store) =>
     actions$.ofType(SIGNUP_SUCCESS)
     .switchMap(() => Observable.concat(
-        Observable.of(addNotification({type: 'info', title: "success!", message: 'Sigined up successfully!'}))
+        Observable.of(addNotification({type: 'success', title: "success!", message: 'Sigined up successfully!'}))
     ))
 
 const signupFailEpic = (actions$: ActionsObservable<any>, store) =>
