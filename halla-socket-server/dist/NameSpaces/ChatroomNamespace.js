@@ -12,13 +12,33 @@ class ChatroomNamespace {
     constructor(socket, rabbitMQContext) {
         this.channels = {
             JOIN_ROOM: "JOIN_ROOM",
-            FETCH_ROOM_USERS: "FETCH_ROOM_USERS"
+            FETCH_ROOM_USERS: "FETCH_ROOM_USERS",
+            REMOVE_USER_FROM_ROOM: "REMOVE_USER_FROM_ROOM",
         };
         this.setupHandlers = () => {
             this.socket.emit("connect", this.socket.id);
             R.forEachObjIndexed((handle, eventName) => {
                 this.socket.on(eventName, handle);
             })(this.handlers);
+            this.onDisconnect();
+        };
+        this.onDisconnect = () => {
+            this.socket.on("disconnect", () => {
+                const data = {
+                    userId: this.userId,
+                    socketId: this.socket.id
+                };
+                this.requestToChannel(this.channels.REMOVE_USER_FROM_ROOM, data, (rooms) => {
+                    const roomsArr = JSON.parse(rooms);
+                    R.forEach((room) => {
+                        console.log("broadcasting to", room._id);
+                        this.socket.broadcast.to(room._id).emit("REMOVE_USER", {
+                            userId: this.userId,
+                            roomId: room._id
+                        });
+                    }, roomsArr);
+                });
+            });
         };
         this.handleJoinRoom = (message) => {
             const constructedMessage = Object.assign({}, message, { socketId: this.socket.id });
@@ -31,6 +51,7 @@ class ChatroomNamespace {
                 else {
                     const room = JSON.parse(response);
                     console.log("JOIN_ROOM_SUCCESS", room);
+                    this.userId = constructedMessage.userId;
                     this.socket.join(room._id);
                     this.socket.emit("JOIN_ROOM_SUCCESS", room);
                     const data = {

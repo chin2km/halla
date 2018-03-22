@@ -63,7 +63,20 @@ const getUsers = function (roomId, userId, callback) {
         });
     });
 };
-const removeUser = function (socketid, callback) {
+const removeUser = function (socketId, userId, callback) {
+    find({ "connections.socketId": socketId }, (err, rooms) => {
+        if (err) {
+            return callback(err, undefined);
+        }
+        R.forEach((room) => {
+            const connectionsToBeRemoved = R.filter(R.pipe(R.prop("socketId"), R.equals(socketId)))(room.connections);
+            R.forEach((conn) => {
+                room.connections.id(conn._id).remove();
+                room.save();
+            })(connectionsToBeRemoved);
+        })(rooms);
+        callback(undefined, rooms);
+    });
 };
 exports.default = {
     addUser,

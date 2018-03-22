@@ -8,7 +8,7 @@ const create = (data: typeof Room, callback: CallBackType) => {
     newRoom.save(callback);
 };
 
-const find = (data: typeof Room, callback: CallBackType) => {
+const find = (data: any, callback: CallBackType) => {
     Room.find(data, callback);
 };
 
@@ -62,7 +62,21 @@ const getUsers = function(roomId: any, userId: string, callback: Function) {
     });
 };
 
-const removeUser = function(socketid: string, callback: CallBackType) {
+const removeUser = function(socketId: string, userId: string, callback: CallBackType) {
+    find({ "connections.socketId" : socketId}, (err, rooms: any[]) => {
+        if (err) { return callback(err, undefined); }
+
+        R.forEach((room: any) => {
+            const connectionsToBeRemoved = R.filter(
+                R.pipe(R.prop("socketId"), R.equals(socketId))
+            )(room.connections);
+            R.forEach((conn: any) => {
+                room.connections.id(conn._id).remove();
+                room.save();
+            })(connectionsToBeRemoved);
+        })(rooms);
+        callback(undefined, rooms);
+    });
 };
 
 export default {

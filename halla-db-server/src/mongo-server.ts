@@ -28,7 +28,8 @@ export class MongoServer {
         FETCH_ROOMS: "FETCH_ROOMS",
 
         JOIN_ROOM: "JOIN_ROOM",
-        FETCH_ROOM_USERS: "FETCH_ROOM_USERS"
+        FETCH_ROOM_USERS: "FETCH_ROOM_USERS",
+        REMOVE_USER_FROM_ROOM: "REMOVE_USER_FROM_ROOM"
     };
 
     private createServer = (): void  => {
@@ -56,7 +57,7 @@ export class MongoServer {
                 console.log("DATA RECIEVED", dataReceived);
                 setTimeout(() => {
                     callback(dataReceived, REPLY_SOCKET);
-                }, 500);
+                }, 0);
             });
         });
     }
@@ -118,12 +119,12 @@ export class MongoServer {
         this.listenReplyToChannel(this.channels.JOIN_ROOM, (dataReceived: any, socket: any) => {
             console.log("JOIN_ROOM", dataReceived);
 
-            Room.findById(dataReceived.id, function(err, room: any) {
+            Room.findById(dataReceived.id, (err, room: any) => {
                 if (err) {
                     return socket.write(`FAIL`);
                 }
                 if (room) {
-                    Room.addUser(room, dataReceived.userId, dataReceived.socketId, function(err, newRoom) {
+                    Room.addUser(room, dataReceived.userId, dataReceived.socketId, (err, newRoom) => {
                         if (err) {
                             return socket.write(`FAIL`);
                         }
@@ -133,16 +134,30 @@ export class MongoServer {
                 }
             });
         });
+
         this.listenReplyToChannel(this.channels.FETCH_ROOM_USERS, (dataReceived: any, socket: any) => {
             console.log("FETCH_ROOM_USERS", dataReceived.roomId, dataReceived.userId);
 
-            Room.getUsers(dataReceived.roomId, dataReceived.userId, function(err: any, users: any) {
+            Room.getUsers(dataReceived.roomId, dataReceived.userId, (err: any, users: any) => {
                 if (err) {
                     console.log("FETCH_ROOM_USERS_FAIL", err, users);
                     return socket.write(`FAIL`);
                 }
                 console.log("FETCH_ROOM_USERS_SUCCESS", users);
                 return socket.write(JSON.stringify(users));
+            });
+        });
+
+        this.listenReplyToChannel(this.channels.REMOVE_USER_FROM_ROOM, (dataReceived: any, socket: any) => {
+            console.log("REMOVE_USER_FROM_ROOM", dataReceived.userId, dataReceived.socketId);
+
+            Room.removeUser(dataReceived.socketId, dataReceived.userId, (err: any, rooms: any) => {
+                if (err) {
+                    console.log("REMOVE_USER_FROM_ROOM", err, rooms);
+                    return socket.write(`FAIL`);
+                }
+                console.log("REMOVE_USER_FROM_ROOM_SUCCESS", rooms);
+                return socket.write(JSON.stringify(rooms));
             });
         });
     }
