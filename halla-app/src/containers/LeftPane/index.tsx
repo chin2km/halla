@@ -43,15 +43,6 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 		this.props.actions.fetchRooms();
 	}
 	
-	handleCreateClick = () => {
-		this.props.actions.openCreateRoom();
-	};
-
-	handleClose = () => {
-		this.props.actions.closeCreateRoom();
-	};
-
-	
 	render() {
 
 		return <div className="pane1">
@@ -74,11 +65,11 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 							<CreateRoomPop
 								loading={this.props.componentsStates.loading}
 								open={this.props.componentsStates.open}
-								handleClose={this.handleClose}
+								handleClose={this.props.actions.closeCreateRoom}
 								createRoom={this.props.actions.createRoom}
 							/>
 							<FloatingActionButton
-								onClick={this.handleCreateClick}
+								onClick={this.props.actions.openCreateRoom}
 								data-tip="Create a room"
 								backgroundColor={deepPurple500}
 								className="add-button">
@@ -92,7 +83,7 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 
 						<EntityList
 							label="people"
-							entities={this.props.rooms}
+							entities={[]}
 							onItemClick={this.props.actions.joinRoom}
 						/>
                     </Tab>
