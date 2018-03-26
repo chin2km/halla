@@ -53,7 +53,8 @@ const removeUser = function (socketId, userId, callback) {
         }
         callback(undefined, rooms);
         if (userId) {
-            Room_1.default.update({}, { $pull: { connections: { socketId: socketId } } }, { multi: true });
+            const roomIds = rooms.map((ele) => new Mongoose.Types.ObjectId(ele._id));
+            Room_1.default.collection.update({ "connections.socketId": socketId }, { $pull: { "connections": { "socketId": socketId } } }, { multi: true });
         }
     });
 };

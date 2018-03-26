@@ -40,7 +40,7 @@ export class ChatroomNamespace {
             this.requestToChannel(this.channels.REMOVE_USER_FROM_ROOM, data, (rooms: any) => {
                 const roomsArr = JSON.parse(rooms);
                 R.forEach((room: any) => {
-                    console.log("broadcasting to", room._id);
+                    console.log("broadcasting to", room._id, "for", this.userId);
                     this.socket.broadcast.to(room._id).emit("REMOVE_USER", {
                         userId: this.userId,
                         roomId: room._id
@@ -98,7 +98,6 @@ export class ChatroomNamespace {
                     REQ_SOCKET.close();
                 }, 10000);
             });
-
         });
     }
 

@@ -53,7 +53,7 @@ class RightPane extends React.Component<RightPane.Props, RightPane.State> {
 					avatar={<Avatar>{R.pipe(R.head, R.toUpper)(chatRoom.title)}</Avatar>}
 				/>
 
-				<h3 className="label"><i>Users in this room</i></h3>
+				<h3 className="label"><i>Active users in this room</i></h3>
 
 				<div className="room-users">
 					{chatRoom.users && R.map((user: any) =>
