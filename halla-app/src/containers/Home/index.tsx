@@ -11,6 +11,7 @@ import './style.less';
 
 export namespace Home {
   export interface Props extends RouteComponentProps<void> {
+    leftPane: any
   }
 
   export interface State {
@@ -31,7 +32,7 @@ class Home extends React.Component<Home.Props, Home.State> {
               secondaryMinSize={30}
               secondaryInitialSize={70}
             >
-            <LeftPane/>
+            <LeftPane show={this.props.leftPane.loading}/>
             <RightPane/>
       </SplitterLayout>
     </div>;
@@ -40,6 +41,7 @@ class Home extends React.Component<Home.Props, Home.State> {
 
 function mapStateToProps(state: RootState) {
   return {
+    leftPane: state.componentsStates.leftPane
   };
 }
 

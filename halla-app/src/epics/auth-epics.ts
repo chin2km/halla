@@ -23,7 +23,7 @@ const loginEpic = (actions$: ActionsObservable<any>, store) =>
                 // .do(() => connect(CHATROOM_NSC, connectedToChatroomNsc))
                 .switchMap(() => Observable.concat(
                     Observable.of(push('/home')),
-                    Observable.of(addNotification({type: 'success', message: 'Logged in successfully'}))
+                    Observable.of(addNotification({type: 'success', title: 'yay!', message: 'Logged in successfully'}))
                 )),
             actions$.ofType(LOGIN_FAIL)
                 .take(1)
@@ -44,7 +44,7 @@ const signUpEpic = (actions$: ActionsObservable<any>, store) =>
             Observable.race(
                 actions$.ofType(SIGNUP_SUCCESS)
                     .take(1)
-                    .map(() => addNotification({type: 'success', title: "success!", message: 'Sigined up successfully!'})),
+                    .map(() => addNotification({type: 'success', title: "yay!", message: 'Sigined up successfully! Go on and login..'})),
                 actions$.ofType(SIGNUP_FAIL)
                     .take(1)
                     .map(() => addNotification({type: 'error', title: 'Signup failed!', message: 'Username aready taken!'}))

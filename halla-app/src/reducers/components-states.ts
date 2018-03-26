@@ -1,5 +1,6 @@
 import { handleActions } from 'redux-actions';
 import * as Actions from '../actions/constants';
+import { JOIN_ROOM_SUCCESS } from '../actions/constants';
 
 export const componentsStatesInitialState = {
   login: {
@@ -9,6 +10,9 @@ export const componentsStatesInitialState = {
   createRoom: {
     open: false,
     error: "",
+    loading: false
+  },
+  leftPane: {
     loading: false
   }
 };
@@ -25,4 +29,8 @@ export default handleActions<typeof componentsStatesInitialState, any>({
   [Actions.CREATE_ROOM]: (state) => ({...state, createRoom: {...state.createRoom, loading: true}}),
   [Actions.CREATE_ROOM_SUCCESSFUL]: (state, action) => ({...state, createRoom: {...state.createRoom, loading: false, open: false}}),
   [Actions.CREATE_ROOM_FAIL]: (state, action) => ({...state, createRoom: {...state.createRoom, error: action.payload, loading: false}}),
+  [Actions.JOIN_ROOM]: (state, action) => ({...state, leftPane: {...state.leftPane, loading: true}}),
+  [Actions.FETCH_ROOMS]: (state, action) => ({...state, leftPane: {...state.leftPane, loading: true}}),
+  [Actions.JOIN_ROOM_SUCCESS]: (state, action) => ({...state, leftPane: {...state.leftPane, loading: false}}),
+  [Actions.SET_ROOMS]: (state, action) => ({...state, leftPane: {...state.leftPane, loading: false}}),
 }, componentsStatesInitialState);

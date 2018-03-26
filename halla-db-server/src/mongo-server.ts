@@ -57,7 +57,7 @@ export class MongoServer {
                 console.log("DATA RECIEVED", dataReceived);
                 setTimeout(() => {
                     callback(dataReceived, REPLY_SOCKET);
-                }, 0);
+                }, 500);
             });
         });
     }

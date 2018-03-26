@@ -14,7 +14,7 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Subheader from 'material-ui/Subheader';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
-import { TextBox, EntityList, CreateRoomPop } from '../../components';
+import { TextBox, EntityList, CreateRoomPop, withSpinner } from '../../components';
 import * as RoomsListActions from '../../actions/RoomsList'
 import * as ChatRoomActions from '../../actions/Chatroom'
 
@@ -39,6 +39,10 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 		newRoomName: ""
 	};
 
+	constructor(props) {
+		super(props);
+	}
+
 	componentDidMount() {
 		this.props.actions.fetchRooms();
 	}
@@ -46,48 +50,48 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 	render() {
 
 		return <div className="pane1">
- 				<Tabs
-					className="tab-system"
-				 	initialSelectedIndex={0}
-                    tabItemContainerStyle={{
-						color: deepPurple600,
-						backgroundColor: 'transparent',
-					}}
-                    inkBarStyle={{background: deepPurple50}}>
-                    <Tab
-                        icon={<br/>}
-                        label="Rooms">
+			<Tabs
+				className="tab-system"
+				initialSelectedIndex={0}
+				tabItemContainerStyle={{
+					color: deepPurple600,
+					backgroundColor: 'transparent',
+				}}
+				inkBarStyle={{background: deepPurple50}}>
+				<Tab
+					icon={<br/>}
+					label="Rooms">
 
-						<EntityList
-							label="rooms"						
-							entities={this.props.rooms}
-							onItemClick={this.props.actions.joinRoom}>
-							<CreateRoomPop
-								loading={this.props.componentsStates.loading}
-								open={this.props.componentsStates.open}
-								handleClose={this.props.actions.closeCreateRoom}
-								createRoom={this.props.actions.createRoom}
-							/>
-							<FloatingActionButton
-								onClick={this.props.actions.openCreateRoom}
-								data-tip="Create a room"
-								backgroundColor={deepPurple500}
-								className="add-button">
-								<ContentAdd />
-							</FloatingActionButton>
-						</EntityList>
-                    </Tab>
-                    <Tab
-                        icon={<br />}
-                        label="People">
-
-						<EntityList
-							label="people"
-							entities={[]}
-							onItemClick={this.props.actions.joinRoom}
+					<EntityList
+						label="rooms"						
+						entities={this.props.rooms}
+						onItemClick={this.props.actions.joinRoom}>
+						<CreateRoomPop
+							loading={this.props.componentsStates.loading}
+							open={this.props.componentsStates.open}
+							handleClose={this.props.actions.closeCreateRoom}
+							createRoom={this.props.actions.createRoom}
 						/>
-                    </Tab>
-                </Tabs>
+						<FloatingActionButton
+							onClick={this.props.actions.openCreateRoom}
+							data-tip="Create a room"
+							backgroundColor={deepPurple500}
+							className="add-button">
+							<ContentAdd />
+						</FloatingActionButton>
+					</EntityList>
+				</Tab>
+				<Tab
+					icon={<br />}
+					label="People">
+
+					<EntityList
+						label="people"
+						entities={[]}
+						onItemClick={this.props.actions.joinRoom}
+					/>
+				</Tab>
+		</Tabs>
 	</div>;
 	}
 }
@@ -108,4 +112,4 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LeftPane);
+export default connect(mapStateToProps, mapDispatchToProps)(withSpinner(LeftPane));

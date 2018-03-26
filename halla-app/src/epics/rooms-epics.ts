@@ -2,7 +2,7 @@ import { combineEpics, ActionsObservable } from "redux-observable";
 import { printLine } from "../utils/printline";
 import { sendMessage, ROOMS_NSC, CHATROOM_NSC, connect } from "../websockets/websocket";
 import { Observable } from "rxjs/Observable";
-import { CREATE_ROOM, SET_ROOMS, FETCH_ROOMS, CREATE_ROOM_SUCCESSFUL, CREATE_ROOM_FAIL, JOIN_ROOM } from "../actions/constants";
+import { CREATE_ROOM, SET_ROOMS, FETCH_ROOMS, CREATE_ROOM_SUCCESSFUL, CREATE_ROOM_FAIL, JOIN_ROOM } from '../actions/constants';
 import { addNotification } from "../actions/auth";
 import { fetchRooms } from "../actions/RoomsList";
 import { connectedToRoomsNsc, connectedToChatroomNsc } from "../actions/websocket";
@@ -33,6 +33,13 @@ const createRoomEpic = (action$: ActionsObservable<any>, store) =>
         )
     )
 
+export const updateRoomsEpic = (action$: ActionsObservable<any>) =>
+    action$.ofType(CREATE_ROOM_SUCCESSFUL)
+        .switchMap(({payload: {title, admin}}) => Observable.concat(
+            Observable.of(addNotification({type: 'success', title: "Room created!", message: `Room ${title} added by ${admin}!`})),
+            Observable.of(fetchRooms())
+        ))
+
 export const fetchRoomsEpic = (action$: ActionsObservable<any>) =>
     action$.ofType(FETCH_ROOMS)
         .do(() => connect(ROOMS_NSC, connectedToRoomsNsc))
@@ -54,9 +61,9 @@ export const joinRoomEpic = (action$: ActionsObservable<any>, store) =>
         })
         .ignoreElements()
 
-
 export const roomsEpics = combineEpics(
     createRoomEpic,
+    updateRoomsEpic,
     fetchRoomsEpic,
     joinRoomEpic
 )

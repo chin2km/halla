@@ -5,7 +5,7 @@ import './style.less';
 
 
 interface WithSpinnerProps {
-  show?: boolean;
+  show: boolean;
 }
 
 
