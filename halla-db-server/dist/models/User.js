@@ -8,6 +8,9 @@ const create = (data, callback) => {
     const newUser = new User_1.default(data);
     newUser.save(callback);
 };
+const find = (data, callback) => {
+    User_1.default.find(data, callback);
+};
 const findOne = (data, callback) => {
     User_1.default.findOne(data, callback);
 };
@@ -15,6 +18,7 @@ const findById = (id, callback) => {
     User_1.default.findById(id, callback);
 };
 exports.default = {
+    find,
     create,
     findOne,
     findById,

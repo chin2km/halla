@@ -5,6 +5,10 @@ const create = (data: typeof User, callback: CallBackType) => {
     newUser.save(callback);
 };
 
+const find = (data: any, callback: CallBackType) => {
+    User.find(data, callback);
+};
+
 const findOne = (data: typeof User, callback: CallBackType) => {
     User.findOne(data, callback);
 };
@@ -14,6 +18,7 @@ const findById = (id: string, callback: CallBackType) => {
 };
 
 export default {
+    find,
     create,
     findOne,
     findById,

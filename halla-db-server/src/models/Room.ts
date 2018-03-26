@@ -2,6 +2,7 @@
 import * as R from "ramda";
 import Room from "../schemas/Room";
 import User from "../models/User";
+import Mongoose = require("mongoose");
 
 const create = (data: typeof Room, callback: CallBackType) => {
     const newRoom = new Room(data);
@@ -35,29 +36,11 @@ const addUser = function(room: any, userId: string, socketId: string, callback: 
 
 const getUsers = function(roomId: any, userId: string, callback: Function) {
 
-    const users: any[] = [], vis: any = {};
-    let cunt = 0;
-
     findById(roomId, function(err, room: any) {
-        room.connections.forEach((conn: any) => {
-            if (conn.userId === userId) {
-                cunt++;
-            }
 
-            if (!vis[conn.userId]) {
-                users.push(conn.userId);
-            }
-            vis[conn.userId] = true;
-        });
-
-        users.forEach((userId, i) => {
-            User.findById(userId, (err, user) => {
-                if (err) { return callback(err); }
-                users[i] = user;
-                if (i + 1 === users.length) {
-                    return callback(undefined, users, cunt);
-                }
-            });
+        const userIds = room.connections.map((ele: any) => new Mongoose.Types.ObjectId(ele.userId));
+        User.find({ _id: { $in: userIds} }, (err, users) => {
+            callback(undefined, users);
         });
     });
 };

@@ -7,8 +7,8 @@ import { addNotification } from "../actions/auth";
 import { fetchRooms } from "../actions/RoomsList";
 import { connectedToRoomsNsc, connectedToChatroomNsc } from "../actions/websocket";
 
-const createRoomEpic = (actions$: ActionsObservable<any>, store) =>
-    actions$.ofType(CREATE_ROOM)
+const createRoomEpic = (action$: ActionsObservable<any>, store) =>
+    action$.ofType(CREATE_ROOM)
     .do(({payload}) => {
         sendMessage({
             route: CREATE_ROOM,
@@ -18,7 +18,20 @@ const createRoomEpic = (actions$: ActionsObservable<any>, store) =>
             }
         }, ROOMS_NSC)
     })
-    .ignoreElements()
+    .switchMap(() =>
+        Observable.race(
+            action$.ofType(CREATE_ROOM_SUCCESSFUL)
+                .take(1)
+                .switchMap(({payload: {title, admin}}) => Observable.concat(
+                    Observable.of(addNotification({type: 'success', title: "Room created!", message: `Room ${title} added by ${admin}!`})),
+                    Observable.of(fetchRooms())
+                ))
+            ,
+            action$.ofType(CREATE_ROOM_FAIL)
+                .take(1)
+                .map(() => addNotification({type: 'error', title: "Error!", message: 'A room with the name exists!'}))
+        )
+    )
 
 export const fetchRoomsEpic = (action$: ActionsObservable<any>) =>
     action$.ofType(FETCH_ROOMS)
@@ -27,19 +40,6 @@ export const fetchRoomsEpic = (action$: ActionsObservable<any>) =>
         .do(() => sendMessage({route: FETCH_ROOMS}, ROOMS_NSC))
         .ignoreElements()
 
-export const createRoomSuccessEpic = (action$: ActionsObservable<any>) =>
-    action$.ofType(CREATE_ROOM_SUCCESSFUL)
-        .switchMap(({payload: {title, admin}}) => Observable.concat(
-            Observable.of(addNotification({type: 'success', title: "Room created!", message: `Room ${title} added by ${admin}!`})),
-            Observable.of(fetchRooms())
-        ))
-
-export const createRoomFailedEpic = (action$: ActionsObservable<any>) =>
-    action$.ofType(CREATE_ROOM_FAIL)
-        .switchMap(() => Observable.concat(
-            Observable.of(addNotification({type: 'error', title: "Error!", message: 'A room with the name exists!'})),
-            Observable.of(fetchRooms())
-        ))
 
 export const joinRoomEpic = (action$: ActionsObservable<any>, store) =>
     action$.ofType(JOIN_ROOM)
@@ -58,7 +58,5 @@ export const joinRoomEpic = (action$: ActionsObservable<any>, store) =>
 export const roomsEpics = combineEpics(
     createRoomEpic,
     fetchRoomsEpic,
-    createRoomSuccessEpic,
-    createRoomFailedEpic,
     joinRoomEpic
 )

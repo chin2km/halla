@@ -13,6 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const R = __importStar(require("ramda"));
 const Room_1 = __importDefault(require("../schemas/Room"));
 const User_1 = __importDefault(require("../models/User"));
+const Mongoose = require("mongoose");
 const create = (data, callback) => {
     const newRoom = new Room_1.default(data);
     newRoom.save(callback);
@@ -38,28 +39,10 @@ const addUser = function (room, userId, socketId, callback) {
     room.save(callback);
 };
 const getUsers = function (roomId, userId, callback) {
-    const users = [], vis = {};
-    let cunt = 0;
     findById(roomId, function (err, room) {
-        room.connections.forEach((conn) => {
-            if (conn.userId === userId) {
-                cunt++;
-            }
-            if (!vis[conn.userId]) {
-                users.push(conn.userId);
-            }
-            vis[conn.userId] = true;
-        });
-        users.forEach((userId, i) => {
-            User_1.default.findById(userId, (err, user) => {
-                if (err) {
-                    return callback(err);
-                }
-                users[i] = user;
-                if (i + 1 === users.length) {
-                    return callback(undefined, users, cunt);
-                }
-            });
+        const userIds = room.connections.map((ele) => new Mongoose.Types.ObjectId(ele.userId));
+        User_1.default.find({ _id: { $in: userIds } }, (err, users) => {
+            callback(undefined, users);
         });
     });
 };
