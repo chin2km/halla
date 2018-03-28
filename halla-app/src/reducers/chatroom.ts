@@ -22,5 +22,11 @@ export default handleActions({
       state.users = R.reject(R.propEq("_id", action.payload.userId))(state.users);
     }
     return {...state};
+  },
+  [Actions.NEW_MESSAGE]: (state, action) => {
+    if(state._id === action.payload.roomId) {
+      state.messages = [...state.messages, action.payload.message];
+    }
+    return {...state};
   }
 }, initialState);

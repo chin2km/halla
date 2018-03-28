@@ -34,6 +34,7 @@
 				display: flex;
 				flex-wrap: wrap;
 				max-height: 85px;
+				min-height: 40px;
 				overflow-y: scroll;
 
 				& > div {
@@ -43,10 +44,14 @@
 
 			.messages {
 				display: flex;
-				flex-direction: column-reverse;
-				height: calc(100% - 210px);
+				flex-direction: column;
+				max-height: calc(100% - 280px);
 				overflow: auto;
 				overflow-x: hidden;
+				padding-bottom: 10px;
+				position: absolute;
+				width: 100%;
+				bottom: 110px;
 			}
 
 			.chat-bubble {
@@ -58,9 +63,10 @@
 				background-color: rgba(72, 72, 72, 0.36) !important;
 				border-radius: 0 20px 20px !important;
 				border: solid 1px #663ab7 !important;
-
+				
 				&.mine {
 					align-self: flex-end;
+					border-radius: 20px 20px 0 20px !important;
 				}
 
 				span {
@@ -81,17 +87,23 @@
 			}
 
 			.footer {
-				bottom: 0;
-				position: absolute;
 				width: calc(100% - 30px);
-				margin: 15px;
+				margin: 0 15px;
+				position: absolute;
+				bottom: 0;
 				display: flex;
 				flex-direction: row;
 				max-height: 110px;
+				min-height: 110px;
 				border-top: solid 1px #333;
 
 				.chat-input {
 					width: 100% !important;
+					height: 110px !important;
+
+					textarea {
+						height: 100% !important;
+					}
 				}
 				.send-button {
 					max-height: 57px;

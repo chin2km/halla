@@ -10,7 +10,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@types/classnames": "2.2.3",
+    "@types/classnames": "^2.2.3",
     "@types/history": "4.6.2",
     "@types/material-ui": "^0.21.1",
     "@types/node": "8.0.53",

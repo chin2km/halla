@@ -30,3 +30,6 @@ export const JOIN_ROOM_SUCCESS = 'JOIN_ROOM_SUCCESS';
 export const SET_ROOM_USERS = 'SET_ROOM_USERS';
 export const REMOVE_USER = 'REMOVE_USER';
 
+export const SEND_MESSAGE_TO_ROOM = 'SEND_MESSAGE_TO_ROOM';
+export const NEW_MESSAGE = 'NEW_MESSAGE';
+

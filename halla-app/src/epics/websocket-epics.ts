@@ -1,5 +1,5 @@
 import { ActionsObservable, combineEpics } from "redux-observable";
-import { CONNECT, CONNECT_SUCCESSFUL, LOGIN_SUCCESS, SIGNUP_SUCCESS, SIGNUP_FAIL, LOGIN_FAIL, CONNECTED_TO_ROOMS_NSC, CREATE_ROOM_SUCCESSFUL, CREATE_ROOM_FAIL, FETCH_ROOMS, SET_ROOMS, CONNECTED_TO_CHATROOM_NSC, JOIN_ROOM_SUCCESS, SET_ROOM_USERS, REMOVE_USER } from "../actions/constants";
+import { CONNECT, CONNECT_SUCCESSFUL, LOGIN_SUCCESS, SIGNUP_SUCCESS, SIGNUP_FAIL, LOGIN_FAIL, CONNECTED_TO_ROOMS_NSC, CREATE_ROOM_SUCCESSFUL, CREATE_ROOM_FAIL, FETCH_ROOMS, SET_ROOMS, CONNECTED_TO_CHATROOM_NSC, JOIN_ROOM_SUCCESS, SET_ROOM_USERS, REMOVE_USER, NEW_MESSAGE } from "../actions/constants";
 import { connect, subscribe, DEFAULT_NSC, ROOMS_NSC, sendMessage, CHATROOM_NSC } from "../websockets/websocket";
 import SocketIO = require('socket.io-client');
 import { Observable } from "rxjs/Observable";
@@ -9,7 +9,7 @@ import { printLine } from "../utils/printline";
 import { url } from "inspector";
 import { setLoginSuccess, setSignupSuccess, setSignupFail, setLoginFail } from "../actions/auth";
 import { createRoomSuccess, createRoomFail, setRooms } from "../actions/RoomsList";
-import { joinRoomSuccess, setRoomUsers, removeUser } from "../actions/Chatroom";
+import { joinRoomSuccess, setRoomUsers, removeUser, newMessageReceived } from "../actions/Chatroom";
 
 
 
@@ -38,6 +38,7 @@ export const connectedToChatroomNscEpic = (action$: ActionsObservable<any>) =>
         .do(() => subscribe(CHATROOM_NSC, JOIN_ROOM_SUCCESS, joinRoomSuccess))
         .do(() => subscribe(CHATROOM_NSC, SET_ROOM_USERS, setRoomUsers))
         .do(() => subscribe(CHATROOM_NSC, REMOVE_USER, removeUser))
+        .do(() => subscribe(CHATROOM_NSC, NEW_MESSAGE, newMessageReceived))
         .ignoreElements()
 
 export const websocketEpics = combineEpics(

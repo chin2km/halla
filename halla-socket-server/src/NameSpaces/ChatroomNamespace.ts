@@ -12,6 +12,8 @@ export class ChatroomNamespace {
         JOIN_ROOM: "JOIN_ROOM",
         FETCH_ROOM_USERS: "FETCH_ROOM_USERS",
         REMOVE_USER_FROM_ROOM: "REMOVE_USER_FROM_ROOM",
+
+        SEND_MESSAGE_TO_ROOM: "SEND_MESSAGE_TO_ROOM"
     };
 
     constructor(socket: SocketIO.Socket, rabbitMQContext: rabbitJS.Context) {
@@ -83,6 +85,20 @@ export class ChatroomNamespace {
         });
     }
 
+    handleSendMessageToRoom = (message: any) => {
+
+        const constructedMessage = {...message, socketId: this.socket.id};
+
+        this.socket.emit("NEW_MESSAGE", {
+            roomId: message.roomId,
+            message: message.message
+        });
+        this.socket.broadcast.to(message.roomId).emit("NEW_MESSAGE", {
+            roomId: message.roomId,
+            message: message.message
+        });
+    }
+
     requestToChannel = (CHANNEL: string, message: any, callback: Function) => {
         const REQ_SOCKET: ReqSocket = this.rabbitMQContext.socket("REQ", {expiration: 10000});
         REQ_SOCKET.setEncoding("utf8");
@@ -103,5 +119,6 @@ export class ChatroomNamespace {
 
     public handlers: any = {
         JOIN_ROOM: this.handleJoinRoom,
+        SEND_MESSAGE_TO_ROOM: this.handleSendMessageToRoom,
     };
 }

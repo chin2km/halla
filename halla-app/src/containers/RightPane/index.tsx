@@ -1,5 +1,7 @@
 import * as React from 'react';
+import * as classname from 'classnames';
 import * as R from 'ramda';
+import * as ChatRoomActions from '../../actions/Chatroom'
 import { RouteComponentProps } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -18,34 +20,60 @@ import { TextBox } from '../../components';
 
 import './style.less';
 
-
 export namespace RightPane {
   export interface Props extends RouteComponentProps<void> {
-	  chatRoom?: any;
+		chatRoom?: any;
+		userId?: string;
+		actions?: typeof ChatRoomActions
   }
 
   export interface State {
-    hasChat? : boolean
   }
 }
 
 class RightPane extends React.Component<RightPane.Props, RightPane.State> {
+	state = {
+		messageToSend: ""
+	}
+	scrollAnchor = undefined;
 
-  componentDidMount() {
+	componentDidMount() {
+    	this.scrollToBottom();
+	}
 
-  }
+	componentDidUpdate() {
+		this.scrollToBottom();
+	}
 
-  leaveRoom = () => {
-	  this.setState({hasChat: !this.state.hasChat});
-  }
-  
-  render() {
-	  const {chatRoom} = this.props;
-	  const {messages} = chatRoom;
-    return <div className="pane2">
-        {
-          !R.isEmpty(chatRoom) ? <div className="chat-window">
-            <Card className="chat">
+	scrollToBottom() {
+		if(this.scrollAnchor) {
+		this.scrollAnchor.scrollIntoView({ behavior: 'smooth' });
+		}
+	}
+
+	setScrollAnchor = (ref) => {
+		this.scrollAnchor = ref;
+	}
+
+
+	setMessageToSend = ({target: {value}}) => {
+		this.setState({messageToSend: value});
+	}
+
+	sendMessageHandle = () => {
+		if(R.trim(this.state.messageToSend)) {
+			this.setState({messageToSend: ""});
+			this.props.actions.sendMessageToRoom(this.state.messageToSend);
+		}
+	}
+
+	render() {
+		const {chatRoom} = this.props;
+		const {messages} = chatRoom;
+	return <div className="pane2">
+		{
+			!R.isEmpty(chatRoom) ? <div className="chat-window">
+			<Card className="chat">
 
 				<CardHeader
 					title={chatRoom.title}
@@ -53,7 +81,7 @@ class RightPane extends React.Component<RightPane.Props, RightPane.State> {
 					avatar={<Avatar>{R.pipe(R.head, R.toUpper)(chatRoom.title)}</Avatar>}
 				/>
 
-				<h3 className="label"><i>Active users in this room</i></h3>
+				<h3 className="label"><i>Active users in this room..</i></h3>
 
 				<div className="room-users">
 					{chatRoom.users && R.map((user: any) =>
@@ -66,28 +94,36 @@ class RightPane extends React.Component<RightPane.Props, RightPane.State> {
 
 				<hr/>
 
-				<div className="messages">
+				<div className="messages" >
 					{
-						messages && R.map(message => <Chip key={message.message} style={{margin: 4}} className="chat-bubble">
+						messages &&
+						R.map(message => {
+							const clazz = classname("chat-bubble", {mine: R.equals(this.props.userId, message.userId)})
+							return <Chip key={message.message} style={{margin: 4}} className={clazz}>
 							<Avatar color="#444" icon={<SvgIconFace />} />
 							<div>
-								<h5>{message.user}</h5>
+								<h5>{message.username}</h5>
 								<h4>{message.message}</h4>
 							</div>
-						</Chip>,messages)
+						</Chip>
+						}, messages)
 					}
+					<div ref={this.setScrollAnchor}></div>
 				</div>
 
 				<div className="footer">
 					<TextBox
+						onChange={this.setMessageToSend}
+						value={this.state.messageToSend}
 						className="chat-input"
-						hintText="type here to chat"
+						hintText="type message here"
 						multiLine={true}
 						rows={2}
 						fullWidth={true}
 						rowsMax={4}
 					/>
 					<FloatingActionButton
+						onClick={this.sendMessageHandle}
 						data-tip="Send to room"
 						backgroundColor={deepPurple500}
 						className="send-button">
@@ -95,22 +131,24 @@ class RightPane extends React.Component<RightPane.Props, RightPane.State> {
 					</FloatingActionButton>
 				</div>
 
-            </Card>
-		  </div> :
-		  <CommunicationChatBubble className="chat-panel-icon" />
+			</Card>
+			</div> :
+			<CommunicationChatBubble className="chat-panel-icon" />
 		}
-    </div>;
-  }
+	</div>;
+	}
 }
 
 function mapStateToProps(state: RootState) {
   return {
-	  chatRoom: state.chatRoom
+	  chatRoom: state.chatRoom,
+	  userId: state.auth.user._id
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
+		actions: bindActionCreators(ChatRoomActions, dispatch)
   };
 }
 
