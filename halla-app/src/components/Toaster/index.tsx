@@ -5,15 +5,13 @@ import './style.less';
 
 export namespace Toastr {
   export interface Props {
-    notifications?: any[];
   }
 }
 
 export class Toastr extends React.Component<Toastr.Props> {
 
   render() {
-
-    return   <ReduxToastr
+    return <ReduxToastr
     timeOut={3000}
     newestOnTop={false}
     preventDuplicates

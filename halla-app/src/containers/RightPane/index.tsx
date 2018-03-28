@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as classname from 'classnames';
 import * as R from 'ramda';
+import * as moment from 'moment';
 import * as ChatRoomActions from '../../actions/Chatroom'
 import { RouteComponentProps } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
@@ -103,6 +104,7 @@ class RightPane extends React.Component<RightPane.Props, RightPane.State> {
 							<Avatar color="#444" icon={<SvgIconFace />} />
 							<div>
 								<h5>{message.username}</h5>
+								<h5 title={message.time}>{moment(message.time).fromNow()}</h5>
 								<h4>{message.message}</h4>
 							</div>
 						</Chip>
