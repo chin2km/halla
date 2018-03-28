@@ -1,12 +1,11 @@
 import * as React from "react";
 import Dialog from "material-ui/Dialog";
-
-import "./style.less";
 import { TextBox } from "..";
 import FlatButton from "material-ui/FlatButton";
 import { deepPurple500 } from "material-ui/styles/colors";
 import CircularProgress from "material-ui/CircularProgress";
 
+import "./style.less";
 
 const customContentStyle = {
 	width: "400px",
