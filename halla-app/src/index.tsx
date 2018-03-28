@@ -10,14 +10,14 @@ import { store , history } from "./store";
 import App from "./containers/App";
 
 ReactDOM.render(
-    <Provider store={store}>
-      <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
-        <Router history={history}>
-            <Switch>
-              <Route path="/" component={App} />
-            </Switch>
-        </Router>
-      </MuiThemeProvider>
-    </Provider>,
-  document.getElementById("root")
+	<Provider store={store}>
+		<MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+			<Router history={history}>
+				<Switch>
+				<Route path="/" component={App} />
+				</Switch>
+			</Router>
+		</MuiThemeProvider>
+	</Provider>,
+	document.getElementById("root")
 );

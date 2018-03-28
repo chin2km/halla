@@ -6,9 +6,9 @@ import { notificationEpics } from "./notifications-epics";
 import { chatRoomEpics } from "./chatRoom-epics";
 
 export const rootEpic = combineEpics(
-    websocketEpics,
-    authEpics,
-    roomsEpics,
-    notificationEpics,
-    chatRoomEpics
+	websocketEpics,
+	authEpics,
+	roomsEpics,
+	notificationEpics,
+	chatRoomEpics
 );

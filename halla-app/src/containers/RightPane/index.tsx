@@ -37,7 +37,7 @@ class RightPane extends React.Component<RightPane.Props, RightPane.State> {
 	scrollAnchor = undefined;
 
 	componentDidMount () {
-    	this.scrollToBottom();
+		this.scrollToBottom();
 	}
 
 	componentDidUpdate () {
@@ -147,9 +147,9 @@ const mapStateToProps = (state: RootState) => {
 };
 
 function mapDispatchToProps (dispatch) {
-  return {
-		actions: bindActionCreators(ChatRoomActions, dispatch)
-  };
+	return {
+			actions: bindActionCreators(ChatRoomActions, dispatch)
+	};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RightPane);

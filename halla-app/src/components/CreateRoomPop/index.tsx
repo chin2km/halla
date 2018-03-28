@@ -13,12 +13,12 @@ const customContentStyle = {
 };
 
 export namespace CreateRoomPopTypes {
-  export interface Props {
-    open: boolean;
-    createRoom: Function;
-    handleClose: () => void;
-    loading: boolean;
-  }
+	export interface Props {
+		open: boolean;
+		createRoom: Function;
+		handleClose: () => void;
+		loading: boolean;
+	}
 }
 
 class CreateRoomPopClass extends React.Component<CreateRoomPopTypes.Props> {
@@ -72,7 +72,7 @@ class CreateRoomPopClass extends React.Component<CreateRoomPopTypes.Props> {
 			hintText="type a name for the room"
 			/>
 
-			 {this.props.loading && <CircularProgress size={60} thickness={7} color={deepPurple500}/>}
+			{this.props.loading && <CircularProgress size={60} thickness={7} color={deepPurple500}/>}
 
 		</Dialog>
 		);

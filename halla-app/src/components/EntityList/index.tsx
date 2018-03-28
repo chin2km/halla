@@ -10,13 +10,13 @@ import { TextBox } from "../../components";
 import "./style.less";
 
 export namespace EntityList {
-  export interface Props {
+	export interface Props {
 		label: string;
 		entities: any[];
 		onItemClick: (id: any) => void;
 	}
 	export interface State {
-  }
+	}
 }
 
 export class EntityList extends React.Component<EntityList.Props, EntityList.State> {
