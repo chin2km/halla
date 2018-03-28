@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { Link} from 'react-router-dom';
-import './style.less';
+import * as React from "react";
+import { Link } from "react-router-dom";
+import "./style.less";
 
 export namespace Header {
   export interface Props {
@@ -9,11 +9,11 @@ export namespace Header {
 }
 
 export class Header extends React.Component<Header.Props> {
-  render() {
+  render () {
     const { title } = this.props;
     return (
       <div className="normal">
-        <Link to='/'>
+        <Link to="/">
           <h1>{title}</h1>
         </Link>
       </div>

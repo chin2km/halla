@@ -1,52 +1,52 @@
-import * as React from 'react';
-import * as classname from 'classnames';
-import * as R from 'ramda';
-import * as moment from 'moment';
-import * as ChatRoomActions from '../../actions/Chatroom'
-import { RouteComponentProps } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { RootState } from '../../reducers';
-import {deepPurple500} from 'material-ui/styles/colors';
-import Avatar from 'material-ui/Avatar';
-import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
-import {Card, CardHeader} from 'material-ui/Card';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import Chip from 'material-ui/Chip';
-import SvgIconFace from 'material-ui/svg-icons/action/face';
-import SendIcon from 'material-ui/svg-icons/content/send';
-import { TextBox } from '../../components';
+import * as React from "react";
+import * as classname from "classnames";
+import * as R from "ramda";
+import * as moment from "moment";
+import * as ChatRoomActions from "../../actions/Chatroom";
+import { RouteComponentProps } from "react-router-dom";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { RootState } from "../../reducers";
+import { deepPurple500 } from "material-ui/styles/colors";
+import Avatar from "material-ui/Avatar";
+import CommunicationChatBubble from "material-ui/svg-icons/communication/chat-bubble";
+import { Card, CardHeader } from "material-ui/Card";
+import FloatingActionButton from "material-ui/FloatingActionButton";
+import Chip from "material-ui/Chip";
+import SvgIconFace from "material-ui/svg-icons/action/face";
+import SendIcon from "material-ui/svg-icons/content/send";
+import { TextBox } from "../../components";
 
-import './style.less';
+import "./style.less";
 
 export namespace RightPane {
-  export interface Props extends RouteComponentProps<void> {
+	export interface Props extends RouteComponentProps<void> {
 		chatRoom?: any;
 		userId?: string;
-		actions?: typeof ChatRoomActions
-  }
+		actions?: typeof ChatRoomActions;
+	}
 
-  export interface State {
-  }
+	export interface State {
+	}
 }
 
 class RightPane extends React.Component<RightPane.Props, RightPane.State> {
 	state = {
 		messageToSend: ""
-	}
+	};
 	scrollAnchor = undefined;
 
-	componentDidMount() {
+	componentDidMount () {
     	this.scrollToBottom();
 	}
 
-	componentDidUpdate() {
+	componentDidUpdate () {
 		this.scrollToBottom();
 	}
 
-	scrollToBottom() {
-		if(this.scrollAnchor) {
-		this.scrollAnchor.scrollIntoView({ behavior: 'smooth' });
+	scrollToBottom () {
+		if (this.scrollAnchor) {
+		this.scrollAnchor.scrollIntoView({ behavior: "smooth" });
 		}
 	}
 
@@ -60,13 +60,13 @@ class RightPane extends React.Component<RightPane.Props, RightPane.State> {
 	}
 
 	sendMessageHandle = () => {
-		if(R.trim(this.state.messageToSend)) {
+		if (R.trim(this.state.messageToSend)) {
 			this.setState({messageToSend: ""});
 			this.props.actions.sendMessageToRoom(this.state.messageToSend);
 		}
 	}
 
-	render() {
+	render () {
 		const {chatRoom} = this.props;
 		const {messages} = chatRoom;
 	return <div className="pane2">
@@ -97,7 +97,7 @@ class RightPane extends React.Component<RightPane.Props, RightPane.State> {
 					{
 						messages &&
 						R.map(message => {
-							const clazz = classname("chat-bubble", {mine: R.equals(this.props.userId, message.userId)})
+							const clazz = classname("chat-bubble", {mine: R.equals(this.props.userId, message.userId)});
 							return <Chip key={message.message} style={{margin: 4}} className={clazz}>
 							<Avatar color="#444" icon={<SvgIconFace />} />
 							<div>
@@ -105,7 +105,7 @@ class RightPane extends React.Component<RightPane.Props, RightPane.State> {
 								<h5 title={message.time}>{moment(message.time).fromNow()}</h5>
 								<h4>{message.message}</h4>
 							</div>
-						</Chip>
+						</Chip>;
 						}, messages)
 					}
 					<div ref={this.setScrollAnchor}></div>
@@ -139,14 +139,14 @@ class RightPane extends React.Component<RightPane.Props, RightPane.State> {
 	}
 }
 
-function mapStateToProps(state: RootState) {
-  return {
-	  chatRoom: state.chatRoom,
-	  userId: state.auth.user._id
-  };
-}
+const mapStateToProps = (state: RootState) => {
+	return {
+		chatRoom: state.chatRoom,
+		userId: state.auth.user._id
+	};
+};
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps (dispatch) {
   return {
 		actions: bindActionCreators(ChatRoomActions, dispatch)
   };

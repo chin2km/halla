@@ -1,5 +1,5 @@
-import { handleActions } from 'redux-actions';
-import * as Actions from '../actions/constants';
+import { handleActions } from "redux-actions";
+import * as Actions from "../actions/constants";
 
 const initialState: UserStoreState = {
 };

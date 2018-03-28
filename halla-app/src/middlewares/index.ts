@@ -1,6 +1,6 @@
-import logger from './logger';
-import {createRouterMiddleware} from './router';
-import epicMiddleware from './epicMiddleware';
+import logger from "./logger";
+import { createRouterMiddleware } from "./router";
+import epicMiddleware from "./epicMiddleware";
 
 export {
   epicMiddleware,

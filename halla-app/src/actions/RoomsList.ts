@@ -1,5 +1,5 @@
-import { createAction } from 'redux-actions';
-import * as Actions from './constants';
+import { createAction } from "redux-actions";
+import * as Actions from "./constants";
 
 export const fetchRooms = createAction(Actions.FETCH_ROOMS);
 export const setRooms = createAction<any>(Actions.SET_ROOMS);

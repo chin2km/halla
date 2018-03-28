@@ -1,5 +1,5 @@
-import { createAction } from 'redux-actions';
-import * as Actions from './constants';
+import { createAction } from "redux-actions";
+import * as Actions from "./constants";
 
 export const addNotification = createAction<any>(Actions.ADD_NOTIFICATION);
 

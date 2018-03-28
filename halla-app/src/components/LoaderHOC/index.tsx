@@ -1,7 +1,7 @@
-import * as React from 'react';
-import CircularProgress from 'material-ui/CircularProgress';
-import {deepPurple500} from 'material-ui/styles/colors';
-import './style.less';
+import * as React from "react";
+import CircularProgress from "material-ui/CircularProgress";
+import { deepPurple500 } from "material-ui/styles/colors";
+import "./style.less";
 
 
 interface WithSpinnerProps {
@@ -13,7 +13,7 @@ const withSpinner = <PropsType extends WithSpinnerProps>(InputComponent: React.C
 
     return class SpinnerHOC extends React.Component<PropsType> {
 
-        render() {
+        render () {
             return (
                 <div className="wrapper">
                     <InputComponent {...this.props} />
@@ -23,7 +23,7 @@ const withSpinner = <PropsType extends WithSpinnerProps>(InputComponent: React.C
                 </div>
             );
         }
-    }
-}
+    };
+};
 
 export default withSpinner;

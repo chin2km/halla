@@ -1,13 +1,13 @@
-import * as React from 'react';
-import * as R from 'ramda';
-import RaisedButton from 'material-ui/RaisedButton';
-import {Tabs, Tab} from 'material-ui/Tabs';
-import {TextBox} from '../TextBox';
-import MapsPersonPin from 'material-ui/svg-icons/maps/person-pin';
-import { deepPurple600, deepPurple50} from 'material-ui/styles/colors';
-import {withSpinner} from '../../components'
+import * as React from "react";
+import * as R from "ramda";
+import RaisedButton from "material-ui/RaisedButton";
+import { Tabs, Tab } from "material-ui/Tabs";
+import { TextBox } from "../TextBox";
+import MapsPersonPin from "material-ui/svg-icons/maps/person-pin";
+import { deepPurple600, deepPurple50 } from "material-ui/styles/colors";
+import { withSpinner } from "../../components";
 
-import './style.less';
+import "./style.less";
 
 export namespace LoginForm {
   export interface Props {
@@ -15,35 +15,35 @@ export namespace LoginForm {
     onSubmitSignUp: (signup: SignUpData) => void;
   }
   export interface State {
-    login: LoginData,
-    signup: SignUpData,
+    login: LoginData;
+    signup: SignUpData;
   }
 }
 
 class LoginFormClass extends React.Component<LoginForm.Props, LoginForm.State> {
-    constructor(props) {
+    constructor (props) {
         super(props);
         this.state = {
             login: {
-                username: 'admin',
-                password: 'admin'
+                username: "admin",
+                password: "admin"
             },
             signup: {
-                emailId: '',
-                username: '',
-                password: ''
+                emailId: "",
+                username: "",
+                password: ""
             }
-        }
+        };
     }
 
-    setValue = (path, value)=> {
-        const newState = R.assocPath(path, value, this.state)
+    setValue = (path, value) => {
+        const newState = R.assocPath(path, value, this.state);
         this.setState({...newState});
     }
 
     handleSubmitLogin = () => {
         const {login} = this.state;
-        if(!this.checkValuesIsEmpty(login)) {
+        if (!this.checkValuesIsEmpty(login)) {
             this.props.onSubmitLogin(login);
         }
     }
@@ -55,23 +55,23 @@ class LoginFormClass extends React.Component<LoginForm.Props, LoginForm.State> {
         return R.pipe(
             R.values,
             R.any(R.isEmpty)
-        )(data)
+        )(data);
     }
 
-    render() {
+    render () {
         const {
-            login:{
+            login: {
                 username: loginUserName,
                 password: loginPassword
             },
-            signup:{
+            signup: {
                 emailId: signupEmailid,
                 username: signupUserName,
                 password: signupPassword
             },
         } = this.state;
         return (
-            <div className={'login-form'}>
+            <div className={"login-form"}>
                 <Tabs initialSelectedIndex={0}
                     tabItemContainerStyle={{background: deepPurple600}}
                     inkBarStyle={{background: deepPurple50}}>
@@ -81,13 +81,13 @@ class LoginFormClass extends React.Component<LoginForm.Props, LoginForm.State> {
                             <form className="content">
                                 <TextBox
                                     value={loginUserName}
-                                    onChange={({target:{value}}) => this.setValue(['login', 'username'], value)}
+                                    onChange={({target: {value}}) => this.setValue(["login", "username"], value)}
                                     hintText="Username"
                                     autoComplete="username"
                                     /><br />
                                 <TextBox
                                     value={loginPassword}
-                                    onChange={({target:{value}}) => this.setValue(['login', 'password'], value)}
+                                    onChange={({target: {value}}) => this.setValue(["login", "password"], value)}
                                     hintText="Password"
                                     type="password"
                                     autoComplete="current-password"
@@ -103,18 +103,18 @@ class LoginFormClass extends React.Component<LoginForm.Props, LoginForm.State> {
                             <form className="content">
                                 <TextBox
                                     value={signupEmailid}
-                                    onChange={({target:{value}}) => this.setValue(['signup', 'emailId'], value)}
+                                    onChange={({target: {value}}) => this.setValue(["signup", "emailId"], value)}
                                     hintText="Emailid"
                                 /><br />
                                 <TextBox
                                     value={signupUserName}
-                                    onChange={({target:{value}}) => this.setValue(['signup', 'username'], value)}
+                                    onChange={({target: {value}}) => this.setValue(["signup", "username"], value)}
                                     hintText="Username"
                                     autoComplete="username"
                                 /><br />
                                 <TextBox
                                     value={signupPassword}
-                                    onChange={({target:{value}}) => this.setValue(['signup', 'password'], value)}
+                                    onChange={({target: {value}}) => this.setValue(["signup", "password"], value)}
                                     hintText="Password"
                                     type="password"
                                     autoComplete="current-password"

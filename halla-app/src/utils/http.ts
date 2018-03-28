@@ -1,5 +1,5 @@
-import * as R from 'ramda';
-import axios from 'axios';
+import * as R from "ramda";
+import axios from "axios";
 
 const instance = axios.create();
 
@@ -10,29 +10,29 @@ export const registerErrorInterceptor = (errorInterceptor) => {
 const getRequestObject = (method, url, config, accept) => ({
     ...config,
     headers: {
-        'Accept': accept,
-        'Accept-Type': accept,
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache',
-        ...R.path(['headers'], config)
+        "Accept": accept,
+        "Accept-Type": accept,
+        "Cache-Control": "no-cache",
+        "Pragma": "no-cache",
+        ...R.path(["headers"], config)
     },
     method,
     url
 });
 
-export const directHttpRequest = (method, url, config, accept = 'application/json') => {
+export const directHttpRequest = (method, url, config, accept = "application/json") => {
     const requestObject = getRequestObject(method, url, config, accept);
     return instance.request(requestObject);
 };
 
-export const httpRequest = (method, url, config, accept = 'application/json') =>
+export const httpRequest = (method, url, config, accept = "application/json") =>
     directHttpRequest(method, `${url}`, config, accept);
 
-export const cancelableHttpRequest = (method, url, config, accept = 'application/json') => {
+export const cancelableHttpRequest = (method, url, config, accept = "application/json") => {
     const source = axios.CancelToken.source();
 
     const requestObject = getRequestObject(method, `${url}`, config, accept);
-    const cancellableRequestObject = R.assoc('cancelToken', source.token)(requestObject);
+    const cancellableRequestObject = R.assoc("cancelToken", source.token)(requestObject);
 
     const request = instance.request(cancellableRequestObject);
     return request;

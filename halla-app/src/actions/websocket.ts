@@ -1,5 +1,5 @@
-import { createAction } from 'redux-actions';
-import * as Actions from './constants';
+import { createAction } from "redux-actions";
+import * as Actions from "./constants";
 
 export const connect = createAction(Actions.CONNECT);
 export const connectSuccessful = createAction(Actions.CONNECT_SUCCESSFUL);

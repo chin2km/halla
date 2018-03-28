@@ -1,5 +1,5 @@
-import {createEpicMiddleware} from 'redux-observable';
-import {rootEpic} from '../epics/rootEpic';
+import { createEpicMiddleware } from "redux-observable";
+import { rootEpic } from "../epics/rootEpic";
 
 export default createEpicMiddleware(rootEpic);
 

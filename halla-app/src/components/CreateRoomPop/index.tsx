@@ -1,16 +1,16 @@
-import * as React from 'react';
-import Dialog from 'material-ui/Dialog';
+import * as React from "react";
+import Dialog from "material-ui/Dialog";
 
-import './style.less';
-import { TextBox } from '..';
-import FlatButton from 'material-ui/FlatButton';
-import {deepPurple500} from 'material-ui/styles/colors';
-import CircularProgress from 'material-ui/CircularProgress';
+import "./style.less";
+import { TextBox } from "..";
+import FlatButton from "material-ui/FlatButton";
+import { deepPurple500 } from "material-ui/styles/colors";
+import CircularProgress from "material-ui/CircularProgress";
 
 
 const customContentStyle = {
-	width: '400px',
-	maxWidth: '400px',
+	width: "400px",
+	maxWidth: "400px",
 };
 
 export namespace CreateRoomPopTypes {
@@ -24,16 +24,16 @@ export namespace CreateRoomPopTypes {
 
 class CreateRoomPopClass extends React.Component<CreateRoomPopTypes.Props> {
 
-	constructor(props){
+	constructor (props) {
 		super(props);
 	}
 
 	state = {
 		newRoomName: ""
-	}
+	};
 
 
-	setNewRoomName = ({target:{value}}) => {
+	setNewRoomName = ({target: {value}}) => {
 		this.setState({newRoomName: value});
 	}
 
@@ -41,7 +41,7 @@ class CreateRoomPopClass extends React.Component<CreateRoomPopTypes.Props> {
 		this.props.createRoom(this.state.newRoomName);
 	};
 
-	render() {
+	render () {
 
 		const modalActions = [
 				<FlatButton
@@ -74,7 +74,7 @@ class CreateRoomPopClass extends React.Component<CreateRoomPopTypes.Props> {
 			/>
 
 			 {this.props.loading && <CircularProgress size={60} thickness={7} color={deepPurple500}/>}
-			
+
 		</Dialog>
 		);
 	}

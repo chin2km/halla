@@ -1,13 +1,13 @@
-import * as React from 'react';
-import * as R from 'ramda';
+import * as React from "react";
+import * as R from "ramda";
 
-import {List, ListItem} from 'material-ui/List';
-import Avatar from 'material-ui/Avatar';
-import Divider from 'material-ui/Divider';
-import { TextBox } from '../../components';
+import { List, ListItem } from "material-ui/List";
+import Avatar from "material-ui/Avatar";
+import Divider from "material-ui/Divider";
+import { TextBox } from "../../components";
 
 
-import './style.less';
+import "./style.less";
 
 export namespace EntityList {
   export interface Props {
@@ -24,22 +24,22 @@ export class EntityList extends React.Component<EntityList.Props, EntityList.Sta
 	state = {
 		searchWord: ""
 	};
-	setSearch = ({target:{value}}) => {
-		this.setState({searchWord: value})
+	setSearch = ({target: {value}}) => {
+		this.setState({searchWord: value});
 	}
 
-	render() {
+	render () {
 		const { entities } = this.props;
 		const filteredEntities = R.filter(
 			R.pipe(
-				R.prop('title'),
+				R.prop("title"),
 				R.toLower,
 				R.contains(this.state.searchWord)
 			)
-		,entities)
+		, entities);
 
 		return (
-			<div style={{display: 'contents'}}>
+			<div style={{display: "contents"}}>
 					<div className="fixed">
 						<TextBox
 							className={"search-box"}
@@ -59,16 +59,16 @@ export class EntityList extends React.Component<EntityList.Props, EntityList.Sta
 										key={_id}
 										primaryText={title}
 										leftAvatar={<Avatar>{R.pipe(R.head, R.toUpper)(title)}</Avatar>}
-									/>
+									/>;
 							}
 							)(filteredEntities.reverse())}
-							
-							{R.isEmpty(filteredEntities) && 
+
+							{R.isEmpty(filteredEntities) &&
 								<ListItem
 								className="list-item"
 								primaryText={`No ${this.props.label} found`}/>
 							}
-						</List>						
+						</List>
 					</div>
 					{this.props.children}
 				<Divider />
