@@ -34,6 +34,16 @@ const addUser = function(room: any, userId: string, socketId: string, callback: 
     room.save(callback);
 };
 
+const addMessage = function(roomId: any, message: any, callback: CallBackType) {
+    findById(roomId, function(err, room: any) {
+        if (err) {
+            return callback(err, undefined);
+        }
+        room.messages.push(message);
+        room.save(callback);
+    });
+};
+
 const getUsers = function(roomId: any, userId: string, callback: Function) {
 
     findById(roomId, function(err, room: any) {
@@ -68,5 +78,6 @@ export default {
     findOne,
     findById,
     removeUser,
+    addMessage,
     getUsers
 };

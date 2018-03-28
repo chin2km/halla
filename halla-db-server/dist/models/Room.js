@@ -38,6 +38,15 @@ const addUser = function (room, userId, socketId, callback) {
     }
     room.save(callback);
 };
+const addMessage = function (roomId, message, callback) {
+    findById(roomId, function (err, room) {
+        if (err) {
+            return callback(err, undefined);
+        }
+        room.messages.push(message);
+        room.save(callback);
+    });
+};
 const getUsers = function (roomId, userId, callback) {
     findById(roomId, function (err, room) {
         const userIds = room.connections.map((ele) => new Mongoose.Types.ObjectId(ele.userId));
@@ -65,6 +74,7 @@ exports.default = {
     findOne,
     findById,
     removeUser,
+    addMessage,
     getUsers
 };
 //# sourceMappingURL=Room.js.map

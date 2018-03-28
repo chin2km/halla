@@ -42,8 +42,6 @@ export const updateRoomsEpic = (action$: ActionsObservable<any>) =>
 
 export const fetchRoomsEpic = (action$: ActionsObservable<any>) =>
     action$.ofType(FETCH_ROOMS)
-        .do(() => connect(ROOMS_NSC, connectedToRoomsNsc))
-        .do(() => connect(CHATROOM_NSC, connectedToChatroomNsc))
         .do(() => sendMessage({route: FETCH_ROOMS}, ROOMS_NSC))
         .ignoreElements()
 

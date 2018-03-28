@@ -17,7 +17,6 @@ class ChatroomNamespace {
             SEND_MESSAGE_TO_ROOM: "SEND_MESSAGE_TO_ROOM"
         };
         this.setupHandlers = () => {
-            this.socket.emit("connect", this.socket.id);
             R.forEachObjIndexed((handle, eventName) => {
                 this.socket.on(eventName, handle);
             })(this.handlers);
@@ -71,14 +70,11 @@ class ChatroomNamespace {
             });
         };
         this.handleSendMessageToRoom = (message) => {
-            const constructedMessage = Object.assign({}, message, { socketId: this.socket.id });
-            this.socket.emit("NEW_MESSAGE", {
-                roomId: message.roomId,
-                message: message.message
-            });
-            this.socket.broadcast.to(message.roomId).emit("NEW_MESSAGE", {
-                roomId: message.roomId,
-                message: message.message
+            this.requestToChannel(this.channels.SEND_MESSAGE_TO_ROOM, message, (response) => {
+                if (response !== "FAIL") {
+                    this.socket.emit("NEW_MESSAGE", message);
+                    this.socket.broadcast.to(message.roomId).emit("NEW_MESSAGE", message);
+                }
             });
         };
         this.requestToChannel = (CHANNEL, message, callback) => {

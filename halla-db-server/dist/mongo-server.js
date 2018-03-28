@@ -23,7 +23,8 @@ class MongoServer {
             FETCH_ROOMS: "FETCH_ROOMS",
             JOIN_ROOM: "JOIN_ROOM",
             FETCH_ROOM_USERS: "FETCH_ROOM_USERS",
-            REMOVE_USER_FROM_ROOM: "REMOVE_USER_FROM_ROOM"
+            REMOVE_USER_FROM_ROOM: "REMOVE_USER_FROM_ROOM",
+            SEND_MESSAGE_TO_ROOM: "SEND_MESSAGE_TO_ROOM"
         };
         this.createServer = () => {
             // MongoDB Connection
@@ -135,6 +136,17 @@ class MongoServer {
                     }
                     console.log("REMOVE_USER_FROM_ROOM_SUCCESS", rooms);
                     return socket.write(JSON.stringify(rooms));
+                });
+            });
+            this.listenReplyToChannel(this.channels.SEND_MESSAGE_TO_ROOM, (dataReceived, socket) => {
+                console.log("SEND_MESSAGE_TO_ROOM", dataReceived.roomId, dataReceived.message);
+                Room_1.default.addMessage(dataReceived.roomId, dataReceived.message, (err, room) => {
+                    if (err) {
+                        console.log("SEND_MESSAGE_TO_ROOM", err);
+                        return socket.write(`FAIL`);
+                    }
+                    console.log("REMOVE_USER_FROM_ROOM_SUCCESS", room);
+                    return socket.write(JSON.stringify(room));
                 });
             });
         };

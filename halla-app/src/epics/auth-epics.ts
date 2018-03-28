@@ -19,8 +19,8 @@ const loginEpic = (actions$: ActionsObservable<any>, store) =>
         Observable.race(
             actions$.ofType(LOGIN_SUCCESS)
                 .take(1)
-                // .do(() => connect(ROOMS_NSC, connectedToRoomsNsc))
-                // .do(() => connect(CHATROOM_NSC, connectedToChatroomNsc))
+                .do(() => connect(ROOMS_NSC, connectedToRoomsNsc))
+                .do(() => connect(CHATROOM_NSC, connectedToChatroomNsc))
                 .switchMap(() => Observable.concat(
                     Observable.of(push('/home')),
                     Observable.of(addNotification({type: 'success', title: 'yay!', message: 'Logged in successfully'}))
