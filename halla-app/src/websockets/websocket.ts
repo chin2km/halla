@@ -1,4 +1,4 @@
-import SocketIO = require("socket.io-client");
+import * as SocketIO from "socket.io-client";
 import { store } from "../store/";
 import { ENDPOINT } from "./constants";
 import { printLine } from "../utils/printline";

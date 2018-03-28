@@ -78,18 +78,21 @@
 					margin: 5px 0;
 					font-weight: normal;
 				}
-				h5:first-of-type {
+				h5 {
 					font-style: italic;
 					color: #b08df1;
-					font-size: 13px;
+					font-size: 14px;
 					margin: 0;
+
+					& > span {
+						color: #656565;
+						font-style: italic;
+						font-size: 10px;
+						margin: 0;
+						margin-left: 5px;
+					}
 				}
-				h5:nth-of-type(2) {
-					color: #656565;
-					font-style: italic;
-					font-size: 12px;
-					margin: 0;
-				}
+
 			}
 
 			.footer {

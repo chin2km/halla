@@ -101,8 +101,11 @@ class RightPane extends React.Component<RightPane.Props, RightPane.State> {
 							return <Chip key={message.message} style={{margin: 4}} className={clazz}>
 							<Avatar color="#444" icon={<SvgIconFace />} />
 							<div>
-								<h5>{message.username}</h5>
-								<h5 title={message.time}>{moment(message.time).fromNow()}</h5>
+								<h5>
+									{message.username}
+									<span title={message.time}>{moment(message.time).fromNow()}</span>
+								</h5>
+
 								<h4>{message.message}</h4>
 							</div>
 						</Chip>;

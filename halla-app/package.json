@@ -1,8 +1,8 @@
 {
-  "name": "typescript-react-redux-boilerplate",
+  "name": "halla-app",
   "version": "1.0.0",
   "private": true,
-  "description": "A frontend boilerplate with React, Redux and Typescript",
+  "description": "A chat app for learning purpose",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --debug --devtool cheap-module-source-map --output-pathinfo --history-api-fallback --hot --inline --progress --colors --port 3333 --open",
