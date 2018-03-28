@@ -1,6 +1,6 @@
 import * as React from 'react';
 import TextField from 'material-ui/TextField';
-import {deepPurple500, deepPurple600, deepPurple50} from 'material-ui/styles/colors';
+import {deepPurple500} from 'material-ui/styles/colors';
 
 const colorScheme = {
     color: deepPurple500,

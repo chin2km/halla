@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RouteComponentProps , Link} from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import './style.less';
 
 export namespace Header {

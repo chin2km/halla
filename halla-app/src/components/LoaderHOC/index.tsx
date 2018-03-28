@@ -1,6 +1,6 @@
 import * as React from 'react';
 import CircularProgress from 'material-ui/CircularProgress';
-import {deepPurple500, deepPurple600, deepPurple50} from 'material-ui/styles/colors';
+import {deepPurple500} from 'material-ui/styles/colors';
 import './style.less';
 
 

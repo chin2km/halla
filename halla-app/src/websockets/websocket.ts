@@ -1,10 +1,6 @@
-import * as R from 'ramda';
 import SocketIO = require('socket.io-client');
 import {store} from '../store/';
-import * as ACTIONS from '../actions/constants';
 import {ENDPOINT} from './constants';
-import { connectSuccessful, connectedToRoomsNsc } from '../actions/websocket';
-import { LOGIN_SUCCESS } from '../actions/constants';
 import { printLine } from '../utils/printline';
 
 export const DEFAULT_NSC = "/";
@@ -16,7 +12,7 @@ const ws = {};
 
 export const connect = (namespace, nextAction) => {
     ws[namespace] = SocketIO(ENDPOINT + namespace, { transports: ['websocket'] });
-    ws[namespace].on('connect',(res)=>{
+    ws[namespace].on('connect',()=>{
         printLine("Connection to nsc ", namespace, " successfull")
         store.dispatch(nextAction());
     });

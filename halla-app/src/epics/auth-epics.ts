@@ -1,6 +1,5 @@
 import { combineEpics, ActionsObservable } from "redux-observable";
 import { SUBMIT_LOGIN, LOGIN_SUCCESS, SUBMIT_SIGNUP, SIGNUP_SUCCESS, LOGIN_FAIL, SIGNUP_FAIL } from "../actions/constants";
-import { printLine } from "../utils/printline";
 import { sendMessage, connect, ROOMS_NSC, CHATROOM_NSC } from "../websockets/websocket";
 import { Observable } from "rxjs/Observable";
 import {push} from 'react-router-redux';

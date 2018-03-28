@@ -1,7 +1,5 @@
 import { ActionsObservable, combineEpics } from 'redux-observable';
-import { RootState } from '../reducers';
 import { SEND_MESSAGE_TO_ROOM } from '../actions/constants';
-import { printLine } from '../utils/printline';
 import { CHATROOM_NSC, sendMessage } from '../websockets/websocket';
 
 const sendMessageEpic = (action$: ActionsObservable<any>, store: any) =>

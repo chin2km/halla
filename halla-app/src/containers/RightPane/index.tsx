@@ -10,13 +10,11 @@ import { RootState } from '../../reducers';
 import {deepPurple500} from 'material-ui/styles/colors';
 import Avatar from 'material-ui/Avatar';
 import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
+import {Card, CardHeader} from 'material-ui/Card';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Chip from 'material-ui/Chip';
 import SvgIconFace from 'material-ui/svg-icons/action/face';
 import SendIcon from 'material-ui/svg-icons/content/send';
-import CloseIcon from 'material-ui/svg-icons/navigation/close';
 import { TextBox } from '../../components';
 
 import './style.less';

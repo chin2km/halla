@@ -1,22 +1,16 @@
 import * as React from 'react';
-import * as R from 'ramda';
 import { RouteComponentProps } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { RootState } from '../../reducers';
-import SplitterLayout from 'react-splitter-layout';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import {deepPurple500, deepPurple600, deepPurple50} from 'material-ui/styles/colors';
 import {Tabs, Tab} from 'material-ui/Tabs';
-import Avatar from 'material-ui/Avatar';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
-import Subheader from 'material-ui/Subheader';
-import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
-import { TextBox, EntityList, CreateRoomPop, withSpinner } from '../../components';
+import { EntityList, CreateRoomPop, withSpinner } from '../../components';
 import * as RoomsListActions from '../../actions/RoomsList'
 import * as ChatRoomActions from '../../actions/Chatroom'
+import * as PeopleListActions from '../../actions/peopeList'
 
 import './style.less';
 
@@ -45,6 +39,7 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 
 	componentDidMount() {
 		this.props.actions.fetchRooms();
+		this.props.actions.fetchPeople();
 	}
 	
 	render() {
@@ -107,6 +102,7 @@ function mapDispatchToProps(dispatch) {
 	return {
 		actions: {
 			...bindActionCreators(RoomsListActions as any, dispatch),
+			...bindActionCreators(PeopleListActions as any, dispatch),
 			...bindActionCreators(ChatRoomActions as any, dispatch)
 		}
 	};

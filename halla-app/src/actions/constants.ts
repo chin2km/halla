@@ -16,6 +16,10 @@ export const SUBMIT_SIGNUP = 'SUBMIT_SIGNUP';
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 export const SIGNUP_FAIL = 'SIGNUP_FAIL';
 
+export const FETCH_PEOPLE = 'FETCH_PEOPLE';
+export const SET_PEOPLE = 'SET_PEOPLE';
+
+
 export const FETCH_ROOMS = 'FETCH_ROOMS';
 export const SET_ROOMS = 'SET_ROOMS';
 

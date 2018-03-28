@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as R from 'ramda';
 
-import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bubble';
 import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import Divider from 'material-ui/Divider';

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { RootState } from '../../reducers';
 import SplitterLayout from 'react-splitter-layout';
@@ -45,7 +44,7 @@ function mapStateToProps(state: RootState) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps() {
   return {
 
   };

@@ -1,11 +1,9 @@
 import { combineEpics, ActionsObservable } from "redux-observable";
-import { printLine } from "../utils/printline";
-import { sendMessage, ROOMS_NSC, CHATROOM_NSC, connect } from "../websockets/websocket";
+import { sendMessage, ROOMS_NSC, CHATROOM_NSC } from "../websockets/websocket";
 import { Observable } from "rxjs/Observable";
-import { CREATE_ROOM, SET_ROOMS, FETCH_ROOMS, CREATE_ROOM_SUCCESSFUL, CREATE_ROOM_FAIL, JOIN_ROOM } from '../actions/constants';
+import { CREATE_ROOM, FETCH_ROOMS, CREATE_ROOM_SUCCESSFUL, CREATE_ROOM_FAIL, JOIN_ROOM } from '../actions/constants';
 import { addNotification } from "../actions/auth";
 import { fetchRooms } from "../actions/RoomsList";
-import { connectedToRoomsNsc, connectedToChatroomNsc } from "../actions/websocket";
 
 const createRoomEpic = (action$: ActionsObservable<any>, store) =>
     action$.ofType(CREATE_ROOM)

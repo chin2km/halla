@@ -1,4 +1,4 @@
-import { combineReducers, Reducer } from 'redux';
+import { combineReducers } from 'redux';
 import auth from './auth';
 import componentsStates, { componentsStatesInitialState } from './components-states';
 import ws from './websockets';

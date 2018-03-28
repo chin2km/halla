@@ -1,12 +1,10 @@
 import * as React from 'react';
 import * as R from 'ramda';
-import { RouteComponentProps } from 'react-router-dom';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import {TextBox} from '../TextBox';
-import FontIcon from 'material-ui/FontIcon';
 import MapsPersonPin from 'material-ui/svg-icons/maps/person-pin';
-import {deepPurple500, deepPurple600, deepPurple50} from 'material-ui/styles/colors';
+import { deepPurple600, deepPurple50} from 'material-ui/styles/colors';
 import {withSpinner} from '../../components'
 
 import './style.less';

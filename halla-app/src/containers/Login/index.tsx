@@ -28,7 +28,6 @@ class Login extends React.Component<Login.Props, Login.State> {
     this.props.actions.submitSignUp(data);
   }
   render() {
-    const {children} = this.props;
     return <div className="login">
       <LoginFormComponent
         show={this.props.componentsStates.loading}

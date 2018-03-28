@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { 
-  Router, Route, Switch, RouteComponentProps 
+  Route, Switch, RouteComponentProps 
 } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -30,8 +30,6 @@ class App extends React.Component<App.Props, App.State> {
   }
   
   render() {
-    const { children } = this.props;
-    const homeComponent = () => <h1>LOGIN (FAKE) SUCCESS!</h1>;
     return (
         <div className="app">
           <Header title="Halla"/>

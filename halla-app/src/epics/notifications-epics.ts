@@ -1,7 +1,4 @@
 import { combineEpics, ActionsObservable } from "redux-observable";
-import { printLine } from "../utils/printline";
-import { sendMessage, ROOMS_NSC } from "../websockets/websocket";
-import { Observable } from "rxjs/Observable";
 import { ADD_NOTIFICATION } from "../actions/constants";
 import {toastr} from 'react-redux-toastr';
 
