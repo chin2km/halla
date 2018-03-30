@@ -13,6 +13,7 @@ class RoomsNamespace {
         this.channels = {
             CREATE_ROOM: "CREATE_ROOM",
             FETCH_ROOMS: "FETCH_ROOMS",
+            FETCH_PEOPLE: "FETCH_PEOPLE"
         };
         this.setupHandlers = () => {
             R.forEachObjIndexed((handle, eventName) => {
@@ -23,6 +24,12 @@ class RoomsNamespace {
             console.log("FETCH_ROOMS", message);
             this.requestToChannel(this.channels.FETCH_ROOMS, message, (response) => {
                 this.socket.emit("SET_ROOMS", JSON.parse(response));
+            });
+        };
+        this.handleFetchPeople = (message) => {
+            console.log("FETCH_PEOPLE", message);
+            this.requestToChannel(this.channels.FETCH_PEOPLE, message, (response) => {
+                this.socket.emit("SET_PEOPLE", JSON.parse(response));
             });
         };
         this.handleCreateRoom = (message) => {
@@ -57,6 +64,7 @@ class RoomsNamespace {
         this.handlers = {
             FETCH_ROOMS: this.handleFetchRooms,
             CREATE_ROOM: this.handleCreateRoom,
+            FETCH_PEOPLE: this.handleFetchPeople,
         };
         this.socket = socket;
         this.rabbitMQContext = rabbitMQContext;

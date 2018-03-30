@@ -1,4 +1,5 @@
 import * as SocketIO from "socket.io-client";
+import * as R from "ramda";
 import { store } from "../store/";
 import { ENDPOINT } from "./constants";
 import { printLine } from "../utils/printline";
@@ -11,7 +12,11 @@ const ws = {};
 
 
 export const connect = (namespace, nextAction) => {
-	ws[namespace] = SocketIO(ENDPOINT + namespace, { transports: ["websocket"] });
+	ws[namespace] = SocketIO(ENDPOINT + namespace, {
+		query: `userId=${R.path(["auth", "user", "_id"], store.getState())}`,
+		transports: ["websocket"],
+		multiplex: !R.equals(DEFAULT_NSC, namespace),
+	});
 	ws[namespace].on("connect", () => {
 		printLine("Connection to nsc ", namespace, " successfull");
 		store.dispatch(nextAction());

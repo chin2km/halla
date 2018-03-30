@@ -12,6 +12,7 @@ import "./style.less";
 export namespace EntityList {
 	export interface Props {
 		label: string;
+		nameProp: string;
 		entities: any[];
 		onItemClick: (id: any) => void;
 	}
@@ -32,7 +33,7 @@ export class EntityList extends React.Component<EntityList.Props, EntityList.Sta
 		const { entities } = this.props;
 		const filteredEntities = R.filter(
 			R.pipe(
-				R.prop("title"),
+				R.prop(this.props.nameProp),
 				R.toLower,
 				R.contains(this.state.searchWord)
 			)
@@ -50,15 +51,15 @@ export class EntityList extends React.Component<EntityList.Props, EntityList.Sta
 
 					<div className="scrolled">
 						<List>
-							{R.map(({title, _id}) => {
-								const itemClick = () => this.props.onItemClick(_id);
+							{R.map((entity: any) => {
+								const itemClick = () => this.props.onItemClick(entity._id);
 
 								return <ListItem
 										onClick={itemClick}
 										className="list-item"
-										key={_id}
-										primaryText={title}
-										leftAvatar={<Avatar>{R.pipe(R.head, R.toUpper)(title)}</Avatar>}
+										key={entity._id}
+										primaryText={entity[this.props.nameProp]}
+										leftAvatar={<Avatar>{R.pipe(R.head, R.toUpper)(entity[this.props.nameProp])}</Avatar>}
 									/>;
 							}
 							)(filteredEntities.reverse())}

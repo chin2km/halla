@@ -44,14 +44,12 @@ const addMessage = function(roomId: any, message: any, callback: CallBackType) {
     });
 };
 
-const getUsers = function(roomId: any, userId: string, callback: Function) {
+const getUsers = function(roomId: any, userId: string, callback: CallBackType) {
 
     findById(roomId, function(err, room: any) {
 
         const userIds = room.connections.map((ele: any) => new Mongoose.Types.ObjectId(ele.userId));
-        User.find({ _id: { $in: userIds} }, (err, users) => {
-            callback(undefined, users);
-        });
+        User.find({ _id: { $in: userIds} }, callback);
     });
 };
 

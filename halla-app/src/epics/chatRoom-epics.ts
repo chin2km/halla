@@ -1,8 +1,8 @@
 import { ActionsObservable, combineEpics } from "redux-observable";
-import { SEND_MESSAGE_TO_ROOM } from "../actions/constants";
+import { SEND_MESSAGE_TO_ROOM, SEND_DIRECT_MESSAGE } from "../actions/constants";
 import { CHATROOM_NSC, sendMessage } from "../websockets/websocket";
 
-const sendMessageEpic = (action$: ActionsObservable<any>, store: any) =>
+const sendMessageToRoomEpic = (action$: ActionsObservable<any>, store: any) =>
 	action$.ofType(SEND_MESSAGE_TO_ROOM)
 		.do(({payload}) => {
 			sendMessage({
@@ -19,6 +19,21 @@ const sendMessageEpic = (action$: ActionsObservable<any>, store: any) =>
 		})
 		.ignoreElements();
 
+const sendDirectMessageEpic = (action$: ActionsObservable<any>, store: any) =>
+	action$.ofType(SEND_DIRECT_MESSAGE)
+		.do(({payload}) => {
+			sendMessage({
+				route: SEND_DIRECT_MESSAGE,
+				message: {
+					message: payload,
+					sender: store.getState().auth.user._id,
+					recipient: store.getState().chatRoom.recipient
+				}
+			}, CHATROOM_NSC);
+		})
+		.ignoreElements();
+
 export const chatRoomEpics = combineEpics(
-	sendMessageEpic
+	sendMessageToRoomEpic,
+	sendDirectMessageEpic
 );

@@ -10,6 +10,8 @@ export class RoomsNamespace {
     private channels = {
         CREATE_ROOM: "CREATE_ROOM",
         FETCH_ROOMS: "FETCH_ROOMS",
+
+        FETCH_PEOPLE: "FETCH_PEOPLE"
     };
 
     constructor(socket: SocketIO.Socket, rabbitMQContext: rabbitJS.Context) {
@@ -30,6 +32,14 @@ export class RoomsNamespace {
 
         this.requestToChannel(this.channels.FETCH_ROOMS, message, (response: string) => {
             this.socket.emit("SET_ROOMS", JSON.parse(response));
+        });
+    }
+
+    handleFetchPeople = (message: any) => {
+        console.log("FETCH_PEOPLE", message);
+
+        this.requestToChannel(this.channels.FETCH_PEOPLE, message, (response: string) => {
+            this.socket.emit("SET_PEOPLE", JSON.parse(response));
         });
     }
 
@@ -70,5 +80,6 @@ export class RoomsNamespace {
     public handlers: any = {
         FETCH_ROOMS: this.handleFetchRooms,
         CREATE_ROOM: this.handleCreateRoom,
+        FETCH_PEOPLE: this.handleFetchPeople,
     };
 }

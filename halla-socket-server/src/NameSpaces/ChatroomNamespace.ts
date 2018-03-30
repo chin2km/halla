@@ -4,21 +4,25 @@ import * as rabbitJS from "rabbit.js";
 import { PushSocket, ReqSocket, RepSocket } from "rabbit.js";
 
 export class ChatroomNamespace {
-    private userId: string;
     private socket: SocketIO.Socket;
     private rabbitMQContext: rabbitJS.Context;
+    private usersOnline: rabbitJS.Context;
 
     private channels = {
         JOIN_ROOM: "JOIN_ROOM",
         FETCH_ROOM_USERS: "FETCH_ROOM_USERS",
         REMOVE_USER_FROM_ROOM: "REMOVE_USER_FROM_ROOM",
 
-        SEND_MESSAGE_TO_ROOM: "SEND_MESSAGE_TO_ROOM"
+        SEND_MESSAGE_TO_ROOM: "SEND_MESSAGE_TO_ROOM",
+        SEND_DIRECT_MESSAGE: "SEND_DIRECT_MESSAGE",
+
+        DIRECT_CHAT: "DIRECT_CHAT"
     };
 
-    constructor(socket: SocketIO.Socket, rabbitMQContext: rabbitJS.Context) {
+    constructor(socket: SocketIO.Socket, rabbitMQContext: rabbitJS.Context, usersOnline: any) {
         this.socket = socket;
         this.rabbitMQContext = rabbitMQContext;
+        this.usersOnline = usersOnline;
 
         this.setupHandlers();
     }
@@ -33,16 +37,18 @@ export class ChatroomNamespace {
 
     onDisconnect = () => {
         this.socket.on("disconnect", () => {
+
+            const userId = this.socket.handshake.query.userId;
             const data = {
-                userId: this.userId,
+                userId,
                 socketId: this.socket.id
             };
             this.requestToChannel(this.channels.REMOVE_USER_FROM_ROOM, data, (rooms: any) => {
                 const roomsArr = JSON.parse(rooms);
                 R.forEach((room: any) => {
-                    console.log("broadcasting to", room._id, "for", this.userId);
+                    console.log("broadcasting to", room._id, "for", userId);
                     this.socket.broadcast.to(room._id).emit("REMOVE_USER", {
-                        userId: this.userId,
+                        userId,
                         roomId: room._id
                     });
                 }, roomsArr);
@@ -62,7 +68,7 @@ export class ChatroomNamespace {
             } else {
                 const room = JSON.parse(response);
                 console.log("JOIN_ROOM_SUCCESS", room);
-                this.userId = constructedMessage.userId;
+
                 this.socket.join(room._id);
                 this.socket.emit("JOIN_ROOM_SUCCESS", room);
 
@@ -79,6 +85,34 @@ export class ChatroomNamespace {
                     this.socket.emit("SET_ROOM_USERS", data);
                     this.socket.broadcast.to(room._id).emit("SET_ROOM_USERS", data);
                 });
+            }
+        });
+    }
+
+    handleDirectChat = (message: any) => {
+
+        console.log("DIRECT_CHAT", message);
+
+        this.requestToChannel(this.channels.DIRECT_CHAT, message, (chats: string) => {
+            if ( chats === "FAIL") {
+                console.log("FAIL");
+                this.socket.emit("DIRECT_CHAT_FAIL");
+            } else {
+                const chatss = JSON.parse(chats);
+                console.log("DIRECT_CHAT_SUCCESS", chatss);
+
+                this.socket.emit("DIRECT_CHAT_SUCCESS", {
+                    ...message,
+                    messages: chatss
+                });
+            }
+        });
+    }
+
+    handleSendDirectMessage = (message: any) => {
+        this.requestToChannel(this.channels.SEND_DIRECT_MESSAGE, message, (response: any) => {
+            if (response !== "FAIL") {
+                this.socket.emit("NEW_DIRECT_MESSAGE", message);
             }
         });
     }
@@ -113,5 +147,7 @@ export class ChatroomNamespace {
     public handlers: any = {
         JOIN_ROOM: this.handleJoinRoom,
         SEND_MESSAGE_TO_ROOM: this.handleSendMessageToRoom,
+        SEND_DIRECT_MESSAGE: this.handleSendDirectMessage,
+        DIRECT_CHAT: this.handleDirectChat
     };
 }

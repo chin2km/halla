@@ -5,6 +5,7 @@ import * as R from "ramda";
 import { PushSocket } from "rabbit.js";
 import { RoomsNamespace } from "./NameSpaces/RoomsNamespace";
 import { ChatroomNamespace } from "./NameSpaces/ChatroomNamespace";
+import { timingSafeEqual } from "crypto";
 
 export class SocketServer {
     public static readonly PORT: number = 5027;
@@ -12,7 +13,7 @@ export class SocketServer {
     private socketIO: SocketIO.Server;
     private rabbitMQConnection: rabbitJS.Context;
     private port: string | number;
-    private ALL_CLIENTS: DefaultNamespace[] = [];
+    private usersOnline: any = {};
 
     constructor() {
         this.config();
@@ -40,13 +41,10 @@ export class SocketServer {
         this.socketIO.of("/").on("connect", (socket: SocketIO.Socket) => {
             const CLIENT = new DefaultNamespace(socket, this.rabbitMQConnection);
 
-            this.ALL_CLIENTS.push(CLIENT);
-            console.log(`Client CONNECTED: Total Clients: ${this.ALL_CLIENTS.length}: Client socket id: ${socket.id}`);
+            console.log(`Client CONNECTED: Client socket id: ${socket.id}`);
 
             socket.on("disconnect", () => {
-                const client = R.find(R.propEq("socket", socket))(this.ALL_CLIENTS);
-                this.ALL_CLIENTS = R.reject(R.equals(client))(this.ALL_CLIENTS);
-                console.log(`Client DISCONNECTED: Total Clients: ${this.ALL_CLIENTS.length}`);
+                console.log(`Client DISCONNECTED`);
             });
         });
 
@@ -57,7 +55,12 @@ export class SocketServer {
 
         // Chatroom namespace
         this.socketIO.of("/chatroom").on("connect", (socket: SocketIO.Socket) => {
-            new ChatroomNamespace(socket, this.rabbitMQConnection);
+            this.usersOnline[socket.handshake.query.userId] = socket.id;
+            new ChatroomNamespace(socket, this.rabbitMQConnection, this.usersOnline);
+
+            socket.on("disconnect", () => {
+                delete this.usersOnline[socket.handshake.query.userId];
+            });
         });
     }
 

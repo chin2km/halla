@@ -7,6 +7,7 @@ import { Socket } from "net";
 
 import User from "./models/User";
 import Room from "./models/Room";
+import Message from "./models/Message";
 
 export class MongoServer {
     public static readonly rabbitMQ_SERVER: string = "amqp://localhost";
@@ -27,11 +28,16 @@ export class MongoServer {
         CREATE_ROOM: "CREATE_ROOM",
         FETCH_ROOMS: "FETCH_ROOMS",
 
+        FETCH_PEOPLE: "FETCH_PEOPLE",
+
+        DIRECT_CHAT: "DIRECT_CHAT",
+
         JOIN_ROOM: "JOIN_ROOM",
         FETCH_ROOM_USERS: "FETCH_ROOM_USERS",
         REMOVE_USER_FROM_ROOM: "REMOVE_USER_FROM_ROOM",
 
-        SEND_MESSAGE_TO_ROOM: "SEND_MESSAGE_TO_ROOM"
+        SEND_MESSAGE_TO_ROOM: "SEND_MESSAGE_TO_ROOM",
+        SEND_DIRECT_MESSAGE: "SEND_DIRECT_MESSAGE"
     };
 
     private createServer = (): void  => {
@@ -118,6 +124,29 @@ export class MongoServer {
             });
         });
 
+        this.listenReplyToChannel(this.channels.FETCH_PEOPLE, (dataReceived: any, socket: any) => {
+            console.log("FETCH_PEOPLE");
+            User.find(undefined, (err, data) => {
+                if (err) {
+                    console.log("FIND FAIL", err);
+                }
+                console.log("FIND SUCCESS", data);
+                socket.write(JSON.stringify(data));
+            });
+        });
+
+        this.listenReplyToChannel(this.channels.DIRECT_CHAT, (dataReceived: any, socket: any) => {
+            console.log("DIRECT_CHAT", dataReceived);
+
+            Message.find(dataReceived, (err, messages: any) => {
+                if (err) {
+                    return socket.write(`FAIL`);
+                }
+
+                socket.write(JSON.stringify(messages));
+            });
+        });
+
         this.listenReplyToChannel(this.channels.JOIN_ROOM, (dataReceived: any, socket: any) => {
             console.log("JOIN_ROOM", dataReceived);
 
@@ -171,8 +200,21 @@ export class MongoServer {
                     console.log("SEND_MESSAGE_TO_ROOM", err);
                     return socket.write(`FAIL`);
                 }
-                console.log("REMOVE_USER_FROM_ROOM_SUCCESS", room);
+                console.log("SEND_MESSAGE_TO_ROOM_SUCCESS", room);
                 return socket.write(JSON.stringify(room));
+            });
+        });
+
+        this.listenReplyToChannel(this.channels.SEND_DIRECT_MESSAGE, (dataReceived: any, socket: any) => {
+            console.log("SEND_DIRECT_MESSAGE", dataReceived.sender,  dataReceived.recipient, dataReceived.message);
+
+            Message.create(dataReceived, (err: any, message: any) => {
+                if (err) {
+                    console.log("SEND_DIRECT_MESSAGE", err);
+                    return socket.write(`FAIL`);
+                }
+                console.log("SEND_DIRECT_MESSAGE", message);
+                return socket.write(JSON.stringify(message));
             });
         });
     }

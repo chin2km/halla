@@ -11,6 +11,9 @@ export default handleActions({
 	[Actions.JOIN_ROOM_SUCCESS]: (state, action) => {
 		return action.payload;
 	},
+	[Actions.DIRECT_CHAT_SUCCESS]: (state, action) => {
+		return {...action.payload};
+	},
 	[Actions.SET_ROOM_USERS]: (state, action) => {
 		if (state._id === action.payload.roomId) {
 		state.users = action.payload.users;
@@ -26,6 +29,12 @@ export default handleActions({
 	[Actions.NEW_MESSAGE]: (state, action) => {
 		if (state._id === action.payload.roomId) {
 		state.messages = [...state.messages, action.payload.message];
+		}
+		return {...state};
+	},
+	[Actions.NEW_DIRECT_MESSAGE]: (state, action) => {
+		if (state.sender === action.payload.sender && state.recipient === action.payload.recipient) {
+			state.messages = [...state.messages, action.payload];
 		}
 		return {...state};
 	}

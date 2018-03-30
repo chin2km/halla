@@ -10,12 +10,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const socketIo = require("socket.io");
 const rabbitJS = __importStar(require("rabbit.js"));
 const DefaultNamespace_1 = require("./NameSpaces/DefaultNamespace");
-const R = __importStar(require("ramda"));
 const RoomsNamespace_1 = require("./NameSpaces/RoomsNamespace");
 const ChatroomNamespace_1 = require("./NameSpaces/ChatroomNamespace");
 class SocketServer {
     constructor() {
-        this.ALL_CLIENTS = [];
+        this.usersOnline = {};
         this.config();
         this.createServer();
     }
@@ -36,12 +35,9 @@ class SocketServer {
         // Default namespace
         this.socketIO.of("/").on("connect", (socket) => {
             const CLIENT = new DefaultNamespace_1.DefaultNamespace(socket, this.rabbitMQConnection);
-            this.ALL_CLIENTS.push(CLIENT);
-            console.log(`Client CONNECTED: Total Clients: ${this.ALL_CLIENTS.length}: Client socket id: ${socket.id}`);
+            console.log(`Client CONNECTED: Client socket id: ${socket.id}`);
             socket.on("disconnect", () => {
-                const client = R.find(R.propEq("socket", socket))(this.ALL_CLIENTS);
-                this.ALL_CLIENTS = R.reject(R.equals(client))(this.ALL_CLIENTS);
-                console.log(`Client DISCONNECTED: Total Clients: ${this.ALL_CLIENTS.length}`);
+                console.log(`Client DISCONNECTED`);
             });
         });
         // Rooms namespace
@@ -50,7 +46,11 @@ class SocketServer {
         });
         // Chatroom namespace
         this.socketIO.of("/chatroom").on("connect", (socket) => {
-            new ChatroomNamespace_1.ChatroomNamespace(socket, this.rabbitMQConnection);
+            this.usersOnline[socket.handshake.query.userId] = socket.id;
+            new ChatroomNamespace_1.ChatroomNamespace(socket, this.rabbitMQConnection, this.usersOnline);
+            socket.on("disconnect", () => {
+                delete this.usersOnline[socket.handshake.query.userId];
+            });
         });
     }
     getServer() {

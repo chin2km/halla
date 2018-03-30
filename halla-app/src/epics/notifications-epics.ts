@@ -9,7 +9,6 @@ const addNotificationEpic = (actions$: ActionsObservable<any>, store) =>
 	})
 	.ignoreElements();
 
-
 export const notificationEpics = combineEpics(
 	addNotificationEpic
 );

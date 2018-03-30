@@ -21,11 +21,6 @@ const UserSchema = new Mongoose.Schema(
     }
 );
 
-UserSchema.pre("save", function(next) {
-    const user = this;
-    next();
-});
-
 const userModel = Mongoose.model("User", UserSchema);
 
 export default userModel;

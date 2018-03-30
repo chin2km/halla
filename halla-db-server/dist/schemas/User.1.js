@@ -18,6 +18,10 @@ const UserSchema = new Mongoose.Schema({
 }, {
     timestamps: true
 });
+UserSchema.pre("save", function (next) {
+    const user = this;
+    next();
+});
 const userModel = Mongoose.model("User", UserSchema);
 exports.default = userModel;
-//# sourceMappingURL=User.js.map
+//# sourceMappingURL=User.1.js.map

@@ -18,6 +18,7 @@ import "./style.less";
 export namespace LeftPane {
 	export interface Props extends RouteComponentProps<void> {
 		rooms?: any[];
+		people?: any[];
 		actions?: any;
 		componentsStates?: any;
 	}
@@ -59,6 +60,7 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 
 					<EntityList
 						label="rooms"
+						nameProp="title"
 						entities={this.props.rooms}
 						onItemClick={this.props.actions.joinRoom}>
 						<CreateRoomPop
@@ -82,8 +84,9 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 
 					<EntityList
 						label="people"
-						entities={[]}
-						onItemClick={this.props.actions.joinRoom}
+						nameProp="username"
+						entities={this.props.people}
+						onItemClick={this.props.actions.directChat}
 					/>
 				</Tab>
 		</Tabs>
@@ -94,6 +97,7 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 function mapStateToProps (state: RootState) {
 	return {
 		rooms: state.rooms,
+		people: state.people,
 		componentsStates: state.componentsStates.createRoom
 	};
 }

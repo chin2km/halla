@@ -50,9 +50,7 @@ const addMessage = function (roomId, message, callback) {
 const getUsers = function (roomId, userId, callback) {
     findById(roomId, function (err, room) {
         const userIds = room.connections.map((ele) => new Mongoose.Types.ObjectId(ele.userId));
-        User_1.default.find({ _id: { $in: userIds } }, (err, users) => {
-            callback(undefined, users);
-        });
+        User_1.default.find({ _id: { $in: userIds } }, callback);
     });
 };
 const removeUser = function (socketId, userId, callback) {

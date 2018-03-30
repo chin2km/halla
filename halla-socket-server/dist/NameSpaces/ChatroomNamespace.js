@@ -9,12 +9,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const R = __importStar(require("ramda"));
 class ChatroomNamespace {
-    constructor(socket, rabbitMQContext) {
+    constructor(socket, rabbitMQContext, usersOnline) {
         this.channels = {
             JOIN_ROOM: "JOIN_ROOM",
             FETCH_ROOM_USERS: "FETCH_ROOM_USERS",
             REMOVE_USER_FROM_ROOM: "REMOVE_USER_FROM_ROOM",
-            SEND_MESSAGE_TO_ROOM: "SEND_MESSAGE_TO_ROOM"
+            SEND_MESSAGE_TO_ROOM: "SEND_MESSAGE_TO_ROOM",
+            SEND_DIRECT_MESSAGE: "SEND_DIRECT_MESSAGE",
+            DIRECT_CHAT: "DIRECT_CHAT"
         };
         this.setupHandlers = () => {
             R.forEachObjIndexed((handle, eventName) => {
@@ -24,16 +26,17 @@ class ChatroomNamespace {
         };
         this.onDisconnect = () => {
             this.socket.on("disconnect", () => {
+                const userId = this.socket.handshake.query.userId;
                 const data = {
-                    userId: this.userId,
+                    userId,
                     socketId: this.socket.id
                 };
                 this.requestToChannel(this.channels.REMOVE_USER_FROM_ROOM, data, (rooms) => {
                     const roomsArr = JSON.parse(rooms);
                     R.forEach((room) => {
-                        console.log("broadcasting to", room._id, "for", this.userId);
+                        console.log("broadcasting to", room._id, "for", userId);
                         this.socket.broadcast.to(room._id).emit("REMOVE_USER", {
-                            userId: this.userId,
+                            userId,
                             roomId: room._id
                         });
                     }, roomsArr);
@@ -51,7 +54,6 @@ class ChatroomNamespace {
                 else {
                     const room = JSON.parse(response);
                     console.log("JOIN_ROOM_SUCCESS", room);
-                    this.userId = constructedMessage.userId;
                     this.socket.join(room._id);
                     this.socket.emit("JOIN_ROOM_SUCCESS", room);
                     const data = {
@@ -66,6 +68,27 @@ class ChatroomNamespace {
                         this.socket.emit("SET_ROOM_USERS", data);
                         this.socket.broadcast.to(room._id).emit("SET_ROOM_USERS", data);
                     });
+                }
+            });
+        };
+        this.handleDirectChat = (message) => {
+            console.log("DIRECT_CHAT", message);
+            this.requestToChannel(this.channels.DIRECT_CHAT, message, (chats) => {
+                if (chats === "FAIL") {
+                    console.log("FAIL");
+                    this.socket.emit("DIRECT_CHAT_FAIL");
+                }
+                else {
+                    const chatss = JSON.parse(chats);
+                    console.log("DIRECT_CHAT_SUCCESS", chatss);
+                    this.socket.emit("DIRECT_CHAT_SUCCESS", Object.assign({}, message, { messages: chatss }));
+                }
+            });
+        };
+        this.handleSendDirectMessage = (message) => {
+            this.requestToChannel(this.channels.SEND_DIRECT_MESSAGE, message, (response) => {
+                if (response !== "FAIL") {
+                    this.socket.emit("NEW_DIRECT_MESSAGE", message);
                 }
             });
         };
@@ -95,9 +118,12 @@ class ChatroomNamespace {
         this.handlers = {
             JOIN_ROOM: this.handleJoinRoom,
             SEND_MESSAGE_TO_ROOM: this.handleSendMessageToRoom,
+            SEND_DIRECT_MESSAGE: this.handleSendDirectMessage,
+            DIRECT_CHAT: this.handleDirectChat
         };
         this.socket = socket;
         this.rabbitMQContext = rabbitMQContext;
+        this.usersOnline = usersOnline;
         this.setupHandlers();
     }
 }

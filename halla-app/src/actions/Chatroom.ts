@@ -8,3 +8,6 @@ export const removeUser = createAction<any>(Actions.REMOVE_USER);
 
 export const sendMessageToRoom = createAction<any>(Actions.SEND_MESSAGE_TO_ROOM);
 export const newMessageReceived = createAction<any>(Actions.NEW_MESSAGE);
+
+export const sendDirectMessage = createAction<any>(Actions.SEND_DIRECT_MESSAGE);
+export const newDirectMessageRecieved = createAction<any>(Actions.NEW_DIRECT_MESSAGE);
