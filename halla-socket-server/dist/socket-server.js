@@ -19,9 +19,10 @@ class SocketServer {
             const REQ_SOCKET = this.rabbitMQConnection.socket("REQ", { expiration: 10000 });
             REQ_SOCKET.setEncoding("utf8");
             REQ_SOCKET.connect(CHANNEL, () => {
+                console.log("SENDING MESSAGE to ", CHANNEL, message);
                 REQ_SOCKET.write(JSON.stringify(message));
                 REQ_SOCKET.on("data", (message) => {
-                    console.log(message);
+                    console.log("DATA RECIEVED on ", CHANNEL, message);
                     callback(message);
                     setTimeout(() => {
                         REQ_SOCKET.close();

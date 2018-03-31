@@ -9,6 +9,13 @@ export class DefaultNamespace {
         LOGIN_CHANNEL: "LOGIN_CHANNEL",
     };
 
+    private eventz = {
+        LOGIN_FAIL: "LOGIN_FAIL",
+        LOGIN_SUCCESS: "LOGIN_SUCCESS",
+        SIGNUP_SUCCESS: "SIGNUP_SUCCESS",
+        SIGNUP_FAIL: "SIGNUP_FAIL"
+    };
+
     constructor (socket: SocketIO.Socket, requestToChannel: Function) {
         this.socket = socket;
         this.requestToChannel = requestToChannel;
@@ -25,27 +32,23 @@ export class DefaultNamespace {
     }
 
     handleLogin = (message: any) => {
-        console.log("SUBMIT_LOGIN", message);
-
         this.requestToChannel(this.channels.LOGIN_CHANNEL, message, (response: string) => {
             if ( response === "FAIL") {
-                this.socket.emit("LOGIN_FAIL", response);
+                this.socket.emit(this.eventz.LOGIN_FAIL, response);
             } else {
-                this.socket.emit("LOGIN_SUCCESS", JSON.parse(response));
+                this.socket.emit(this.eventz.LOGIN_SUCCESS, JSON.parse(response));
             }
         });
     }
 
     handleSignUp = (message: any) => {
-        console.log("SUBMIT_SIGNUP", message);
-
         this.requestToChannel(this.channels.SIGNUP_CHANNEL, message, (response: string) => {
             if (response === "SUCCESS") {
-                this.socket.emit("SIGNUP_SUCCESS", message);
+                this.socket.emit(this.eventz.SIGNUP_SUCCESS, message);
             }
 
             if ( response === "FAIL") {
-                this.socket.emit("SIGNUP_FAIL", response);
+                this.socket.emit(this.eventz.SIGNUP_FAIL, response);
             }
         });
     };

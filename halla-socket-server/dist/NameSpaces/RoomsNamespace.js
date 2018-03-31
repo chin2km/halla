@@ -15,34 +15,35 @@ class RoomsNamespace {
             FETCH_ROOMS: "FETCH_ROOMS",
             FETCH_PEOPLE: "FETCH_PEOPLE"
         };
+        this.eventz = {
+            SET_ROOMS: "SET_ROOMS",
+            SET_PEOPLE: "SET_PEOPLE",
+            CREATE_ROOM_FAIL: "CREATE_ROOM_FAIL",
+            CREATE_ROOM_SUCCESSFUL: "CREATE_ROOM_SUCCESSFUL"
+        };
         this.setupHandlers = () => {
             R.forEachObjIndexed((handle, eventName) => {
                 this.socket.on(eventName, handle);
             })(this.handlers);
         };
         this.handleFetchRooms = (message) => {
-            console.log("FETCH_ROOMS", message);
             this.requestToChannel(this.channels.FETCH_ROOMS, message, (response) => {
-                this.socket.emit("SET_ROOMS", JSON.parse(response));
+                this.socket.emit(this.eventz.SET_ROOMS, JSON.parse(response));
             });
         };
         this.handleFetchPeople = (message) => {
-            console.log("FETCH_PEOPLE", message);
             this.requestToChannel(this.channels.FETCH_PEOPLE, message, (response) => {
-                this.socket.emit("SET_PEOPLE", JSON.parse(response));
+                this.socket.emit(this.eventz.SET_PEOPLE, JSON.parse(response));
             });
         };
         this.handleCreateRoom = (message) => {
-            console.log("CREATE_ROOM", message);
             this.requestToChannel(this.channels.CREATE_ROOM, message, (response) => {
                 if (response === "FAIL") {
-                    console.log("FAIL");
-                    this.socket.emit("CREATE_ROOM_FAIL", response);
+                    this.socket.emit(this.eventz.CREATE_ROOM_FAIL, response);
                 }
                 else {
-                    console.log("CREATE_ROOM_SUCCESSFUL");
-                    this.socket.emit("CREATE_ROOM_SUCCESSFUL", message);
-                    this.socket.broadcast.emit("CREATE_ROOM_SUCCESSFUL", message);
+                    this.socket.emit(this.eventz.CREATE_ROOM_SUCCESSFUL, message);
+                    this.socket.broadcast.emit(this.eventz.CREATE_ROOM_SUCCESSFUL, message);
                 }
             });
         };

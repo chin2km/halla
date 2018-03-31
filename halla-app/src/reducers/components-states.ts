@@ -32,4 +32,6 @@ export default handleActions<typeof componentsStatesInitialState, any>({
 	[Actions.FETCH_ROOMS]: (state) => ({...state, leftPane: {...state.leftPane, loading: true}}),
 	[Actions.JOIN_ROOM_SUCCESS]: (state) => ({...state, leftPane: {...state.leftPane, loading: false}}),
 	[Actions.SET_ROOMS]: (state) => ({...state, leftPane: {...state.leftPane, loading: false}}),
+	[Actions.DIRECT_CHAT]: (state) => ({...state, leftPane: {...state.leftPane, loading: true}}),
+	[Actions.DIRECT_CHAT_SUCCESS]: (state) => ({...state, leftPane: {...state.leftPane, loading: false}}),
 }, componentsStatesInitialState);

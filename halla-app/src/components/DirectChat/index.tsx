@@ -79,7 +79,7 @@ export class DirectChat extends React.Component<DirectChat.Props> {
 							const senderObj = chatRoom.sender._id === message.sender ?
 								chatRoom.sender : chatRoom.recipient;
 							const clazz = classname("chat-bubble", {mine: R.equals(this.props.userId, message.sender)});
-							return <Chip key={message.message} style={{margin: 4}} className={clazz}>
+							return <Chip key={message.createdAt} style={{margin: 4}} className={clazz}>
 							<Avatar color="#444" icon={<SvgIconFace />} />
 							<div>
 								<h5>

@@ -89,7 +89,7 @@ export class RoomChat extends React.Component<RoomChat.Props> {
 						messages &&
 						R.map(message => {
 							const clazz = classname("chat-bubble", {mine: R.equals(this.props.userId, message.userId)});
-							return <Chip key={message.message} style={{margin: 4}} className={clazz}>
+							return <Chip key={message.time} style={{margin: 4}} className={clazz}>
 							<Avatar color="#444" icon={<SvgIconFace />} />
 							<div>
 								<h5>

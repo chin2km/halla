@@ -44,10 +44,8 @@ class MongoServer {
             REPLY_SOCKET.connect(CHANNEL, () => {
                 REPLY_SOCKET.on("data", (data) => {
                     const dataReceived = JSON.parse(data);
-                    console.log("DATA RECIEVED", dataReceived);
-                    setTimeout(() => {
-                        callback(dataReceived, REPLY_SOCKET);
-                    }, 500);
+                    console.log("DATA RECIEVED on", CHANNEL, " -> ", dataReceived);
+                    callback(dataReceived, REPLY_SOCKET);
                 });
             });
         };
@@ -55,11 +53,9 @@ class MongoServer {
             this.listenReplyToChannel(this.channels.LOGIN_CHANNEL, (dataReceived, socket) => {
                 User_1.default.findOne(dataReceived, (err, data) => {
                     if (data !== null) {
-                        console.log("LOGIN_SUCCESS");
                         socket.write(JSON.stringify(data));
                     }
                     else {
-                        console.log("LOGIN_FAIL");
                         socket.write(`FAIL`);
                     }
                 });
@@ -77,43 +73,35 @@ class MongoServer {
             this.listenReplyToChannel(this.channels.CREATE_ROOM, (dataReceived, socket) => {
                 Room_1.default.create(dataReceived, (err, data) => {
                     if (err) {
-                        console.log("FAIL");
                         socket.write(`FAIL`);
                     }
                     else {
-                        console.log("SUCCESS");
                         Room_1.default.find(undefined, (err, data) => {
                             if (err) {
-                                console.log("FIND FAIL", err);
+                                socket.write(`FAIL`);
                             }
-                            console.log("FIND SUCCESS", data);
                             socket.write(JSON.stringify(data));
                         });
                     }
                 });
             });
             this.listenReplyToChannel(this.channels.FETCH_ROOMS, (dataReceived, socket) => {
-                console.log("FETCH_ROOMS");
                 Room_1.default.find(undefined, (err, data) => {
                     if (err) {
-                        console.log("FIND FAIL", err);
+                        socket.write("FAIL");
                     }
-                    console.log("FIND SUCCESS", data);
                     socket.write(JSON.stringify(data));
                 });
             });
             this.listenReplyToChannel(this.channels.FETCH_PEOPLE, (dataReceived, socket) => {
-                console.log("FETCH_PEOPLE");
                 User_1.default.find(undefined, (err, data) => {
                     if (err) {
-                        console.log("FIND FAIL", err);
+                        socket.write("FAIL");
                     }
-                    console.log("FIND SUCCESS", data);
                     socket.write(JSON.stringify(data));
                 });
             });
             this.listenReplyToChannel(this.channels.DIRECT_CHAT, (dataReceived, socket) => {
-                console.log("DIRECT_CHAT", dataReceived);
                 Message_1.default.find(dataReceived, (err, messages) => {
                     if (err) {
                         return socket.write(`FAIL`);
@@ -122,7 +110,6 @@ class MongoServer {
                 });
             });
             this.listenReplyToChannel(this.channels.JOIN_ROOM, (dataReceived, socket) => {
-                console.log("JOIN_ROOM", dataReceived);
                 Room_1.default.findById(dataReceived.id, (err, room) => {
                     if (err) {
                         return socket.write(`FAIL`);
@@ -138,46 +125,34 @@ class MongoServer {
                 });
             });
             this.listenReplyToChannel(this.channels.FETCH_ROOM_USERS, (dataReceived, socket) => {
-                console.log("FETCH_ROOM_USERS", dataReceived.roomId, dataReceived.userId);
                 Room_1.default.getUsers(dataReceived.roomId, dataReceived.userId, (err, users) => {
                     if (err) {
-                        console.log("FETCH_ROOM_USERS_FAIL", err, users);
                         return socket.write(`FAIL`);
                     }
-                    console.log("FETCH_ROOM_USERS_SUCCESS", users);
                     return socket.write(JSON.stringify(users));
                 });
             });
             this.listenReplyToChannel(this.channels.REMOVE_USER_FROM_ROOM, (dataReceived, socket) => {
-                console.log("REMOVE_USER_FROM_ROOM", dataReceived.userId, dataReceived.socketId);
                 Room_1.default.removeUser(dataReceived.socketId, dataReceived.userId, (err, rooms) => {
                     if (err) {
-                        console.log("REMOVE_USER_FROM_ROOM", err, rooms);
                         return socket.write(`FAIL`);
                     }
-                    console.log("REMOVE_USER_FROM_ROOM_SUCCESS", rooms);
                     return socket.write(JSON.stringify(rooms));
                 });
             });
             this.listenReplyToChannel(this.channels.SEND_MESSAGE_TO_ROOM, (dataReceived, socket) => {
-                console.log("SEND_MESSAGE_TO_ROOM", dataReceived.roomId, dataReceived.message);
                 Room_1.default.addMessage(dataReceived.roomId, dataReceived.message, (err, room) => {
                     if (err) {
-                        console.log("SEND_MESSAGE_TO_ROOM", err);
                         return socket.write(`FAIL`);
                     }
-                    console.log("SEND_MESSAGE_TO_ROOM_SUCCESS", room);
                     return socket.write(JSON.stringify(room));
                 });
             });
             this.listenReplyToChannel(this.channels.SEND_DIRECT_MESSAGE, (dataReceived, socket) => {
-                console.log("SEND_DIRECT_MESSAGE", dataReceived.sender, dataReceived.recipient, dataReceived.message);
                 Message_1.default.create(dataReceived, (err, message) => {
                     if (err) {
-                        console.log("SEND_DIRECT_MESSAGE", err);
                         return socket.write(`FAIL`);
                     }
-                    console.log("SEND_DIRECT_MESSAGE", message);
                     return socket.write(JSON.stringify(message));
                 });
             });

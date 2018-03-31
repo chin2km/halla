@@ -28,7 +28,7 @@ export default handleActions({
 	},
 	[Actions.NEW_MESSAGE]: (state, action) => {
 		if (state._id === action.payload.roomId) {
-		state.messages = [...state.messages, action.payload.message];
+			state.messages = [...state.messages, {time: new Date(), ...action.payload.message}];
 		}
 		return {...state};
 	},

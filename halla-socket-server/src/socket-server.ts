@@ -39,9 +39,11 @@ export class SocketServer {
 
         REQ_SOCKET.connect(CHANNEL, () => {
 
+            console.log("SENDING MESSAGE to ", CHANNEL, message);
             REQ_SOCKET.write(JSON.stringify(message));
+
             REQ_SOCKET.on("data", (message: string) => {
-                console.log(message);
+                console.log("DATA RECIEVED on ", CHANNEL, message);
                 callback(message);
                 setTimeout(() => {
                     REQ_SOCKET.close();

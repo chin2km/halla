@@ -50,19 +50,14 @@ export class MongoServer {
     }
 
     private listenReplyToChannel = (CHANNEL: string, callback: Function) => {
-
         const REPLY_SOCKET: RepSocket = this.rabbitMQContext.socket("REPLY");
-
         REPLY_SOCKET.setEncoding("utf8");
 
         REPLY_SOCKET.connect(CHANNEL, () => {
-
             REPLY_SOCKET.on("data", (data: string) => {
                 const dataReceived = JSON.parse(data);
-                console.log("DATA RECIEVED", dataReceived);
-                setTimeout(() => {
-                    callback(dataReceived, REPLY_SOCKET);
-                }, 500);
+                console.log("DATA RECIEVED on", CHANNEL, " -> ", dataReceived);
+                callback(dataReceived, REPLY_SOCKET);
             });
         });
     }
@@ -72,10 +67,8 @@ export class MongoServer {
         this.listenReplyToChannel(this.channels.LOGIN_CHANNEL, (dataReceived: any, socket: any) => {
             User.findOne(dataReceived, (err, data) => {
                 if (data !== null) {
-                    console.log("LOGIN_SUCCESS");
                     socket.write(JSON.stringify(data));
                 } else {
-                    console.log("LOGIN_FAIL");
                     socket.write(`FAIL`);
                 }
             });
@@ -95,15 +88,12 @@ export class MongoServer {
         this.listenReplyToChannel(this.channels.CREATE_ROOM, (dataReceived: any, socket: any) => {
             Room.create(dataReceived, (err, data) => {
                 if (err) {
-                    console.log("FAIL");
                     socket.write(`FAIL`);
                 } else {
-                    console.log("SUCCESS");
                     Room.find(undefined, (err, data) => {
                         if (err) {
-                            console.log("FIND FAIL", err);
+                            socket.write(`FAIL`);
                         }
-                        console.log("FIND SUCCESS", data);
                         socket.write(JSON.stringify(data));
                     });
                 }
@@ -111,30 +101,24 @@ export class MongoServer {
         });
 
         this.listenReplyToChannel(this.channels.FETCH_ROOMS, (dataReceived: any, socket: any) => {
-            console.log("FETCH_ROOMS");
             Room.find(undefined, (err, data) => {
                 if (err) {
-                    console.log("FIND FAIL", err);
+                    socket.write("FAIL");
                 }
-                console.log("FIND SUCCESS", data);
                 socket.write(JSON.stringify(data));
             });
         });
 
         this.listenReplyToChannel(this.channels.FETCH_PEOPLE, (dataReceived: any, socket: any) => {
-            console.log("FETCH_PEOPLE");
             User.find(undefined, (err, data) => {
                 if (err) {
-                    console.log("FIND FAIL", err);
+                    socket.write("FAIL");
                 }
-                console.log("FIND SUCCESS", data);
                 socket.write(JSON.stringify(data));
             });
         });
 
         this.listenReplyToChannel(this.channels.DIRECT_CHAT, (dataReceived: any, socket: any) => {
-            console.log("DIRECT_CHAT", dataReceived);
-
             Message.find(dataReceived, (err, messages: any) => {
                 if (err) {
                     return socket.write(`FAIL`);
@@ -145,8 +129,6 @@ export class MongoServer {
         });
 
         this.listenReplyToChannel(this.channels.JOIN_ROOM, (dataReceived: any, socket: any) => {
-            console.log("JOIN_ROOM", dataReceived);
-
             Room.findById(dataReceived.id, (err, room: any) => {
                 if (err) {
                     return socket.write(`FAIL`);
@@ -164,53 +146,37 @@ export class MongoServer {
         });
 
         this.listenReplyToChannel(this.channels.FETCH_ROOM_USERS, (dataReceived: any, socket: any) => {
-            console.log("FETCH_ROOM_USERS", dataReceived.roomId, dataReceived.userId);
-
             Room.getUsers(dataReceived.roomId, dataReceived.userId, (err: any, users: any) => {
                 if (err) {
-                    console.log("FETCH_ROOM_USERS_FAIL", err, users);
                     return socket.write(`FAIL`);
                 }
-                console.log("FETCH_ROOM_USERS_SUCCESS", users);
                 return socket.write(JSON.stringify(users));
             });
         });
 
         this.listenReplyToChannel(this.channels.REMOVE_USER_FROM_ROOM, (dataReceived: any, socket: any) => {
-            console.log("REMOVE_USER_FROM_ROOM", dataReceived.userId, dataReceived.socketId);
-
             Room.removeUser(dataReceived.socketId, dataReceived.userId, (err: any, rooms: any) => {
                 if (err) {
-                    console.log("REMOVE_USER_FROM_ROOM", err, rooms);
                     return socket.write(`FAIL`);
                 }
-                console.log("REMOVE_USER_FROM_ROOM_SUCCESS", rooms);
                 return socket.write(JSON.stringify(rooms));
             });
         });
 
         this.listenReplyToChannel(this.channels.SEND_MESSAGE_TO_ROOM, (dataReceived: any, socket: any) => {
-            console.log("SEND_MESSAGE_TO_ROOM", dataReceived.roomId, dataReceived.message);
-
             Room.addMessage(dataReceived.roomId, dataReceived.message, (err: any, room: any) => {
                 if (err) {
-                    console.log("SEND_MESSAGE_TO_ROOM", err);
                     return socket.write(`FAIL`);
                 }
-                console.log("SEND_MESSAGE_TO_ROOM_SUCCESS", room);
                 return socket.write(JSON.stringify(room));
             });
         });
 
         this.listenReplyToChannel(this.channels.SEND_DIRECT_MESSAGE, (dataReceived: any, socket: any) => {
-            console.log("SEND_DIRECT_MESSAGE", dataReceived.sender,  dataReceived.recipient, dataReceived.message);
-
             Message.create(dataReceived, (err: any, message: any) => {
                 if (err) {
-                    console.log("SEND_DIRECT_MESSAGE", err);
                     return socket.write(`FAIL`);
                 }
-                console.log("SEND_DIRECT_MESSAGE", message);
                 return socket.write(JSON.stringify(message));
             });
         });

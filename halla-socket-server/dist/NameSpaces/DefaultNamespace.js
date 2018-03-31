@@ -14,6 +14,12 @@ class DefaultNamespace {
             SIGNUP_CHANNEL: "SIGNUP_CHANNEL",
             LOGIN_CHANNEL: "LOGIN_CHANNEL",
         };
+        this.eventz = {
+            LOGIN_FAIL: "LOGIN_FAIL",
+            LOGIN_SUCCESS: "LOGIN_SUCCESS",
+            SIGNUP_SUCCESS: "SIGNUP_SUCCESS",
+            SIGNUP_FAIL: "SIGNUP_FAIL"
+        };
         this.setupHandlers = () => {
             this.socket.emit("connect", this.socket.id);
             R.forEachObjIndexed((handle, eventName) => {
@@ -21,24 +27,22 @@ class DefaultNamespace {
             })(this.handlers);
         };
         this.handleLogin = (message) => {
-            console.log("SUBMIT_LOGIN", message);
             this.requestToChannel(this.channels.LOGIN_CHANNEL, message, (response) => {
                 if (response === "FAIL") {
-                    this.socket.emit("LOGIN_FAIL", response);
+                    this.socket.emit(this.eventz.LOGIN_FAIL, response);
                 }
                 else {
-                    this.socket.emit("LOGIN_SUCCESS", JSON.parse(response));
+                    this.socket.emit(this.eventz.LOGIN_SUCCESS, JSON.parse(response));
                 }
             });
         };
         this.handleSignUp = (message) => {
-            console.log("SUBMIT_SIGNUP", message);
             this.requestToChannel(this.channels.SIGNUP_CHANNEL, message, (response) => {
                 if (response === "SUCCESS") {
-                    this.socket.emit("SIGNUP_SUCCESS", message);
+                    this.socket.emit(this.eventz.SIGNUP_SUCCESS, message);
                 }
                 if (response === "FAIL") {
-                    this.socket.emit("SIGNUP_FAIL", response);
+                    this.socket.emit(this.eventz.SIGNUP_FAIL, response);
                 }
             });
         };
