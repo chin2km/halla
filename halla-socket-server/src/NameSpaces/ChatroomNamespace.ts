@@ -1,7 +1,6 @@
-import { SocketServer } from "../socket-server";
 import * as R from "ramda";
 import * as rabbitJS from "rabbit.js";
-import { PushSocket, ReqSocket, RepSocket } from "rabbit.js";
+import { ReqSocket } from "rabbit.js";
 
 export class ChatroomNamespace {
     private socket: SocketIO.Socket;
@@ -19,7 +18,7 @@ export class ChatroomNamespace {
         DIRECT_CHAT: "DIRECT_CHAT"
     };
 
-    constructor(socket: SocketIO.Socket, rabbitMQContext: rabbitJS.Context, usersOnline: any) {
+    constructor (socket: SocketIO.Socket, rabbitMQContext: rabbitJS.Context, usersOnline: any) {
         this.socket = socket;
         this.rabbitMQContext = rabbitMQContext;
         this.usersOnline = usersOnline;

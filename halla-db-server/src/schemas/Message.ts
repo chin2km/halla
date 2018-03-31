@@ -20,7 +20,7 @@ const MessageSchema = new Mongoose.Schema(
     }
 );
 
-MessageSchema.pre("save", function(next) {
+MessageSchema.pre("save", function (next) {
     this.chatKey = `${this.sender}:${this.recipient}`;
     next();
 });

@@ -21,11 +21,7 @@ const findById = (id: string, callback: CallBackType) => {
     Room.findById(id, callback);
 };
 
-const findByIdAndUpdate = (id: String, data: typeof Room, callback: CallBackType) => {
-    Room.findByIdAndUpdate(id, data, { new: true }, callback);
-};
-
-const addUser = function(room: any, userId: string, socketId: string, callback: CallBackType) {
+const addUser = function (room: any, userId: string, socketId: string, callback: CallBackType) {
     const conn = { userId, socketId};
     const connection = R.find(R.propEq("socketId", socketId))(room.connections);
     if (!connection) {
@@ -34,8 +30,8 @@ const addUser = function(room: any, userId: string, socketId: string, callback: 
     room.save(callback);
 };
 
-const addMessage = function(roomId: any, message: any, callback: CallBackType) {
-    findById(roomId, function(err, room: any) {
+const addMessage = function (roomId: any, message: any, callback: CallBackType) {
+    findById(roomId, function (err, room: any) {
         if (err) {
             return callback(err, undefined);
         }
@@ -44,22 +40,21 @@ const addMessage = function(roomId: any, message: any, callback: CallBackType) {
     });
 };
 
-const getUsers = function(roomId: any, userId: string, callback: CallBackType) {
+const getUsers = function (roomId: any, userId: string, callback: CallBackType) {
 
-    findById(roomId, function(err, room: any) {
+    findById(roomId, function (err, room: any) {
 
         const userIds = room.connections.map((ele: any) => new Mongoose.Types.ObjectId(ele.userId));
         User.find({ _id: { $in: userIds} }, callback);
     });
 };
 
-const removeUser = function(socketId: string, userId: string, callback: CallBackType) {
+const removeUser = function (socketId: string, userId: string, callback: CallBackType) {
     find({ "connections.socketId" : socketId}, (err, rooms: any[]) => {
         if (err) { return callback(err, undefined); }
         callback(undefined, rooms);
 
         if (userId) {
-            const roomIds = rooms.map((ele: any) => new Mongoose.Types.ObjectId(ele._id));
             Room.collection.update(
                 { "connections.socketId": socketId },
                 { $pull: { "connections": { "socketId": socketId} } },

@@ -1,11 +1,8 @@
 import socketIo = require("socket.io");
 import * as rabbitJS from "rabbit.js";
 import { DefaultNamespace } from "./NameSpaces/DefaultNamespace";
-import * as R from "ramda";
-import { PushSocket } from "rabbit.js";
 import { RoomsNamespace } from "./NameSpaces/RoomsNamespace";
 import { ChatroomNamespace } from "./NameSpaces/ChatroomNamespace";
-import { timingSafeEqual } from "crypto";
 
 export class SocketServer {
     public static readonly PORT: number = 5027;
@@ -15,16 +12,16 @@ export class SocketServer {
     private port: string | number;
     private usersOnline: any = {};
 
-    constructor() {
+    constructor () {
         this.config();
         this.createServer();
     }
 
-    private config(): void {
+    private config (): void {
         this.port = process.env.PORT || SocketServer.PORT;
     }
 
-    private createServer(): void {
+    private createServer (): void {
         // Socket Connection
         this.socketIO = socketIo();
         this.socketIO.listen(this.port);
@@ -36,11 +33,9 @@ export class SocketServer {
         });
     }
 
-    private listenClients(): void {
+    private listenClients (): void {
         // Default namespace
         this.socketIO.of("/").on("connect", (socket: SocketIO.Socket) => {
-            const CLIENT = new DefaultNamespace(socket, this.rabbitMQConnection);
-
             console.log(`Client CONNECTED: Client socket id: ${socket.id}`);
 
             socket.on("disconnect", () => {
@@ -64,7 +59,7 @@ export class SocketServer {
         });
     }
 
-    public getServer(): SocketIO.Server {
+    public getServer (): SocketIO.Server {
         return this.socketIO;
     }
 }

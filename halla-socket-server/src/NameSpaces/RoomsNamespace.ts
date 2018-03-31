@@ -1,7 +1,6 @@
-import { SocketServer } from "../socket-server";
 import * as R from "ramda";
 import * as rabbitJS from "rabbit.js";
-import { PushSocket, ReqSocket, RepSocket } from "rabbit.js";
+import { ReqSocket } from "rabbit.js";
 
 export class RoomsNamespace {
     private socket: SocketIO.Socket;
@@ -14,7 +13,7 @@ export class RoomsNamespace {
         FETCH_PEOPLE: "FETCH_PEOPLE"
     };
 
-    constructor(socket: SocketIO.Socket, rabbitMQContext: rabbitJS.Context) {
+    constructor (socket: SocketIO.Socket, rabbitMQContext: rabbitJS.Context) {
         this.socket = socket;
         this.rabbitMQContext = rabbitMQContext;
 

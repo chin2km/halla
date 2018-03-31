@@ -54,8 +54,16 @@
         "no-internal-module": true,
         "no-trailing-whitespace": true,
         "no-null-keyword": true,
-        "no-unused-variable": true,
         "prefer-const": true,
-        "jsdoc-format": true
+        "jsdoc-format": true,
+        "no-unused-variable": [true, {"ignore-pattern": "^_"}],
+        "trailing-comma": [
+			true
+        ],
+        "max-line-length": [
+			true,
+			150
+        ],
+        "space-before-function-paren": true
     }
 }

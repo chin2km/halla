@@ -1,9 +1,7 @@
 
 import Mongoose =  require("mongoose");
 import * as rabbitJS from "rabbit.js";
-import * as R from "ramda";
-import { WorkerSocket, RepSocket } from "rabbit.js";
-import { Socket } from "net";
+import { RepSocket } from "rabbit.js";
 
 import User from "./models/User";
 import Room from "./models/Room";
@@ -13,11 +11,10 @@ export class MongoServer {
     public static readonly rabbitMQ_SERVER: string = "amqp://localhost";
     public static readonly MONGODB_DB: string = "mongodb://localhost/halla_db";
     private rabbitMQContext: rabbitJS.Context;
-    private port: string | number;
 
     private hallaDB: Mongoose.Connection;
 
-    constructor() {
+    constructor () {
         this.createServer();
     }
 
@@ -219,7 +216,7 @@ export class MongoServer {
         });
     }
 
-    public getServer(): any {
+    public getServer (): any {
         return this.hallaDB;
     }
 }

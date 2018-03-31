@@ -27,9 +27,6 @@ const findOne = (data, callback) => {
 const findById = (id, callback) => {
     Room_1.default.findById(id, callback);
 };
-const findByIdAndUpdate = (id, data, callback) => {
-    Room_1.default.findByIdAndUpdate(id, data, { new: true }, callback);
-};
 const addUser = function (room, userId, socketId, callback) {
     const conn = { userId, socketId };
     const connection = R.find(R.propEq("socketId", socketId))(room.connections);
@@ -60,7 +57,6 @@ const removeUser = function (socketId, userId, callback) {
         }
         callback(undefined, rooms);
         if (userId) {
-            const roomIds = rooms.map((ele) => new Mongoose.Types.ObjectId(ele._id));
             Room_1.default.collection.update({ "connections.socketId": socketId }, { $pull: { "connections": { "socketId": socketId } } }, { multi: true });
         }
     });

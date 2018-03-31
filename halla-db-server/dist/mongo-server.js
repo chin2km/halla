@@ -31,12 +31,10 @@ class MongoServer {
             SEND_DIRECT_MESSAGE: "SEND_DIRECT_MESSAGE"
         };
         this.createServer = () => {
-            // MongoDB Connection
             Mongoose.connect(MongoServer.MONGODB_DB);
             this.hallaDB = Mongoose.connection;
             this.hallaDB.on("error", () => { console.log("FAILED to connect to mongoose"); });
             this.hallaDB.once("open", console.log);
-            // rabbitJS Connection
             this.rabbitMQContext = rabbitJS.createContext(MongoServer.rabbitMQ_SERVER);
             this.rabbitMQContext.on("ready", this.listenClients);
         };
