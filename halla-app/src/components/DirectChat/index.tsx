@@ -66,9 +66,8 @@ export class DirectChat extends React.Component<DirectChat.Props> {
 			<Card className="chat">
 
 				<CardHeader
-					title={chatRoom.sender}
-					subtitle={`Room admin: ${chatRoom.sender}`}
-					avatar={<Avatar>{R.pipe(R.head, R.toUpper)(chatRoom.sender)}</Avatar>}
+					title={chatRoom.recipient.username}
+					avatar={<Avatar>{R.pipe(R.head, R.toUpper)(chatRoom.recipient.username)}</Avatar>}
 				/>
 
 				<hr/>
@@ -77,13 +76,15 @@ export class DirectChat extends React.Component<DirectChat.Props> {
 					{
 						messages &&
 						R.map(message => {
-							const clazz = classname("chat-bubble", {mine: R.equals(this.props.userId, message.userId)});
+							const senderObj = chatRoom.sender._id === message.sender ?
+								chatRoom.sender : chatRoom.recipient;
+							const clazz = classname("chat-bubble", {mine: R.equals(this.props.userId, message.sender)});
 							return <Chip key={message.message} style={{margin: 4}} className={clazz}>
 							<Avatar color="#444" icon={<SvgIconFace />} />
 							<div>
 								<h5>
-									{message.username}
-									<span title={message.time}>{moment(message.time).fromNow()}</span>
+									{senderObj.username}
+									<span title={message.createdAt}>{moment(message.createdAt).fromNow()}</span>
 								</h5>
 
 								<h4>{message.message}</h4>

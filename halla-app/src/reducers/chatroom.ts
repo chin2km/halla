@@ -33,7 +33,10 @@ export default handleActions({
 		return {...state};
 	},
 	[Actions.NEW_DIRECT_MESSAGE]: (state, action) => {
-		if (state.sender === action.payload.sender && state.recipient === action.payload.recipient) {
+		if (
+			(state.sender._id === action.payload.sender && state.recipient._id === action.payload.recipient) ||
+			(state.sender._id === action.payload.recipient && state.recipient._id === action.payload.sender)
+		) {
 			state.messages = [...state.messages, action.payload];
 		}
 		return {...state};

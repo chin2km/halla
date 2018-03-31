@@ -101,10 +101,7 @@ export class ChatroomNamespace {
                 const chatss = JSON.parse(chats);
                 console.log("DIRECT_CHAT_SUCCESS", chatss);
 
-                this.socket.emit("DIRECT_CHAT_SUCCESS", {
-                    ...message,
-                    messages: chatss
-                });
+                this.socket.emit("DIRECT_CHAT_SUCCESS", chatss);
             }
         });
     }
@@ -112,7 +109,11 @@ export class ChatroomNamespace {
     handleSendDirectMessage = (message: any) => {
         this.requestToChannel(this.channels.SEND_DIRECT_MESSAGE, message, (response: any) => {
             if (response !== "FAIL") {
-                this.socket.emit("NEW_DIRECT_MESSAGE", message);
+                this.socket.emit("NEW_DIRECT_MESSAGE", response);
+
+                if (R.has(message.recipient, this.usersOnline)) {
+                    this.socket.broadcast.to(R.prop(message.recipient, this.usersOnline)).emit("NEW_DIRECT_MESSAGE", response);
+                }
             }
         });
     }

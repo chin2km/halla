@@ -81,14 +81,17 @@ class ChatroomNamespace {
                 else {
                     const chatss = JSON.parse(chats);
                     console.log("DIRECT_CHAT_SUCCESS", chatss);
-                    this.socket.emit("DIRECT_CHAT_SUCCESS", Object.assign({}, message, { messages: chatss }));
+                    this.socket.emit("DIRECT_CHAT_SUCCESS", chatss);
                 }
             });
         };
         this.handleSendDirectMessage = (message) => {
             this.requestToChannel(this.channels.SEND_DIRECT_MESSAGE, message, (response) => {
                 if (response !== "FAIL") {
-                    this.socket.emit("NEW_DIRECT_MESSAGE", message);
+                    this.socket.emit("NEW_DIRECT_MESSAGE", response);
+                    if (R.has(message.recipient, this.usersOnline)) {
+                        this.socket.broadcast.to(R.prop(message.recipient, this.usersOnline)).emit("NEW_DIRECT_MESSAGE", response);
+                    }
                 }
             });
         };

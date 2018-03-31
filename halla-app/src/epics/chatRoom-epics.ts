@@ -27,7 +27,7 @@ const sendDirectMessageEpic = (action$: ActionsObservable<any>, store: any) =>
 				message: {
 					message: payload,
 					sender: store.getState().auth.user._id,
-					recipient: store.getState().chatRoom.recipient
+					recipient: store.getState().chatRoom.recipient._id
 				}
 			}, CHATROOM_NSC);
 		})
