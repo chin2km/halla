@@ -1,6 +1,6 @@
 import { combineEpics, ActionsObservable } from "redux-observable";
 import { sendMessage, ROOMS_NSC, CHATROOM_NSC } from "../websockets/websocket";
-import { FETCH_PEOPLE, DIRECT_CHAT, DIRECT_CHAT_SUCCESS } from "../actions/constants";
+import { FETCH_PEOPLE, DIRECT_CHAT, DIRECT_CHAT_SUCCESS, NEW_USER } from "../actions/constants";
 import { addNotification } from "../actions/auth";
 import { Observable } from "rxjs/Observable";
 
@@ -28,8 +28,13 @@ export const directChatEpic = (action$: ActionsObservable<any>, store) =>
 				))
 		);
 
+export const newUserJoinedEpic = (action$: ActionsObservable<any>, store) =>
+	action$.ofType(NEW_USER)
+		.switchMap(({payload: {username}}) => Observable.of(addNotification({type: "info", title: "Yay!", message: `${username} joined halla!`})));
+
 
 export const peopleEpics = combineEpics(
 	fetchPeopleEpic,
-	directChatEpic
+	directChatEpic,
+	newUserJoinedEpic
 );

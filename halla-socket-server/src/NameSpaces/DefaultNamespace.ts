@@ -2,6 +2,7 @@ import * as R from "ramda";
 
 export class DefaultNamespace {
     private socket: SocketIO.Socket;
+    private IO: SocketIO.Server;
     private requestToChannel: Function;
 
     private channels = {
@@ -13,12 +14,14 @@ export class DefaultNamespace {
         LOGIN_FAIL: "LOGIN_FAIL",
         LOGIN_SUCCESS: "LOGIN_SUCCESS",
         SIGNUP_SUCCESS: "SIGNUP_SUCCESS",
-        SIGNUP_FAIL: "SIGNUP_FAIL"
+        SIGNUP_FAIL: "SIGNUP_FAIL",
+        NEW_USER: "NEW_USER"
     };
 
-    constructor (socket: SocketIO.Socket, requestToChannel: Function) {
+    constructor (socket: SocketIO.Socket, requestToChannel: Function, IO: SocketIO.Server) {
         this.socket = socket;
         this.requestToChannel = requestToChannel;
+        this.IO = IO;
 
         this.setupHandlers();
     }
@@ -43,12 +46,11 @@ export class DefaultNamespace {
 
     handleSignUp = (message: any) => {
         this.requestToChannel(this.channels.SIGNUP_CHANNEL, message, (response: string) => {
-            if (response === "SUCCESS") {
-                this.socket.emit(this.eventz.SIGNUP_SUCCESS, message);
-            }
-
             if ( response === "FAIL") {
                 this.socket.emit(this.eventz.SIGNUP_FAIL, response);
+            } else {
+                this.socket.emit(this.eventz.SIGNUP_SUCCESS, response);
+                this.IO.of("/chatroom").emit(this.eventz.NEW_USER, JSON.parse(response));
             }
         });
     };

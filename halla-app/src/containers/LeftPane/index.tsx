@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as R from "ramda";
 import { RouteComponentProps } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
@@ -21,6 +22,7 @@ export namespace LeftPane {
 		people?: any[];
 		actions?: any;
 		componentsStates?: any;
+		userId?: string;
 	}
 
 	export interface State {
@@ -85,7 +87,7 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 					<EntityList
 						label="people"
 						nameProp="username"
-						entities={this.props.people}
+						entities={R.reject(R.propEq("_id", this.props.userId), this.props.people)}
 						onItemClick={this.props.actions.directChat}
 					/>
 				</Tab>
@@ -96,6 +98,7 @@ class LeftPane extends React.Component<LeftPane.Props, LeftPane.State> {
 
 function mapStateToProps (state: RootState) {
 	return {
+		userId: state.auth.user._id,
 		rooms: state.rooms,
 		people: state.people,
 		componentsStates: state.componentsStates.createRoom

@@ -2,6 +2,7 @@
 import Mongoose =  require("mongoose");
 import * as rabbitJS from "rabbit.js";
 import { RepSocket } from "rabbit.js";
+import * as R from "ramda";
 
 import User from "./models/User";
 import Room from "./models/Room";
@@ -77,10 +78,12 @@ export class MongoServer {
         this.listenReplyToChannel(this.channels.SIGNUP_CHANNEL, (dataReceived: any, socket: any) => {
             User.create(dataReceived, (err, data) => {
                 if (err) {
-                    socket.write(`FAIL`);
-                } else {
-                    socket.write(`SUCCESS`);
+                    return socket.write(`FAIL`);
                 }
+
+                const newUser = R.omit(["password"], JSON.parse(JSON.stringify(data)));
+                console.log(data, newUser);
+                socket.write(JSON.stringify(newUser));
             });
         });
 

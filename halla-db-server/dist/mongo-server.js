@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Mongoose = require("mongoose");
 const rabbitJS = __importStar(require("rabbit.js"));
+const R = __importStar(require("ramda"));
 const User_1 = __importDefault(require("./models/User"));
 const Room_1 = __importDefault(require("./models/Room"));
 const Message_1 = __importDefault(require("./models/Message"));
@@ -63,11 +64,11 @@ class MongoServer {
             this.listenReplyToChannel(this.channels.SIGNUP_CHANNEL, (dataReceived, socket) => {
                 User_1.default.create(dataReceived, (err, data) => {
                     if (err) {
-                        socket.write(`FAIL`);
+                        return socket.write(`FAIL`);
                     }
-                    else {
-                        socket.write(`SUCCESS`);
-                    }
+                    const newUser = R.omit(["password"], JSON.parse(JSON.stringify(data)));
+                    console.log(data, newUser);
+                    socket.write(JSON.stringify(newUser));
                 });
             });
             this.listenReplyToChannel(this.channels.CREATE_ROOM, (dataReceived, socket) => {

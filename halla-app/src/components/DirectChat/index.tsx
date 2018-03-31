@@ -62,7 +62,7 @@ export class DirectChat extends React.Component<DirectChat.Props> {
 		const chatRoom = this.props.chatRoom;
 		const {messages} = chatRoom;
 		return (
-			<div className="chat-window">
+			<div className="direct-chat-window">
 			<Card className="chat">
 
 				<CardHeader

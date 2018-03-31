@@ -63,7 +63,7 @@ export class RoomChat extends React.Component<RoomChat.Props> {
 		const chatRoom = this.props.chatRoom;
 		const {messages} = chatRoom;
 		return (
-			<div className="chat-window">
+			<div className="room-chat-window">
 			<Card className="chat">
 
 				<CardHeader
@@ -91,8 +91,10 @@ export class RoomChat extends React.Component<RoomChat.Props> {
 					{
 						messages &&
 						R.map(message => {
-							const clazz = classname("chat-bubble", {mine: R.equals(this.props.userId, message.userId)});
-							const directChat = () => this.props.directChat(message.userId);
+							const mine = R.equals(this.props.userId, message.userId);
+							const clazz = classname("chat-bubble", {mine});
+							const directChat = () => !mine ? this.props.directChat(message.userId) : false;
+
 							return <Chip key={message.time} style={{margin: 4}} className={clazz}>
 								<Avatar color="#444" icon={<SvgIconFace />} />
 								<div>

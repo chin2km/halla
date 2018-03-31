@@ -5,13 +5,13 @@ import {
 	SIGNUP_FAIL, LOGIN_FAIL,
 	CONNECTED_TO_ROOMS_NSC, CREATE_ROOM_SUCCESSFUL, CREATE_ROOM_FAIL,
 	SET_ROOMS, CONNECTED_TO_CHATROOM_NSC, JOIN_ROOM_SUCCESS, SET_ROOM_USERS,
-	REMOVE_USER, NEW_MESSAGE, SET_PEOPLE, NEW_DIRECT_MESSAGE
+	REMOVE_USER, NEW_MESSAGE, SET_PEOPLE, NEW_DIRECT_MESSAGE, NEW_USER
 } from "../actions/constants";
 import { connect, subscribe, DEFAULT_NSC, ROOMS_NSC, CHATROOM_NSC } from "../websockets/websocket";
 import { connectSuccessful } from "../actions/websocket";
 import { setLoginSuccess, setSignupSuccess, setSignupFail, setLoginFail } from "../actions/auth";
 import { createRoomSuccess, createRoomFail, setRooms } from "../actions/RoomsList";
-import { joinRoomSuccess, setRoomUsers, removeUser, newMessageReceived, newDirectMessageRecieved } from "../actions/Chatroom";
+import { joinRoomSuccess, setRoomUsers, removeUser, newMessageReceived, newDirectMessageRecieved, newUserJoined } from "../actions/Chatroom";
 import { setPeople, directChatSuccess } from "../actions/peopeList";
 import { DIRECT_CHAT_SUCCESS } from "../actions/constants";
 
@@ -40,6 +40,7 @@ export const connectedToRoomsNscEpic = (action$: ActionsObservable<any>) =>
 
 export const connectedToChatroomNscEpic = (action$: ActionsObservable<any>) =>
 	action$.ofType(CONNECTED_TO_CHATROOM_NSC)
+		.do(() => subscribe(CHATROOM_NSC, NEW_USER, newUserJoined))
 		.do(() => subscribe(CHATROOM_NSC, JOIN_ROOM_SUCCESS, joinRoomSuccess))
 		.do(() => subscribe(CHATROOM_NSC, DIRECT_CHAT_SUCCESS, directChatSuccess))
 		.do(() => subscribe(CHATROOM_NSC, SET_ROOM_USERS, setRoomUsers))

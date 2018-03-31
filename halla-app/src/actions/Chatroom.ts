@@ -11,3 +11,5 @@ export const newMessageReceived = createAction<any>(Actions.NEW_MESSAGE);
 
 export const sendDirectMessage = createAction<any>(Actions.SEND_DIRECT_MESSAGE);
 export const newDirectMessageRecieved = createAction<any>(Actions.NEW_DIRECT_MESSAGE);
+
+export const newUserJoined = createAction<any>(Actions.NEW_USER);

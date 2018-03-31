@@ -57,7 +57,7 @@ export class SocketServer {
         // Default namespace
         this.socketIO.of("/").on("connect", (socket: SocketIO.Socket) => {
             console.log(`Client CONNECTED: Client socket id: ${socket.id}`);
-            new DefaultNamespace(socket, this.requestToChannel);
+            new DefaultNamespace(socket, this.requestToChannel, this.socketIO);
 
             socket.on("disconnect", () => {
                 console.log(`Client DISCONNECTED`);

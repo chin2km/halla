@@ -7,5 +7,6 @@ export {CreateRoomPop} from "./CreateRoomPop";
 export {Toastr} from "./Toaster";
 export {RoomChat} from "./RoomChat";
 export {DirectChat} from "./DirectChat";
+export {PrivateRoute} from "./PrivateRoute";
 
 export {withSpinner};

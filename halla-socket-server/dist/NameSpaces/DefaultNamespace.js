@@ -9,7 +9,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const R = __importStar(require("ramda"));
 class DefaultNamespace {
-    constructor(socket, requestToChannel) {
+    constructor(socket, requestToChannel, IO) {
         this.channels = {
             SIGNUP_CHANNEL: "SIGNUP_CHANNEL",
             LOGIN_CHANNEL: "LOGIN_CHANNEL",
@@ -18,7 +18,8 @@ class DefaultNamespace {
             LOGIN_FAIL: "LOGIN_FAIL",
             LOGIN_SUCCESS: "LOGIN_SUCCESS",
             SIGNUP_SUCCESS: "SIGNUP_SUCCESS",
-            SIGNUP_FAIL: "SIGNUP_FAIL"
+            SIGNUP_FAIL: "SIGNUP_FAIL",
+            NEW_USER: "NEW_USER"
         };
         this.setupHandlers = () => {
             this.socket.emit("connect", this.socket.id);
@@ -38,11 +39,12 @@ class DefaultNamespace {
         };
         this.handleSignUp = (message) => {
             this.requestToChannel(this.channels.SIGNUP_CHANNEL, message, (response) => {
-                if (response === "SUCCESS") {
-                    this.socket.emit(this.eventz.SIGNUP_SUCCESS, message);
-                }
                 if (response === "FAIL") {
                     this.socket.emit(this.eventz.SIGNUP_FAIL, response);
+                }
+                else {
+                    this.socket.emit(this.eventz.SIGNUP_SUCCESS, response);
+                    this.IO.of("/chatroom").emit(this.eventz.NEW_USER, JSON.parse(response));
                 }
             });
         };
@@ -52,6 +54,7 @@ class DefaultNamespace {
         };
         this.socket = socket;
         this.requestToChannel = requestToChannel;
+        this.IO = IO;
         this.setupHandlers();
     }
 }

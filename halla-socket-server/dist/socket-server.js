@@ -47,7 +47,7 @@ class SocketServer {
     listenClients() {
         this.socketIO.of("/").on("connect", (socket) => {
             console.log(`Client CONNECTED: Client socket id: ${socket.id}`);
-            new DefaultNamespace_1.DefaultNamespace(socket, this.requestToChannel);
+            new DefaultNamespace_1.DefaultNamespace(socket, this.requestToChannel, this.socketIO);
             socket.on("disconnect", () => {
                 console.log(`Client DISCONNECTED`);
             });

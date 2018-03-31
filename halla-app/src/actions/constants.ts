@@ -16,6 +16,8 @@ export const SUBMIT_SIGNUP = "SUBMIT_SIGNUP";
 export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
 export const SIGNUP_FAIL = "SIGNUP_FAIL";
 
+export const NEW_USER = "NEW_USER";
+
 export const FETCH_PEOPLE = "FETCH_PEOPLE";
 export const SET_PEOPLE = "SET_PEOPLE";
 

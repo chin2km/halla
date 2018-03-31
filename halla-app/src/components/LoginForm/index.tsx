@@ -29,7 +29,6 @@ class LoginFormClass extends React.Component<LoginForm.Props, LoginForm.State> {
 				password: "admin"
 			},
 			signup: {
-				emailId: "",
 				username: "",
 				password: ""
 			}
@@ -66,7 +65,6 @@ class LoginFormClass extends React.Component<LoginForm.Props, LoginForm.State> {
 				password: loginPassword
 			},
 			signup: {
-				emailId: signupEmailid,
 				username: signupUserName,
 				password: signupPassword
 			},
@@ -103,11 +101,6 @@ class LoginFormClass extends React.Component<LoginForm.Props, LoginForm.State> {
 						label="Sign-up">
 							<form className="content">
 								<TextBox
-									value={signupEmailid}
-									onChange={({target: {value}}) => this.setValue(["signup", "emailId"], value)}
-									hintText="Emailid"
-								/><br />
-								<TextBox
 									value={signupUserName}
 									onChange={({target: {value}}) => this.setValue(["signup", "username"], value)}
 									hintText="Username"
@@ -121,7 +114,7 @@ class LoginFormClass extends React.Component<LoginForm.Props, LoginForm.State> {
 									autoComplete="current-password"
 								/><br />
 								<RaisedButton label="Sign-up"
-								disabled={this.checkValuesIsEmpty({signupEmailid, signupUserName, signupPassword})}
+								disabled={this.checkValuesIsEmpty({signupUserName, signupPassword})}
 								onClick={this.handleSubmitSignup}/>
 							</form>
 					</Tab>
