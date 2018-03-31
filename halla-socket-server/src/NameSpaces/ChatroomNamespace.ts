@@ -1,11 +1,9 @@
 import * as R from "ramda";
-import * as rabbitJS from "rabbit.js";
-import { ReqSocket } from "rabbit.js";
 
 export class ChatroomNamespace {
     private socket: SocketIO.Socket;
-    private rabbitMQContext: rabbitJS.Context;
-    private usersOnline: rabbitJS.Context;
+    private requestToChannel: Function;
+    private usersOnline: any;
 
     private channels = {
         JOIN_ROOM: "JOIN_ROOM",
@@ -18,9 +16,9 @@ export class ChatroomNamespace {
         DIRECT_CHAT: "DIRECT_CHAT"
     };
 
-    constructor (socket: SocketIO.Socket, rabbitMQContext: rabbitJS.Context, usersOnline: any) {
+    constructor (socket: SocketIO.Socket, requestToChannel: Function, usersOnline: any) {
         this.socket = socket;
-        this.rabbitMQContext = rabbitMQContext;
+        this.requestToChannel = requestToChannel;
         this.usersOnline = usersOnline;
 
         this.setupHandlers();
@@ -123,24 +121,6 @@ export class ChatroomNamespace {
                 this.socket.emit("NEW_MESSAGE", message);
                 this.socket.broadcast.to(message.roomId).emit("NEW_MESSAGE", message);
             }
-        });
-    }
-
-    requestToChannel = (CHANNEL: string, message: any, callback: Function) => {
-        const REQ_SOCKET: ReqSocket = this.rabbitMQContext.socket("REQ", {expiration: 10000});
-        REQ_SOCKET.setEncoding("utf8");
-
-        REQ_SOCKET.connect(CHANNEL, () => {
-
-            REQ_SOCKET.write(JSON.stringify(message));
-            REQ_SOCKET.on("data", (message: any) => {
-                console.log("DATA RECIVED:", typeof message, message);
-                console.log();
-                callback(message);
-                setTimeout(() => {
-                    REQ_SOCKET.close();
-                }, 10000);
-            });
         });
     }
 

@@ -9,11 +9,26 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const socketIo = require("socket.io");
 const rabbitJS = __importStar(require("rabbit.js"));
+const DefaultNamespace_1 = require("./NameSpaces/DefaultNamespace");
 const RoomsNamespace_1 = require("./NameSpaces/RoomsNamespace");
 const ChatroomNamespace_1 = require("./NameSpaces/ChatroomNamespace");
 class SocketServer {
     constructor() {
         this.usersOnline = {};
+        this.requestToChannel = (CHANNEL, message, callback) => {
+            const REQ_SOCKET = this.rabbitMQConnection.socket("REQ", { expiration: 10000 });
+            REQ_SOCKET.setEncoding("utf8");
+            REQ_SOCKET.connect(CHANNEL, () => {
+                REQ_SOCKET.write(JSON.stringify(message));
+                REQ_SOCKET.on("data", (message) => {
+                    console.log(message);
+                    callback(message);
+                    setTimeout(() => {
+                        REQ_SOCKET.close();
+                    }, 10000);
+                });
+            });
+        };
         this.config();
         this.createServer();
     }
@@ -31,16 +46,17 @@ class SocketServer {
     listenClients() {
         this.socketIO.of("/").on("connect", (socket) => {
             console.log(`Client CONNECTED: Client socket id: ${socket.id}`);
+            new DefaultNamespace_1.DefaultNamespace(socket, this.requestToChannel);
             socket.on("disconnect", () => {
                 console.log(`Client DISCONNECTED`);
             });
         });
         this.socketIO.of("/rooms").on("connect", (socket) => {
-            new RoomsNamespace_1.RoomsNamespace(socket, this.rabbitMQConnection);
+            new RoomsNamespace_1.RoomsNamespace(socket, this.requestToChannel);
         });
         this.socketIO.of("/chatroom").on("connect", (socket) => {
             this.usersOnline[socket.handshake.query.userId] = socket.id;
-            new ChatroomNamespace_1.ChatroomNamespace(socket, this.rabbitMQConnection, this.usersOnline);
+            new ChatroomNamespace_1.ChatroomNamespace(socket, this.requestToChannel, this.usersOnline);
             socket.on("disconnect", () => {
                 delete this.usersOnline[socket.handshake.query.userId];
             });

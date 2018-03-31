@@ -9,7 +9,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const R = __importStar(require("ramda"));
 class DefaultNamespace {
-    constructor(socket, rabbitMQContext) {
+    constructor(socket, requestToChannel) {
         this.channels = {
             SIGNUP_CHANNEL: "SIGNUP_CHANNEL",
             LOGIN_CHANNEL: "LOGIN_CHANNEL",
@@ -42,26 +42,12 @@ class DefaultNamespace {
                 }
             });
         };
-        this.requestToChannel = (CHANNEL, message, callback) => {
-            const REQ_SOCKET = this.rabbitMQContext.socket("REQ", { expiration: 10000 });
-            REQ_SOCKET.setEncoding("utf8");
-            REQ_SOCKET.connect(CHANNEL, () => {
-                REQ_SOCKET.write(JSON.stringify(message));
-                REQ_SOCKET.on("data", (message) => {
-                    console.log(message);
-                    callback(message);
-                    setTimeout(() => {
-                        REQ_SOCKET.close();
-                    }, 10000);
-                });
-            });
-        };
         this.handlers = {
             SUBMIT_LOGIN: this.handleLogin,
             SUBMIT_SIGNUP: this.handleSignUp,
         };
         this.socket = socket;
-        this.rabbitMQContext = rabbitMQContext;
+        this.requestToChannel = requestToChannel;
         this.setupHandlers();
     }
 }

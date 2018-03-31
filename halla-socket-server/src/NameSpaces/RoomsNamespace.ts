@@ -1,10 +1,8 @@
 import * as R from "ramda";
-import * as rabbitJS from "rabbit.js";
-import { ReqSocket } from "rabbit.js";
 
 export class RoomsNamespace {
     private socket: SocketIO.Socket;
-    private rabbitMQContext: rabbitJS.Context;
+    private requestToChannel: Function;
 
     private channels = {
         CREATE_ROOM: "CREATE_ROOM",
@@ -13,9 +11,9 @@ export class RoomsNamespace {
         FETCH_PEOPLE: "FETCH_PEOPLE"
     };
 
-    constructor (socket: SocketIO.Socket, rabbitMQContext: rabbitJS.Context) {
+    constructor (socket: SocketIO.Socket, requestToChannel: Function) {
         this.socket = socket;
-        this.rabbitMQContext = rabbitMQContext;
+        this.requestToChannel = requestToChannel;
 
         this.setupHandlers();
     }
@@ -54,25 +52,6 @@ export class RoomsNamespace {
                 this.socket.emit("CREATE_ROOM_SUCCESSFUL", message);
                 this.socket.broadcast.emit("CREATE_ROOM_SUCCESSFUL", message);
             }
-        });
-    }
-
-    requestToChannel = (CHANNEL: string, message: any, callback: Function) => {
-        const REQ_SOCKET: ReqSocket = this.rabbitMQContext.socket("REQ", {expiration: 10000});
-        REQ_SOCKET.setEncoding("utf8");
-
-        REQ_SOCKET.connect(CHANNEL, () => {
-
-            REQ_SOCKET.write(JSON.stringify(message));
-            REQ_SOCKET.on("data", (message: any) => {
-                console.log("DATA RECIVED:", typeof message, message);
-                console.log();
-                callback(message);
-                setTimeout(() => {
-                    REQ_SOCKET.close();
-                }, 10000);
-            });
-
         });
     }
 

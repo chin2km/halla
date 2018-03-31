@@ -9,7 +9,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const R = __importStar(require("ramda"));
 class RoomsNamespace {
-    constructor(socket, rabbitMQContext) {
+    constructor(socket, requestToChannel) {
         this.channels = {
             CREATE_ROOM: "CREATE_ROOM",
             FETCH_ROOMS: "FETCH_ROOMS",
@@ -46,28 +46,13 @@ class RoomsNamespace {
                 }
             });
         };
-        this.requestToChannel = (CHANNEL, message, callback) => {
-            const REQ_SOCKET = this.rabbitMQContext.socket("REQ", { expiration: 10000 });
-            REQ_SOCKET.setEncoding("utf8");
-            REQ_SOCKET.connect(CHANNEL, () => {
-                REQ_SOCKET.write(JSON.stringify(message));
-                REQ_SOCKET.on("data", (message) => {
-                    console.log("DATA RECIVED:", typeof message, message);
-                    console.log();
-                    callback(message);
-                    setTimeout(() => {
-                        REQ_SOCKET.close();
-                    }, 10000);
-                });
-            });
-        };
         this.handlers = {
             FETCH_ROOMS: this.handleFetchRooms,
             CREATE_ROOM: this.handleCreateRoom,
             FETCH_PEOPLE: this.handleFetchPeople,
         };
         this.socket = socket;
-        this.rabbitMQContext = rabbitMQContext;
+        this.requestToChannel = requestToChannel;
         this.setupHandlers();
     }
 }

@@ -9,7 +9,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const R = __importStar(require("ramda"));
 class ChatroomNamespace {
-    constructor(socket, rabbitMQContext, usersOnline) {
+    constructor(socket, requestToChannel, usersOnline) {
         this.channels = {
             JOIN_ROOM: "JOIN_ROOM",
             FETCH_ROOM_USERS: "FETCH_ROOM_USERS",
@@ -103,21 +103,6 @@ class ChatroomNamespace {
                 }
             });
         };
-        this.requestToChannel = (CHANNEL, message, callback) => {
-            const REQ_SOCKET = this.rabbitMQContext.socket("REQ", { expiration: 10000 });
-            REQ_SOCKET.setEncoding("utf8");
-            REQ_SOCKET.connect(CHANNEL, () => {
-                REQ_SOCKET.write(JSON.stringify(message));
-                REQ_SOCKET.on("data", (message) => {
-                    console.log("DATA RECIVED:", typeof message, message);
-                    console.log();
-                    callback(message);
-                    setTimeout(() => {
-                        REQ_SOCKET.close();
-                    }, 10000);
-                });
-            });
-        };
         this.handlers = {
             JOIN_ROOM: this.handleJoinRoom,
             SEND_MESSAGE_TO_ROOM: this.handleSendMessageToRoom,
@@ -125,7 +110,7 @@ class ChatroomNamespace {
             DIRECT_CHAT: this.handleDirectChat
         };
         this.socket = socket;
-        this.rabbitMQContext = rabbitMQContext;
+        this.requestToChannel = requestToChannel;
         this.usersOnline = usersOnline;
         this.setupHandlers();
     }
