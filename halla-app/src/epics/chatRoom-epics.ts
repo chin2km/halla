@@ -1,6 +1,9 @@
+import * as R from "ramda";
 import { ActionsObservable, combineEpics } from "redux-observable";
-import { SEND_MESSAGE_TO_ROOM, SEND_DIRECT_MESSAGE } from "../actions/constants";
+import { SEND_MESSAGE_TO_ROOM, SEND_DIRECT_MESSAGE, NEW_DIRECT_MESSAGE } from "../actions/constants";
 import { CHATROOM_NSC, sendMessage } from "../websockets/websocket";
+import { Observable } from "rxjs/Observable";
+import { addNotification } from "../actions/auth";
 
 const sendMessageToRoomEpic = (action$: ActionsObservable<any>, store: any) =>
 	action$.ofType(SEND_MESSAGE_TO_ROOM)
@@ -33,7 +36,19 @@ const sendDirectMessageEpic = (action$: ActionsObservable<any>, store: any) =>
 		})
 		.ignoreElements();
 
+export const newUserJoinedEpic = (action$: ActionsObservable<any>, store) =>
+		action$.ofType(NEW_DIRECT_MESSAGE)
+			.switchMap(({payload: {username, sender}}) => {
+				const {username: name} = R.find(R.propEq("_id", sender), store.getState().people);
+				const loggedInUser = store.getState().auth.user._id;
+				if (sender !== loggedInUser) {
+					return Observable.of(addNotification({type: "info", title: "Yay!", message: `You have recieved a private message from ${name}`}));
+				}
+				return Observable.empty();
+			});
+
 export const chatRoomEpics = combineEpics(
 	sendMessageToRoomEpic,
-	sendDirectMessageEpic
+	sendDirectMessageEpic,
+	newUserJoinedEpic
 );
