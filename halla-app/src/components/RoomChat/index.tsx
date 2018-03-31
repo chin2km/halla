@@ -18,6 +18,7 @@ export namespace RoomChat {
 		chatRoom?: any;
 		userId?: any;
 		sendMessage: Function;
+		directChat: Function;
 	}
 }
 
@@ -74,11 +75,13 @@ export class RoomChat extends React.Component<RoomChat.Props> {
 				<h3 className="label"><i>Active users in this room..</i></h3>
 
 				<div className="room-users">
-					{chatRoom.users && R.map((user: any) =>
-						<Chip key={user.username}>
+					{chatRoom.users && R.map((user: any) => {
+						const directChat = () => this.props.directChat(user._id);
+						return <Chip key={user.username} onClick={directChat}>
 							<Avatar color="#444" icon={<SvgIconFace />} />
 							{user.username}
-						</Chip>)(chatRoom.users)
+						</Chip>;
+						})(chatRoom.users)
 					}
 				</div>
 
@@ -89,17 +92,18 @@ export class RoomChat extends React.Component<RoomChat.Props> {
 						messages &&
 						R.map(message => {
 							const clazz = classname("chat-bubble", {mine: R.equals(this.props.userId, message.userId)});
+							const directChat = () => this.props.directChat(message.userId);
 							return <Chip key={message.time} style={{margin: 4}} className={clazz}>
-							<Avatar color="#444" icon={<SvgIconFace />} />
-							<div>
-								<h5>
-									{message.username}
-									<span title={message.time}>{moment(message.time).fromNow()}</span>
-								</h5>
+								<Avatar color="#444" icon={<SvgIconFace />} />
+								<div>
+									<h5 onClick={directChat}>
+										{message.username}
+										<span title={message.time}>{moment(message.time).fromNow()}</span>
+									</h5>
 
-								<h4>{message.message}</h4>
-							</div>
-						</Chip>;
+									<h4>{message.message}</h4>
+								</div>
+							</Chip>;
 						}, messages)
 					}
 					<div ref={this.setScrollAnchor}></div>

@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as R from "ramda";
 import * as ChatRoomActions from "../../actions/Chatroom";
+import * as PeopleListActions from "../../actions/peopeList";
 import { RouteComponentProps } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
@@ -14,7 +15,7 @@ export namespace RightPane {
 	export interface Props extends RouteComponentProps<void> {
 		chatRoom?: any;
 		userId?: string;
-		actions?: typeof ChatRoomActions;
+		actions?: any;
 	}
 
 	export interface State {
@@ -38,6 +39,7 @@ class RightPane extends React.Component<RightPane.Props, RightPane.State> {
 					<RoomChat
 						userId={this.props.userId}
 						chatRoom={chatRoom}
+						directChat={this.props.actions.directChat}
 						sendMessage={this.props.actions.sendMessageToRoom}
 					/>
 			: <CommunicationChatBubble className="chat-panel-icon" />
@@ -56,7 +58,10 @@ const mapStateToProps = (state: RootState) => {
 
 function mapDispatchToProps (dispatch) {
 	return {
-		actions: bindActionCreators(ChatRoomActions, dispatch)
+		actions: {
+			...bindActionCreators(ChatRoomActions, dispatch),
+			...bindActionCreators(PeopleListActions, dispatch)
+		}
 	};
 }
 
