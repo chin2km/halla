@@ -10,8 +10,8 @@
   "scripts": {
     "start": "npm run serve",
     "build": "npm run build-ts && npm run tslint",
-    "serve": "node dist/index.js",
-    "watch-node": "nodemon dist/index.js",
+    "serve": "node dist/halla-socket-server/src/index.js",
+    "watch-node": "nodemon dist/halla-socket-server/src/index.js",
     "build-ts": "tsc",
     "watch": "tsc -w",
     "tslint": "tslint -c tslint.json -p tsconfig.json"

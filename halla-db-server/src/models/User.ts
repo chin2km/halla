@@ -1,6 +1,7 @@
 import User from "../schemas/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import configs from "../configs";
 
 const create = (data: any, callback: CallBackType) => {
     find({username: data.username}, (err, foundUser) => {
@@ -35,7 +36,7 @@ const authenticate = (data: any, callback: CallBackType) => {
                         _id: foundUser._id,
                         username: foundUser.username
                     },
-                    "oruVrithiketaSecret"
+                    configs.jwtSecret
                 );
 
                 callback(undefined, token);

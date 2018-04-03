@@ -3,10 +3,7 @@ import * as R from "ramda";
 import { store } from "../store/";
 import { ENDPOINT } from "./constants";
 import { printLine } from "../utils/printline";
-
-export const DEFAULT_NSC = "/";
-export const ROOMS_NSC = "/rooms";
-export const CHATROOM_NSC = "/chatroom";
+import { DEFAULT_NSC } from "../../../halla-shared/src/Namespaces";
 
 const ws = {};
 

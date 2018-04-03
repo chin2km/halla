@@ -1,6 +1,6 @@
 import * as R from "ramda";
 import { handleActions } from "redux-actions";
-import * as Actions from "../actions/constants";
+import * as Actions from "../../../halla-shared/src/Actions";
 
 const initialState: any = {};
 

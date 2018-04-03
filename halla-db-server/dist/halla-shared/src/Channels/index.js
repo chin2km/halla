@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.JOIN_ROOM_CHANNEL = "JOIN_ROOM";
+exports.ROOM_USERS_CHANNEL = "FETCH_ROOM_USERS";
+exports.REMOVE_USER_CHANNEL = "REMOVE_USER_FROM_ROOM";
+exports.SEND_MESSAGE_TO_ROOM_CHANNEL = "SEND_MESSAGE_TO_ROOM";
+exports.SEND_DIRECT_MESSAGE_CHANNEL = "SEND_DIRECT_MESSAGE";
+exports.DIRECT_CHAT_CHANNEL = "DIRECT_CHAT";
+exports.SIGNUP_CHANNEL = "SIGNUP";
+exports.LOGIN_CHANNEL = "LOGIN";
+exports.CREATE_ROOM_CHANNEL = "CREATE_ROOM";
+exports.FETCH_ROOMS_CHANNEL = "FETCH_ROOMS";
+exports.FETCH_PEOPLE_CHANNEL = "FETCH_PEOPLE";
+//# sourceMappingURL=index.js.map

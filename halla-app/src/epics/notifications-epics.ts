@@ -1,5 +1,5 @@
 import { combineEpics, ActionsObservable } from "redux-observable";
-import { ADD_NOTIFICATION } from "../actions/constants";
+import { ADD_NOTIFICATION } from "../../../halla-shared/src/Actions";
 import { toastr } from "react-redux-toastr";
 
 const addNotificationEpic = (actions$: ActionsObservable<any>, store) =>

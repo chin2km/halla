@@ -3,6 +3,7 @@ import * as rabbitJS from "rabbit.js";
 import { DefaultNamespace } from "./NameSpaces/DefaultNamespace";
 import { RoomsNamespace } from "./NameSpaces/RoomsNamespace";
 import { ChatroomNamespace } from "./NameSpaces/ChatroomNamespace";
+import { DEFAULT_NSC, ROOMS_NSC, CHATROOM_NSC } from "../../halla-shared/src/Namespaces/index";
 
 export class SocketServer {
     public static readonly PORT: number = 5027;
@@ -54,7 +55,7 @@ export class SocketServer {
 
     private listenClients (): void {
         // Default namespace
-        this.socketIO.of("/").on("connect", (socket: SocketIO.Socket) => {
+        this.socketIO.of(DEFAULT_NSC).on("connect", (socket: SocketIO.Socket) => {
             console.log(`Client CONNECTED: Client socket id: ${socket.id}`);
             new DefaultNamespace(socket, this.requestToChannel, this.socketIO);
 
@@ -64,12 +65,12 @@ export class SocketServer {
         });
 
         // Rooms namespace
-        this.socketIO.of("/rooms").on("connect", (socket: SocketIO.Socket) => {
+        this.socketIO.of(ROOMS_NSC).on("connect", (socket: SocketIO.Socket) => {
             new RoomsNamespace(socket, this.requestToChannel);
         });
 
         // Chatroom namespace
-        this.socketIO.of("/chatroom").on("connect", (socket: SocketIO.Socket) => {
+        this.socketIO.of(CHATROOM_NSC).on("connect", (socket: SocketIO.Socket) => {
             this.usersOnline[socket.handshake.query.userId] = socket.id;
             new ChatroomNamespace(socket, this.requestToChannel, this.usersOnline);
 

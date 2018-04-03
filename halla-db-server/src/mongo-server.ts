@@ -1,12 +1,24 @@
 
 import Mongoose =  require("mongoose");
+import * as R from "ramda";
 import * as rabbitJS from "rabbit.js";
 import { RepSocket } from "rabbit.js";
-import * as R from "ramda";
-
 import User from "./models/User";
 import Room from "./models/Room";
 import Message from "./models/Message";
+import {
+    LOGIN_CHANNEL,
+    SIGNUP_CHANNEL,
+    CREATE_ROOM_CHANNEL,
+    FETCH_ROOMS_CHANNEL,
+    FETCH_PEOPLE_CHANNEL,
+    DIRECT_CHAT_CHANNEL,
+    JOIN_ROOM_CHANNEL,
+    ROOM_USERS_CHANNEL,
+    REMOVE_USER_CHANNEL,
+    SEND_MESSAGE_TO_ROOM_CHANNEL,
+    SEND_DIRECT_MESSAGE_CHANNEL
+} from "../../halla-shared/src/Channels";
 
 export class MongoServer {
     public static readonly rabbitMQ_SERVER: string = "amqp://localhost";
@@ -18,25 +30,6 @@ export class MongoServer {
     constructor () {
         this.createServer();
     }
-
-    private channels = {
-        SIGNUP_CHANNEL: "SIGNUP_CHANNEL",
-        LOGIN_CHANNEL: "LOGIN_CHANNEL",
-
-        CREATE_ROOM: "CREATE_ROOM",
-        FETCH_ROOMS: "FETCH_ROOMS",
-
-        FETCH_PEOPLE: "FETCH_PEOPLE",
-
-        DIRECT_CHAT: "DIRECT_CHAT",
-
-        JOIN_ROOM: "JOIN_ROOM",
-        FETCH_ROOM_USERS: "FETCH_ROOM_USERS",
-        REMOVE_USER_FROM_ROOM: "REMOVE_USER_FROM_ROOM",
-
-        SEND_MESSAGE_TO_ROOM: "SEND_MESSAGE_TO_ROOM",
-        SEND_DIRECT_MESSAGE: "SEND_DIRECT_MESSAGE"
-    };
 
     private createServer = (): void  => {
         // MongoDB Connection
@@ -65,7 +58,7 @@ export class MongoServer {
 
 
     private listenClients = (): void => {
-        this.listenReplyToChannel(this.channels.LOGIN_CHANNEL, (dataReceived: any, socket: any) => {
+        this.listenReplyToChannel(LOGIN_CHANNEL, (dataReceived: any, socket: any) => {
             User.authenticate(dataReceived, (err, data) => {
                 if (data !== null) {
                     socket.write(JSON.stringify(data));
@@ -75,7 +68,7 @@ export class MongoServer {
             });
         });
 
-        this.listenReplyToChannel(this.channels.SIGNUP_CHANNEL, (dataReceived: any, socket: any) => {
+        this.listenReplyToChannel(SIGNUP_CHANNEL, (dataReceived: any, socket: any) => {
             User.create(dataReceived, (err, data) => {
                 if (err) {
                     return socket.write(`FAIL`);
@@ -87,7 +80,7 @@ export class MongoServer {
         });
 
 
-        this.listenReplyToChannel(this.channels.CREATE_ROOM, (dataReceived: any, socket: any) => {
+        this.listenReplyToChannel(CREATE_ROOM_CHANNEL, (dataReceived: any, socket: any) => {
             Room.create(dataReceived, (err, data) => {
                 if (err) {
                     socket.write(`FAIL`);
@@ -102,7 +95,7 @@ export class MongoServer {
             });
         });
 
-        this.listenReplyToChannel(this.channels.FETCH_ROOMS, (dataReceived: any, socket: any) => {
+        this.listenReplyToChannel(FETCH_ROOMS_CHANNEL, (dataReceived: any, socket: any) => {
             Room.find(undefined, (err, data) => {
                 if (err) {
                     socket.write("FAIL");
@@ -111,7 +104,7 @@ export class MongoServer {
             });
         });
 
-        this.listenReplyToChannel(this.channels.FETCH_PEOPLE, (dataReceived: any, socket: any) => {
+        this.listenReplyToChannel(FETCH_PEOPLE_CHANNEL, (dataReceived: any, socket: any) => {
             User.find(undefined, (err, data) => {
                 if (err) {
                     socket.write("FAIL");
@@ -120,7 +113,7 @@ export class MongoServer {
             });
         });
 
-        this.listenReplyToChannel(this.channels.DIRECT_CHAT, (dataReceived: any, socket: any) => {
+        this.listenReplyToChannel(DIRECT_CHAT_CHANNEL, (dataReceived: any, socket: any) => {
             Message.find(dataReceived, (err, messages: any) => {
                 if (err) {
                     return socket.write(`FAIL`);
@@ -130,7 +123,7 @@ export class MongoServer {
             });
         });
 
-        this.listenReplyToChannel(this.channels.JOIN_ROOM, (dataReceived: any, socket: any) => {
+        this.listenReplyToChannel(JOIN_ROOM_CHANNEL, (dataReceived: any, socket: any) => {
             Room.findById(dataReceived.id, (err, room: any) => {
                 if (err) {
                     return socket.write(`FAIL`);
@@ -147,7 +140,7 @@ export class MongoServer {
             });
         });
 
-        this.listenReplyToChannel(this.channels.FETCH_ROOM_USERS, (dataReceived: any, socket: any) => {
+        this.listenReplyToChannel(ROOM_USERS_CHANNEL, (dataReceived: any, socket: any) => {
             Room.getUsers(dataReceived.roomId, dataReceived.userId, (err: any, users: any) => {
                 if (err) {
                     return socket.write(`FAIL`);
@@ -156,7 +149,7 @@ export class MongoServer {
             });
         });
 
-        this.listenReplyToChannel(this.channels.REMOVE_USER_FROM_ROOM, (dataReceived: any, socket: any) => {
+        this.listenReplyToChannel(REMOVE_USER_CHANNEL, (dataReceived: any, socket: any) => {
             Room.removeUser(dataReceived.socketId, dataReceived.userId, (err: any, rooms: any) => {
                 if (err) {
                     return socket.write(`FAIL`);
@@ -165,7 +158,7 @@ export class MongoServer {
             });
         });
 
-        this.listenReplyToChannel(this.channels.SEND_MESSAGE_TO_ROOM, (dataReceived: any, socket: any) => {
+        this.listenReplyToChannel(SEND_MESSAGE_TO_ROOM_CHANNEL, (dataReceived: any, socket: any) => {
             Room.addMessage(dataReceived.roomId, dataReceived.message, (err: any, room: any) => {
                 if (err) {
                     return socket.write(`FAIL`);
@@ -174,7 +167,7 @@ export class MongoServer {
             });
         });
 
-        this.listenReplyToChannel(this.channels.SEND_DIRECT_MESSAGE, (dataReceived: any, socket: any) => {
+        this.listenReplyToChannel(SEND_DIRECT_MESSAGE_CHANNEL, (dataReceived: any, socket: any) => {
             Message.create(dataReceived, (err: any, message: any) => {
                 if (err) {
                     return socket.write(`FAIL`);
