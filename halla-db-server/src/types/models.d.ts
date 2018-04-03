@@ -1,2 +1,2 @@
-type CallBackType = (err: any, product: any) => void;
+type CallBackType = (err: any, product?: any) => void;
 

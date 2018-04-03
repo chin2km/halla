@@ -37,8 +37,7 @@ class SocketServer {
         this.port = process.env.PORT || SocketServer.PORT;
     }
     createServer() {
-        this.socketIO = socketIo();
-        this.socketIO.listen(this.port);
+        this.socketIO = socketIo(this.port, { transports: ["websocket"] });
         this.rabbitMQConnection = rabbitJS.createContext(SocketServer.rabbitMQ_SERVER);
         this.rabbitMQConnection.on("ready", () => {
             this.listenClients();

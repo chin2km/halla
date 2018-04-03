@@ -12,6 +12,7 @@
   "devDependencies": {
     "@types/classnames": "^2.2.3",
     "@types/history": "4.6.2",
+    "@types/jwt-decode": "^2.2.1",
     "@types/material-ui": "^0.21.1",
     "@types/node": "8.0.53",
     "@types/ramda": "^0.25.20",
@@ -54,6 +55,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "classnames": "^2.2.5",
+    "jwt-decode": "^2.2.0",
     "less": "^3.0.0",
     "less-loader": "^4.0.5",
     "material-ui": "^0.20.0",

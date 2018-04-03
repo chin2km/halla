@@ -17,11 +17,15 @@
     "tslint": "tslint -c tslint.json -p tsconfig.json"
   },
   "dependencies": {
+    "bcrypt": "^1.0.3",
+    "jsonwebtoken": "^8.2.0",
     "mongoose": "^5.0.7",
     "rabbit.js": "^0.4.4",
     "ramda": "^0.25.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^1.0.0",
+    "@types/jsonwebtoken": "^7.2.6",
     "@types/mongoose": "^5.0.2",
     "@types/rabbit.js": "^0.4.31",
     "@types/ramda": "^0.25.18",

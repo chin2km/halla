@@ -1,7 +1,6 @@
 import * as R from "ramda";
 import Message from "../schemas/Message";
 import User from "../models/User";
-import { userInfo } from "os";
 import Mongoose = require("mongoose");
 
 const create = (data: typeof Message, callback: CallBackType) => {

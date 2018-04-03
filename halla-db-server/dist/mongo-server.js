@@ -52,7 +52,7 @@ class MongoServer {
         };
         this.listenClients = () => {
             this.listenReplyToChannel(this.channels.LOGIN_CHANNEL, (dataReceived, socket) => {
-                User_1.default.findOne(dataReceived, (err, data) => {
+                User_1.default.authenticate(dataReceived, (err, data) => {
                     if (data !== null) {
                         socket.write(JSON.stringify(data));
                     }
@@ -67,7 +67,6 @@ class MongoServer {
                         return socket.write(`FAIL`);
                     }
                     const newUser = R.omit(["password"], JSON.parse(JSON.stringify(data)));
-                    console.log(data, newUser);
                     socket.write(JSON.stringify(newUser));
                 });
             });

@@ -23,8 +23,7 @@ export class SocketServer {
 
     private createServer (): void {
         // Socket Connection
-        this.socketIO = socketIo();
-        this.socketIO.listen(this.port);
+        this.socketIO = socketIo(this.port, {transports: ["websocket"]});
 
         // rabbitJS Connection
         this.rabbitMQConnection = rabbitJS.createContext(SocketServer.rabbitMQ_SERVER);

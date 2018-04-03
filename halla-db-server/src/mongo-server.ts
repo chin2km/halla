@@ -66,7 +66,7 @@ export class MongoServer {
 
     private listenClients = (): void => {
         this.listenReplyToChannel(this.channels.LOGIN_CHANNEL, (dataReceived: any, socket: any) => {
-            User.findOne(dataReceived, (err, data) => {
+            User.authenticate(dataReceived, (err, data) => {
                 if (data !== null) {
                     socket.write(JSON.stringify(data));
                 } else {
@@ -82,7 +82,6 @@ export class MongoServer {
                 }
 
                 const newUser = R.omit(["password"], JSON.parse(JSON.stringify(data)));
-                console.log(data, newUser);
                 socket.write(JSON.stringify(newUser));
             });
         });

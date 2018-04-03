@@ -12,8 +12,10 @@ const ws = {};
 
 
 export const connect = (namespace, nextAction) => {
+	const userId = R.path(["auth", "user", "_id"], store.getState());
+
 	ws[namespace] = SocketIO(ENDPOINT + namespace, {
-		query: `userId=${R.path(["auth", "user", "_id"], store.getState())}`,
+		query: `userId=${userId}`,
 		transports: ["websocket"],
 		multiplex: !R.equals(DEFAULT_NSC, namespace),
 	});
