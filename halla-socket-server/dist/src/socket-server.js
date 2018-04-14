@@ -12,7 +12,7 @@ const rabbitJS = __importStar(require("rabbit.js"));
 const DefaultNamespace_1 = require("./NameSpaces/DefaultNamespace");
 const RoomsNamespace_1 = require("./NameSpaces/RoomsNamespace");
 const ChatroomNamespace_1 = require("./NameSpaces/ChatroomNamespace");
-const index_1 = require("../../halla-shared/src/Namespaces/index");
+const index_1 = require("../halla-shared/src/Namespaces/index");
 class SocketServer {
     constructor() {
         this.usersOnline = {};

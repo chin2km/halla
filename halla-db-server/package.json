@@ -1,7 +1,7 @@
 {
   "name": "halla-db-server",
   "version": "0.1.0",
-  "description": "A starting point for Node.js express apps with TypeScript",
+  "description": "Halla mongodb server",
   "repository": {
     "type": "git"
   },
@@ -10,8 +10,8 @@
   "scripts": {
     "start": "npm run serve",
     "build": "npm run build-ts && npm run tslint",
-    "serve": "node dist/halla-db-server/src/index.js",
-    "watch-node": "nodemon dist/halla-db-server/src/index.js",
+    "serve": "node dist/src/index.js",
+    "watch-node": "nodemon dist/src/index.js",
     "build-ts": "tsc",
     "watch": "tsc -w",
     "tslint": "tslint -c tslint.json -p tsconfig.json"

@@ -18,7 +18,7 @@ import {
     REMOVE_USER_CHANNEL,
     SEND_MESSAGE_TO_ROOM_CHANNEL,
     SEND_DIRECT_MESSAGE_CHANNEL
-} from "../../halla-shared/src/Channels";
+} from "../halla-shared/src/Channels";
 
 export class MongoServer {
     public static readonly rabbitMQ_SERVER: string = "amqp://localhost";

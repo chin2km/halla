@@ -3,7 +3,7 @@ import * as rabbitJS from "rabbit.js";
 import { DefaultNamespace } from "./NameSpaces/DefaultNamespace";
 import { RoomsNamespace } from "./NameSpaces/RoomsNamespace";
 import { ChatroomNamespace } from "./NameSpaces/ChatroomNamespace";
-import { DEFAULT_NSC, ROOMS_NSC, CHATROOM_NSC } from "../../halla-shared/src/Namespaces/index";
+import { DEFAULT_NSC, ROOMS_NSC, CHATROOM_NSC } from "../halla-shared/src/Namespaces/index";
 
 export class SocketServer {
     public static readonly PORT: number = 5027;

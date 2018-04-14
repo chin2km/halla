@@ -16,7 +16,7 @@ const rabbitJS = __importStar(require("rabbit.js"));
 const User_1 = __importDefault(require("./models/User"));
 const Room_1 = __importDefault(require("./models/Room"));
 const Message_1 = __importDefault(require("./models/Message"));
-const Channels_1 = require("../../halla-shared/src/Channels");
+const Channels_1 = require("../halla-shared/src/Channels");
 class MongoServer {
     constructor() {
         this.createServer = () => {
