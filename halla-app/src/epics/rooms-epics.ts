@@ -1,8 +1,8 @@
 import { combineEpics, ActionsObservable } from "redux-observable";
 import { sendMessage } from "../websockets/websocket";
-import { ROOMS_NSC, CHATROOM_NSC } from "../../../halla-shared/src/Namespaces";
+import { ROOMS_NSC, CHATROOM_NSC } from "../../halla-shared/src/Namespaces";
 import { Observable } from "rxjs/Observable";
-import { CREATE_ROOM, FETCH_ROOMS, CREATE_ROOM_SUCCESSFUL, CREATE_ROOM_FAIL, JOIN_ROOM } from "../../../halla-shared/src/Actions";
+import { CREATE_ROOM, FETCH_ROOMS, CREATE_ROOM_SUCCESSFUL, CREATE_ROOM_FAIL, JOIN_ROOM } from "../../halla-shared/src/Actions";
 import { addNotification } from "../actions/auth";
 import { fetchRooms } from "../actions/RoomsList";
 

@@ -1,8 +1,8 @@
 import * as R from "ramda";
 import { ActionsObservable, combineEpics } from "redux-observable";
-import { SEND_MESSAGE_TO_ROOM, SEND_DIRECT_MESSAGE, NEW_DIRECT_MESSAGE } from "../../../halla-shared/src/Actions";
+import { SEND_MESSAGE_TO_ROOM, SEND_DIRECT_MESSAGE, NEW_DIRECT_MESSAGE } from "../../halla-shared/src/Actions";
 import { sendMessage } from "../websockets/websocket";
-import { CHATROOM_NSC } from "../../../halla-shared/src/Namespaces";
+import { CHATROOM_NSC } from "../../halla-shared/src/Namespaces";
 import { Observable } from "rxjs/Observable";
 import { addNotification } from "../actions/auth";
 

@@ -1,6 +1,6 @@
 import * as R from "ramda";
-import { SET_ROOMS, SET_PEOPLE, CREATE_ROOM_FAIL, CREATE_ROOM_SUCCESSFUL } from "../../../halla-shared/src/Actions";
-import { FETCH_ROOMS_CHANNEL, FETCH_PEOPLE_CHANNEL, CREATE_ROOM_CHANNEL } from "../../../halla-shared/src/Channels";
+import { SET_ROOMS, SET_PEOPLE, CREATE_ROOM_FAIL, CREATE_ROOM_SUCCESSFUL } from "../../halla-shared/src/Actions";
+import { FETCH_ROOMS_CHANNEL, FETCH_PEOPLE_CHANNEL, CREATE_ROOM_CHANNEL } from "../../halla-shared/src/Channels";
 
 export class RoomsNamespace {
     private socket: SocketIO.Socket;

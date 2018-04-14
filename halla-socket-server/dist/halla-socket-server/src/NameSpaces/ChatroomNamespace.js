@@ -8,9 +8,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 const R = __importStar(require("ramda"));
-const Channels_1 = require("../../../halla-shared/src/Channels");
-const Channels_2 = require("../../../halla-shared/src/Channels");
-const Actions_1 = require("../../../halla-shared/src/Actions");
+const Channels_1 = require("../../halla-shared/src/Channels");
+const Channels_2 = require("../../halla-shared/src/Channels");
+const Actions_1 = require("../../halla-shared/src/Actions");
 class ChatroomNamespace {
     constructor(socket, requestToChannel, usersOnline) {
         this.setupHandlers = () => {

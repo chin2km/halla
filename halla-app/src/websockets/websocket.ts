@@ -3,7 +3,7 @@ import * as R from "ramda";
 import { store } from "../store/";
 import { ENDPOINT } from "./constants";
 import { printLine } from "../utils/printline";
-import { DEFAULT_NSC } from "../../../halla-shared/src/Namespaces";
+import { DEFAULT_NSC } from "../../halla-shared/src/Namespaces";
 
 const ws = {};
 

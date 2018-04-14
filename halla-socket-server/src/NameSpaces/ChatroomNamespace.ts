@@ -1,12 +1,12 @@
 import * as R from "ramda";
-import { REMOVE_USER_CHANNEL } from "../../../halla-shared/src/Channels";
+import { REMOVE_USER_CHANNEL } from "../../halla-shared/src/Channels";
 import {
     JOIN_ROOM_CHANNEL,
     ROOM_USERS_CHANNEL,
     DIRECT_CHAT_CHANNEL,
     SEND_DIRECT_MESSAGE_CHANNEL,
     SEND_MESSAGE_TO_ROOM_CHANNEL
-} from "../../../halla-shared/src/Channels";
+} from "../../halla-shared/src/Channels";
 import {
     DISCONNECT,
     REMOVE_USER,
@@ -17,7 +17,7 @@ import {
     DIRECT_CHAT_SUCCESS,
     NEW_DIRECT_MESSAGE,
     NEW_MESSAGE
-} from "../../../halla-shared/src/Actions";
+} from "../../halla-shared/src/Actions";
 
 export class ChatroomNamespace {
     private socket: SocketIO.Socket;

@@ -1,5 +1,5 @@
 import { createAction } from "redux-actions";
-import * as Actions from "../../../halla-shared/src/Actions";
+import * as Actions from "../../halla-shared/src/Actions";
 
 export const connect = createAction(Actions.CONNECT);
 export const connectSuccessful = createAction(Actions.CONNECT_SUCCESSFUL);

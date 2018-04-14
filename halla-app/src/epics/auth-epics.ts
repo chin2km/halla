@@ -1,11 +1,11 @@
 import { combineEpics, ActionsObservable } from "redux-observable";
 import { sendMessage, connect } from "../websockets/websocket";
-import { ROOMS_NSC, CHATROOM_NSC } from "../../../halla-shared/src/Namespaces";
+import { ROOMS_NSC, CHATROOM_NSC } from "../../halla-shared/src/Namespaces";
 import { Observable } from "rxjs/Observable";
 import { push } from "react-router-redux";
 import { connectedToRoomsNsc, connectedToChatroomNsc } from "../actions/websocket";
 import { addNotification } from "../actions/auth";
-import { SUBMIT_LOGIN, LOGIN_SUCCESS, LOGIN_FAIL, SUBMIT_SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAIL } from "../../../halla-shared/src/Actions";
+import { SUBMIT_LOGIN, LOGIN_SUCCESS, LOGIN_FAIL, SUBMIT_SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAIL } from "../../halla-shared/src/Actions";
 
 const loginEpic = (actions$: ActionsObservable<any>, store) =>
 	actions$.ofType(SUBMIT_LOGIN)

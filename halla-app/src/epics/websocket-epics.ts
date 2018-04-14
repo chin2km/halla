@@ -6,14 +6,14 @@ import {
 	CONNECTED_TO_ROOMS_NSC, CREATE_ROOM_SUCCESSFUL, CREATE_ROOM_FAIL,
 	SET_ROOMS, CONNECTED_TO_CHATROOM_NSC, JOIN_ROOM_SUCCESS, SET_ROOM_USERS,
 	REMOVE_USER, NEW_MESSAGE, SET_PEOPLE, NEW_DIRECT_MESSAGE, NEW_USER, DIRECT_CHAT_SUCCESS
-} from "../../../halla-shared/src/Actions";
+} from "../../halla-shared/src/Actions";
 import { connect, subscribe } from "../websockets/websocket";
 import { connectSuccessful } from "../actions/websocket";
 import { setLoginSuccess, setSignupSuccess, setSignupFail, setLoginFail } from "../actions/auth";
 import { createRoomSuccess, createRoomFail, setRooms } from "../actions/RoomsList";
 import { joinRoomSuccess, setRoomUsers, removeUser, newMessageReceived, newDirectMessageRecieved, newUserJoined } from "../actions/Chatroom";
 import { setPeople, directChatSuccess } from "../actions/peopeList";
-import { DEFAULT_NSC, ROOMS_NSC, CHATROOM_NSC } from "../../../halla-shared/src/Namespaces";
+import { DEFAULT_NSC, ROOMS_NSC, CHATROOM_NSC } from "../../halla-shared/src/Namespaces";
 
 export const connectEpic = (action$: ActionsObservable<any>) =>
 	action$.ofType(CONNECT)

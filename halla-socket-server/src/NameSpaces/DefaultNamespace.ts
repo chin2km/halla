@@ -1,7 +1,7 @@
 import * as R from "ramda";
-import { LOGIN_CHANNEL, SIGNUP_CHANNEL } from "../../../halla-shared/src/Channels";
-import { LOGIN_FAIL, LOGIN_SUCCESS, SIGNUP_FAIL, SIGNUP_SUCCESS, NEW_USER } from "../../../halla-shared/src/Actions";
-import { CHATROOM_NSC } from "../../../halla-shared/src/Namespaces/index";
+import { LOGIN_CHANNEL, SIGNUP_CHANNEL } from "../../halla-shared/src/Channels";
+import { LOGIN_FAIL, LOGIN_SUCCESS, SIGNUP_FAIL, SIGNUP_SUCCESS, NEW_USER } from "../../halla-shared/src/Actions";
+import { CHATROOM_NSC } from "../../halla-shared/src/Namespaces/index";
 
 export class DefaultNamespace {
     private socket: SocketIO.Socket;
