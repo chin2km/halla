@@ -11,7 +11,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/classnames": "^2.2.3",
-    "@types/history": "4.6.2",
+    "@types/history": "4.7.2",
     "@types/jwt-decode": "^2.2.1",
     "@types/material-ui": "^0.21.1",
     "@types/node": "8.0.53",
