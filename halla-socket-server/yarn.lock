@@ -6,17 +6,17 @@
   version "9.4.6"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.4.6.tgz#d8176d864ee48753d053783e4e463aec86b8d82e"
 
-"@types/rabbit.js@^0.4.31":
+"@types/rabbit.js@0.4.31":
   version "0.4.31"
   resolved "https://registry.yarnpkg.com/@types/rabbit.js/-/rabbit.js-0.4.31.tgz#3d9c97224fa1271100030cc0dbbc78426d6b7165"
   dependencies:
     "@types/node" "*"
 
-"@types/ramda@^0.25.18":
+"@types/ramda@0.25.18":
   version "0.25.18"
   resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.25.18.tgz#a026777d780226a08a50a50a353ce901490f0b92"
 
-"@types/socket.io@^1.4.31":
+"@types/socket.io@1.4.31":
   version "1.4.31"
   resolved "https://registry.yarnpkg.com/@types/socket.io/-/socket.io-1.4.31.tgz#7a928518a35516fccd90431f94538ed3fddaba19"
   dependencies:
@@ -1326,7 +1326,7 @@ node-uuid@:
   version "1.4.8"
   resolved "https://registry.yarnpkg.com/node-uuid/-/node-uuid-1.4.8.tgz#b040eb0923968afabf8d32fb1f17f1167fdab907"
 
-nodemon@^1.13.0:
+nodemon@1.15.1:
   version "1.15.1"
   resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-1.15.1.tgz#54daa72443d8d5a548f130866b92e65cded0ed58"
   dependencies:
@@ -1530,7 +1530,7 @@ qs@~6.4.0:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.4.0.tgz#13e26d28ad6b0ffaa91312cd3bf708ed351e7233"
 
-rabbit.js@^0.4.4:
+rabbit.js@0.4.4:
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/rabbit.js/-/rabbit.js-0.4.4.tgz#84a97b2fba35fd21af435dfd7cbd9b31895f1da4"
   dependencies:
@@ -1538,7 +1538,7 @@ rabbit.js@^0.4.4:
     node-uuid ""
     readable-stream "~1 >=1.0.2"
 
-ramda@^0.25.0:
+ramda@0.25.0:
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"
 
@@ -1790,7 +1790,7 @@ socket.io-parser@~3.1.1:
     has-binary2 "~1.0.2"
     isarray "2.0.1"
 
-socket.io@^2.0.4:
+socket.io@2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/socket.io/-/socket.io-2.0.4.tgz#c1a4590ceff87ecf13c72652f046f716b29e6014"
   dependencies:
@@ -2002,7 +2002,7 @@ tough-cookie@~2.3.0:
   dependencies:
     punycode "^1.4.1"
 
-ts-node@^5.0.0:
+ts-node@5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-5.0.0.tgz#9aa573889ad7949411f972981c209e064705e36f"
   dependencies:
@@ -2019,7 +2019,7 @@ tslib@^1.8.0, tslib@^1.8.1:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.9.0.tgz#e37a86fda8cbbaf23a057f473c9f4dc64e5fc2e8"
 
-tslint@^5.9.1:
+tslint@5.9.1:
   version "5.9.1"
   resolved "https://registry.yarnpkg.com/tslint/-/tslint-5.9.1.tgz#1255f87a3ff57eb0b0e1f0e610a8b4748046c9ae"
   dependencies:
@@ -2052,7 +2052,7 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
 
-typescript@^2.7.2:
+typescript@2.7.2:
   version "2.7.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.7.2.tgz#2d615a1ef4aee4f574425cdff7026edf81919836"
 

@@ -17,17 +17,17 @@
     "tslint": "tslint -c tslint.json -p tsconfig.json"
   },
   "dependencies": {
-    "rabbit.js": "^0.4.4",
-    "ramda": "^0.25.0",
-    "socket.io": "^2.0.4"
+    "rabbit.js": "0.4.4",
+    "ramda": "0.25.0",
+    "socket.io": "2.0.4"
   },
   "devDependencies": {
-    "@types/ramda": "^0.25.18",
-    "@types/rabbit.js": "^0.4.31",
-    "@types/socket.io": "^1.4.31",
-    "nodemon": "^1.13.0",
-    "ts-node": "^5.0.0",
-    "tslint": "^5.9.1",
-    "typescript": "^2.7.2"
+    "@types/ramda": "0.25.18",
+    "@types/rabbit.js": "0.4.31",
+    "@types/socket.io": "1.4.31",
+    "nodemon": "1.15.1",
+    "ts-node": "5.0.0",
+    "tslint": "5.9.1",
+    "typescript": "2.7.2"
   }
 }
