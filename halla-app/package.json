@@ -50,7 +50,7 @@
     "typings-for-css-modules-loader": "^1.7.0",
     "url-loader": "^0.6.2",
     "webpack": "^3.8.1",
-    "webpack-dev-server": "^2.9.4"
+    "webpack-dev-server": "^3.0.0"
   },
   "dependencies": {
     "axios": "^0.17.1",
