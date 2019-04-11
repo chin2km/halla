@@ -17,7 +17,7 @@
     "@types/node": "8.0.53",
     "@types/ramda": "^0.25.20",
     "@types/react": "^16.0.25",
-    "@types/react-dom": "16.0.3",
+    "@types/react-dom": "16.8.4",
     "@types/react-redux": "5.0.13",
     "@types/react-redux-toastr": "^7.0.10",
     "@types/react-router": "4.0.18",
