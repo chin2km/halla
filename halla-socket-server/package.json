@@ -18,11 +18,11 @@
   },
   "dependencies": {
     "rabbit.js": "^0.4.4",
-    "ramda": "^0.25.0",
+    "ramda": "0.26.1",
     "socket.io": "^2.0.4"
   },
   "devDependencies": {
-    "@types/ramda": "^0.25.18",
+    "@types/ramda": "0.26.9",
     "@types/rabbit.js": "^0.4.31",
     "@types/socket.io": "^1.4.31",
     "nodemon": "^1.13.0",
