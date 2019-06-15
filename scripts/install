@@ -10,4 +10,4 @@ else
     echo "installing node modules.."
 fi
 
-cd ./halla-app && npm i && cd ../halla-db-server && npm i && cd ../halla-socket-server && npm i
+npm i && cd ./halla-app && npm i && cd ../halla-db-server && npm i && cd ../halla-socket-server && npm i

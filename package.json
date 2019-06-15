@@ -4,7 +4,10 @@
   "description": "Full stack chat application with React/ Redux/ Socket.io/ RxJs /TS /NodeJs /MongoDB /RabbitMQ",
   "main": "index.js",
   "scripts": {
-    "setup": "./scripts/start"
+    "start": "./scripts/install && ./scripts/start",
+    "start-db-server": "./scripts/startDbServer",
+    "start-socket-server": "./scripts/startDockerServer",
+    "start-client": "./scripts/startClient"
   },
   "repository": {
     "type": "git",
@@ -15,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/chin2km/halla/issues"
   },
-  "homepage": "https://github.com/chin2km/halla#readme"
+  "homepage": "https://github.com/chin2km/halla#readme",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
 }

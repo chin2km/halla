@@ -1,8 +1,7 @@
 # halla
 Full stack chat application with React/ Redux/ Socket.io/ RxJs /TS /NodeJs /MongoDB /RabbitMQ
 
-## Setup
+## How to start
 ```
-step 1: ./scripts/install
-step 2: ./scripts/start
+npm start
 ```

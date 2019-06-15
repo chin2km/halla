@@ -8,12 +8,12 @@
   "author": "Chintu Kishen KM",
   "license": "MIT",
   "scripts": {
-    "start": "npm run serve",
-    "build": "npm run build-ts && npm run tslint",
-    "serve": "node dist/src/index.js",
-    "watch-node": "nodemon dist/src/index.js",
-    "build-ts": "tsc",
     "watch": "tsc -w",
+    "watch-node": "nodemon dist/src/index.js",
+    "watch-all": "npm-run-all --parallel watch watch-node",
+    "build": "npm run build-ts && npm run tslint",
+    "build-ts": "tsc",
+    "serve": "node dist/src/index.js",
     "tslint": "tslint -c tslint.json -p tsconfig.json"
   },
   "dependencies": {
@@ -30,6 +30,7 @@
     "@types/rabbit.js": "0.4.31",
     "@types/ramda": "0.25.18",
     "nodemon": "1.13.0",
+    "npm-run-all": "^4.1.5",
     "ts-node": "5.0.0",
     "tslint": "5.9.1",
     "typescript": "2.7.2"
