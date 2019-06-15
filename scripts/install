@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+
+NODE=$(node -v | grep "v7.")
+
+if [ -z "$NODE" ]; then
+    echo 'This application is unfortunately not optimised for node versions greater than 7.x'
+    echo 'PRs are welcome!'
+    exit 1;
+else
+    echo "installing node modules.."
+fi
+
+cd ./halla-app && npm i && cd ../halla-db-server && npm i && cd ../halla-socket-server && npm i

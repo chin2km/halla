@@ -1,0 +1,19 @@
+{
+  "name": "halla",
+  "version": "1.0.0",
+  "description": "Full stack chat application with React/ Redux/ Socket.io/ RxJs /TS /NodeJs /MongoDB /RabbitMQ",
+  "main": "index.js",
+  "scripts": {
+    "setup": "./scripts/start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chin2km/halla.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chin2km/halla/issues"
+  },
+  "homepage": "https://github.com/chin2km/halla#readme"
+}

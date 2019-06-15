@@ -1,0 +1,22 @@
+version: '2'
+services:
+  mongo:
+    image: 'mongo:3.4'
+    ports:
+      - '27017:27017'
+  rabbitmq:
+    image: 'rabbitmq:management'
+    ports:
+      - '4369:4369'
+      - '5671:5671'
+      - '5672:5672'
+      - '15671:15671'
+      - '15672:15672'
+      - '25672:25672'
+volumes:
+  esdata1:
+    driver: local
+
+networks:
+  main:
+    driver: bridge
